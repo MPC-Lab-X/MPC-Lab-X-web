@@ -9,10 +9,12 @@ module.exports = {
         secondary: "#1B91BF",
         accent: "#0F9FBF",
         dark: {
-          DEFAULT: "#151926",
+          300: "#151926",
+          DEFAULT: "#10121E",
+          700: "#0C0E1A",
         },
         text: {
-          DEFAULT: "#151926",
+          DEFAULT: "#0C0E1A",
           light: "#F2F2F2",
         },
       },
