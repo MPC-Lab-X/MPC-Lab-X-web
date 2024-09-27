@@ -14,4 +14,8 @@ router.get("/register", (req, res) => {
   res.render("pages/auth/register");
 });
 
+router.get("/register/complete", (req, res) => {
+  res.render("pages/auth/complete-registration");
+});
+
 module.exports = router;
