@@ -5,12 +5,16 @@
 
 /**
  * @class UI
+ * @description Handles the user interface of the application.
  */
 class UI {
   /**
    * @constructor - Initializes the UI class.
+   * @param {Object} app - The App class instance.
    */
-  constructor() {
+  constructor(app) {
+    this.app = app;
+
     this.notifications = new Map();
   }
 
@@ -90,117 +94,109 @@ class UI {
 }
 
 /**
- * @class App
+ * @class Data
+ * @description Handles the data of the application.
  */
-class App {
+class Data {
   /**
-   * @constructor - Initializes the App class.
-   * @param {string} baseURL - The base URL of the application.
-   * @param {string} apiURL - The API URL of the application.
+   * @constructor - Initializes the Data class.
+   * @param {Object} app - The App class instance.
    */
-  constructor(baseURL, apiURL) {
-    this.baseURL = baseURL;
-    this.apiURL = apiURL;
+  constructor(app) {
+    this.app = app;
 
-    this.ui = new UI();
+    this.key = "appData";
+    this._data = this.loadData();
 
-    this.data = {};
-    this.path = "";
-    this.auth = {
-      authenticated: false,
-      accessToken: "",
-    };
-
-    this.init();
-  }
-
-  /**
-   * @function init - Initializes the App class.
-   */
-  async init() {
-    this.initData();
-    this.initUrl();
-    await this.initAuth();
-    this.initRedirect();
-  }
-
-  /**
-   * @function initData - Initializes the data.
-   */
-  initData() {
-    this.data = this.getData();
-  }
-
-  /**
-   * @function initUrl - Initializes the URL.
-   */
-  initUrl() {
-    this.path = window.location.pathname;
-  }
-
-  /**
-   * @function initAuth - Initializes the authentication.
-   */
-  async initAuth() {
-    if (this.data.auth?.accessToken) {
-      this.auth.accessToken = this.data.auth.accessToken;
-      this.auth.authenticated = true;
-    } else {
-      try {
-        await this.authenticate();
-        this.auth.authenticated = true;
-      } catch (error) {
-        if (!this.isPublicRoute(this.path)) {
-          this.redirect(`${this.baseURL}/login`);
+    return new Proxy(this._data, {
+      set: (target, prop, value) => {
+        target[prop] = value;
+        this.saveData();
+        return true;
+      },
+      get: (target, prop) => {
+        if (prop in target) {
+          return target[prop];
         }
-      }
-    }
+        return undefined;
+      },
+    });
   }
 
   /**
-   * @function initRedirect - Initializes the redirect.
+   * @function loadData - Loads data from the local-storage.
    */
-  initRedirect() {
-    if (this.isPublicRoute(this.path)) {
-      if (this.isAuthRoute(this.path) && this.auth.authenticated) {
-        this.redirect(`${this.baseURL}/dashboard`);
-      }
-    } else {
-      if (!this.auth.authenticated) {
-        this.redirect(`${this.baseURL}/login`);
-      }
-    }
-  }
-
-  /**
-   * @function getData - Gets data from the local-storage.
-   * @returns {Object} - The data from the local-storage.
-   */
-  getData() {
-    return JSON.parse(localStorage.getItem("appData")) || {};
-  }
-
-  /**
-   * @function setData - Sets data to the local-storage.
-   * @param {Object} data - The data to be set in the local-storage.
-   * @returns {Object} - The data set in the local-storage.
-   * @throws {Error} - If the data is not an object.
-   */
-  setData(data) {
-    if (typeof data !== "object") {
-      throw new Error("Data must be an object.");
-    }
-
-    localStorage.setItem("appData", JSON.stringify(data));
-
-    return data;
+  loadData() {
+    const storedData = localStorage.getItem(this.key);
+    return storedData ? JSON.parse(storedData) : {};
   }
 
   /**
    * @function saveData - Saves data to the local-storage.
    */
   saveData() {
-    this.setData(this.data);
+    localStorage.setItem(this.key, JSON.stringify(this._data));
+  }
+}
+
+/**
+ * @class Auth
+ * @description Handles the authentication of the application.
+ */
+class Auth {
+  /**
+   * @constructor - Initializes the Auth class.
+   * @param {Object} app - The App class instance.
+   */
+  constructor(app) {
+    this.app = app;
+
+    this.authenticated = false;
+    this.accessToken = this.app.data.auth?.accessToken;
+    this.refreshToken = this.app.data.auth?.refreshToken;
+  }
+
+  /**
+   * @function init - Initializes the Auth class.
+   * @returns {boolean} - True if the user is authenticated, false otherwise.
+   */
+  async init() {
+    if (this.accessToken) {
+      this.authenticated = true;
+    } else if (this.refreshToken) {
+      try {
+        await this.authenticate();
+        this.authenticated = true;
+      } catch (error) {
+        return false;
+      }
+    }
+    return this.authenticated;
+  }
+
+  /**
+   * @function authenticate - Authenticates the user. (refresh JWT token)
+   * @throws {Error} - If the token is invalid or expired.
+   */
+  async authenticate() {
+    const response = await fetch(`${this.app.apiURL}/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        refreshToken: this.refreshToken,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid or expired token.");
+    } else {
+      const data = (await response.json()).data;
+
+      this.accessToken = data.accessToken;
+      this.app.data.auth.accessToken = data.accessToken;
+    }
   }
 
   /**
@@ -210,44 +206,40 @@ class App {
    * @returns {Object} - The data with the tokens set.
    */
   setTokens(accessToken, refreshToken) {
-    this.data.auth = {
+    this.app.data.auth = {
       accessToken,
       refreshToken,
     };
+  }
+}
 
-    this.saveData();
+/**
+ * @class Location
+ * @description Handles the location of the application.
+ */
+class Location {
+  /**
+   * @constructor - Initializes the Location class.
+   * @param {Object} app - The App class instance.
+   */
+  constructor(app) {
+    this.app = app;
 
-    return this.data;
+    this.path = window.location.pathname;
   }
 
   /**
-   * @function authenticate - Authenticates the user. (refresh JWT token)
-   * @throws {Error} - If the token is invalid or expired.
+   * @function init - Initializes the redirect.
    */
-  async authenticate() {
-    const token = this.data.auth?.refreshToken;
-
-    if (!token) {
-      throw new Error("Invalid token.");
-    }
-
-    const response = await fetch(`${this.apiURL}/auth/refresh-token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refreshToken: token,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Invalid or expired token.");
+  init() {
+    if (this.isPublicRoute(this.path)) {
+      if (this.isAuthRoute(this.path) && this.app.auth.authenticated) {
+        this.redirect(`${this.app.baseURL}/dashboard`);
+      }
     } else {
-      const data = (await response.json()).data;
-
-      this.data.auth.accessToken = data.accessToken;
-      this.saveData();
+      if (!this.app.auth.authenticated) {
+        this.redirect(`${this.app.baseURL}/login`);
+      }
     }
   }
 
@@ -303,6 +295,37 @@ class App {
    */
   refresh() {
     window.location.reload();
+  }
+}
+
+/**
+ * @class App
+ * @description Main application class.
+ */
+class App {
+  /**
+   * @constructor - Initializes the App class.
+   * @param {string} baseURL - The base URL of the application.
+   * @param {string} apiURL - The API URL of the application.
+   */
+  constructor(baseURL, apiURL) {
+    this.baseURL = baseURL;
+    this.apiURL = apiURL;
+
+    this.data = new Data(this);
+    this.auth = new Auth(this);
+    this.location = new Location(this);
+    this.ui = new UI(this);
+
+    this.init();
+  }
+
+  /**
+   * @function init - Initializes the App class.
+   */
+  async init() {
+    await this.auth.init();
+    this.location.init();
   }
 }
 

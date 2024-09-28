@@ -3,7 +3,7 @@
  * @description Authentication class.
  */
 
-class Auth {
+class Authentication {
   /**
    * @constructor - Initializes the Auth class.
    * @param {Object} app - The App class.
