@@ -22,4 +22,8 @@ router.get("/password-reset", (req, res) => {
   res.render("pages/auth/password-reset");
 });
 
+router.get("/password-reset/complete", (req, res) => {
+  res.render("pages/auth/complete-password-reset");
+});
+
 module.exports = router;
