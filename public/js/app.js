@@ -204,6 +204,23 @@ class App {
   }
 
   /**
+   * @function setTokens - Sets the tokens in the data.
+   * @param {String} accessToken - The access token.
+   * @param {String} refreshToken - The refresh token.
+   * @returns {Object} - The data with the tokens set.
+   */
+  setTokens(accessToken, refreshToken) {
+    this.data.auth = {
+      accessToken,
+      refreshToken,
+    };
+
+    this.saveData();
+
+    return this.data;
+  }
+
+  /**
    * @function authenticate - Authenticates the user. (refresh JWT token)
    * @throws {Error} - If the token is invalid or expired.
    */
