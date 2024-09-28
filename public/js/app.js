@@ -8,14 +8,22 @@
  */
 class UI {
   /**
+   * @constructor - Initializes the UI class.
+   */
+  constructor() {
+    this.notifications = new Map();
+  }
+
+  /**
    * @function notify - Displays a notification message in an element.
    * @param {string} type - The type of notification.
    * @param {string | string[]} message - The message to display.
    * @param {string} status - The status of the notification.
    * @param {HTMLElement} parentElement - The parent element to append the notification to.
+   * @param {string} messageGroup - The message group, auto-removes when a new message is added to the group.
    * @returns {HTMLElement} The notification element.
    */
-  notification(type, message, status, parentElement) {
+  notification(type, message, status, parentElement, messageGroup) {
     let alert = document.createElement("div");
 
     let colorClasses = "";
@@ -68,6 +76,14 @@ class UI {
     }
 
     parentElement.appendChild(alert);
+
+    if (messageGroup) {
+      if (this.notifications.has(messageGroup)) {
+        this.notifications.get(messageGroup).remove();
+      }
+
+      this.notifications.set(messageGroup, alert);
+    }
 
     return alert;
   }
