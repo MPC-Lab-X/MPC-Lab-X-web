@@ -11,7 +11,10 @@ router.get("/register", (req, res) => {
 });
 
 router.get("/register/complete", (req, res) => {
-  res.render("pages/auth/complete-registration");
+  if (!req.query.token) {
+    return res.redirect("/register");
+  }
+  res.render("pages/auth/complete-registration", { token: req.query.token });
 });
 
 router.get("/login", (req, res) => {
