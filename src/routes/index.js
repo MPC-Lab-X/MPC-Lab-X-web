@@ -18,4 +18,8 @@ router.get("/register/complete", (req, res) => {
   res.render("pages/auth/complete-registration");
 });
 
+router.get("/login", (req, res) => {
+  res.render("pages/auth/login");
+});
+
 module.exports = router;
