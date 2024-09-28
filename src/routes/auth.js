@@ -26,7 +26,10 @@ router.get("/password-reset", (req, res) => {
 });
 
 router.get("/password-reset/complete", (req, res) => {
-  res.render("pages/auth/complete-password-reset");
+  if (!req.query.token) {
+    return res.redirect("/password-reset");
+  }
+  res.render("pages/auth/complete-password-reset", { token: req.query.token });
 });
 
 module.exports = router;
