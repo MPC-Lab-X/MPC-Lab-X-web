@@ -1,0 +1,36 @@
+<div id="problem-type-selector" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="transition-all max-w-full max-h-full h-auto xl:hs-overlay-open:mt-10 xl:mt-0 xl:max-w-xl xl:max-h-full xl:h-auto xl:mx-auto modal-slide-down">
+    <div class="flex flex-col bg-background border border-gray-300 rounded-xl shadow-lg max-w-lg max-h-[90vh] overflow-auto xl:max-w-lg">
+
+      <div class="flex justify-between items-center py-3 px-4 border-b border-gray-200">
+        <h3 class="font-bold text-gray-800">Select a Problem Type</h3>
+        <button onclick="problemTypeSelector.hide()" class="text-gray-800 hover:text-gray-600 focus:outline-none">
+          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1">
+        <span class="mt-1 text-gray-600">Please select a category to view detailed problems and examples.</span>
+        <ul id="problem-type-selector-list" class="space-y-4 mt-4 relative"></ul>
+
+        <div id="problem-type-selector-description-container" class="hidden mt-4 text-gray-600">
+          <h4 id="problem-type-selector-title" class="font-bold text-lg text-gray-800"></h4>
+          <p id="problem-type-selector-description" class="border-l-2 border-blue-600 pl-4"></p>
+        </div>
+      </div>
+
+      <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-gray-200 mt-auto">
+        <button onclick="problemTypeSelector.hide()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none">
+          Close
+        </button>
+        <button id="problem-type-selector-select" onclick="problemTypeSelector.select()" class="hidden py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none transition duration-300">
+          Select
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="/js/components/problem-type-selector.js"></script>
