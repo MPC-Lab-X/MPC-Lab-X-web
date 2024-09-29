@@ -10,6 +10,10 @@ router.get("/", (req, res) => {
   res.render("pages/home");
 });
 
+router.get("/dashboard", (req, res) => {
+  res.render("pages/dashboard");
+});
+
 router.use("/", require("./auth"));
 
 module.exports = router;
