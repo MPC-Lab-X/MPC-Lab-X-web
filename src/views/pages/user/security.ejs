@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Security</title>
+</head>
+
+<body>
+  <%- include("../../components/main-sidebar.ejs") %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Security Records</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-6 overflow-x-auto">
+      <table class="min-w-full">
+        <thead>
+          <tr class="bg-gray-100 border-b">
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Type</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Time</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">IP Address</th>
+            <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Device Info</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="px-4 py-2">Login</td>
+            <td class="px-4 py-2">2024-09-29 12:34:56</td>
+            <td class="px-4 py-2">192.168.1.1</td>
+            <td class="px-4 py-2">Chrome on Windows</td>
+          </tr>
+          <tr class="border-b">
+            <td class="px-4 py-2">Password Change</td>
+            <td class="px-4 py-2">2024-09-28 10:20:30</td>
+            <td class="px-4 py-2">192.168.1.2</td>
+            <td class="px-4 py-2">Firefox on macOS</td>
+          </tr>
+          <!-- Add more records as needed -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 flex justify-between items-center">
+      <span class="text-sm text-gray-600">Showing 1 to 10 of max 100 records</span>
+      <div>
+        <button class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Previous</button>
+        <button class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Next</button>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
