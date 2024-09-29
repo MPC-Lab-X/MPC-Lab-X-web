@@ -16,4 +16,6 @@ router.get("/dashboard", (req, res) => {
 
 router.use("/", require("./auth"));
 
+router.use("/classrooms", require("./class"));
+
 module.exports = router;
