@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Profile</title>
+</head>
+
+<body>
+  <%- include("../../components/main-sidebar.ejs") %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Profile</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-xl font-bold mb-4">User Information</h2>
+
+      <div class="mb-4">
+        <label for="display-name" class="block text-sm font-medium text-text">Display Name</label>
+        <input type="text" id="display-name" value="User" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
+      </div>
+
+      <div class="mb-4">
+        <p class="text-sm text-text"><strong>@<span id="username">user</span></strong></p>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-sm text-text"><strong>Email:</strong> <span id="email">user@example.com</span></p>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-sm text-text"><strong>Joined:</strong> <span id="joined-at">2021-01-01</span></p>
+      </div>
+
+      <button id="update-profile" class="mt-4 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Save Changes</button>
+
+      <div class="mt-6 text-sm text-text">
+        <p class="mb-2">Didn't find what you were looking for?</p>
+        <a href="/user/settings" class="text-primary-500 hover:underline">Edit your account settings</a>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
