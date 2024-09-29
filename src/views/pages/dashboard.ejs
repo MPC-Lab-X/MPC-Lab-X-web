@@ -8,6 +8,42 @@
 
 <body>
   <%- include("../components/main-sidebar.ejs") %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-3xl font-semibold mb-6">Welcome back, <span id="username">User</span>!</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-2">Profile</h2>
+        <p class="text-gray-600 mb-4">View and update your personal information.</p>
+        <a href="/user" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Go to Profile</a>
+      </div>
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-2">Classrooms</h2>
+        <p class="text-gray-600 mb-4">View and manage your classrooms and assignments.</p>
+        <a href="/classrooms" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Go to Classrooms</a>
+      </div>
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-2">Security Records</h2>
+        <p class="text-gray-600 mb-4">Check your recent activity and security events.</p>
+        <a href="/user/security" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">View Security Records</a>
+      </div>
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-2">Settings</h2>
+        <p class="text-gray-600 mb-4">Manage your account settings and preferences.</p>
+        <a href="/user/settings" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Account Settings</a>
+      </div>
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold mb-2">Logout</h2>
+        <p class="text-gray-600 mb-4">Are you sure you want to log out?</p>
+        <a href="/user/logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200">Logout</a>
+      </div>
+    </div>
+  </main>
 </body>
 
 </html>
