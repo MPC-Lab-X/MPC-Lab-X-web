@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/user.js"></script>
   <title>MPC Lab | Settings</title>
 </head>
 
@@ -13,19 +14,19 @@
 
     <div class="bg-background-50 shadow-md rounded-lg p-6">
 
-      <div class="mb-6">
+      <div id="username-section" class="mb-6">
         <label for="username" class="block text-sm font-medium text-text">Username</label>
-        <input type="text" id="username" value="user" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
+        <input type="text" id="username" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
         <button id="update-username" class="mt-2 w-full bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Modify</button>
       </div>
 
-      <div class="mb-6">
+      <div id="email-section" class="mb-6">
         <label for="email" class="block text-sm font-medium text-text">Email</label>
-        <input type="email" id="email" value="user@example.com" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
-        <button id="send-verification" class="mt-2 w-full bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Send Verification</button>
+        <input type="email" id="email" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
+        <button id="send-verification" class="mt-2 w-full bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Update Email</button>
       </div>
 
-      <div class="mb-6">
+      <div id="password-section" class="mb-6">
         <label class="block text-sm font-medium text-text">Password</label>
         <div class="mt-1 grid grid-cols-1 gap-4">
           <input type="password" id="current-password" placeholder="Current Password" class="p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
@@ -37,6 +38,120 @@
 
     </div>
   </main>
+  <script>
+    const user = new User(app);
+
+    user.getUser().then((response) => {
+      if (response.status === "success") {
+        document.getElementById("username").value = response.data.username;
+        document.getElementById("email").value = response.data.email;
+      }
+    });
+
+    updateUsernameButton = document.getElementById("update-username");
+    updateUsernameButton.addEventListener("click", async () => {
+      updateUsernameButton.disabled = true;
+      const username = document.getElementById("username").value;
+      const response = await user.updateUsername(username);
+      if (response.status === "success") {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "success",
+          document.getElementById("username-section"),
+          "username"
+        );
+      } else {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "error",
+          document.getElementById("username-section"),
+          "username"
+        );
+      }
+      updateUsernameButton.disabled = false;
+    });
+
+    sendVerificationButton = document.getElementById("send-verification");
+    sendVerificationButton.addEventListener("click", async () => {
+      sendVerificationButton.disabled = true;
+      const email = document.getElementById("email").value;
+      const response = await user.updateEmail(email);
+      if (response.status === "success") {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "success",
+          document.getElementById("email-section"),
+          "email"
+        );
+      } else {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "error",
+          document.getElementById("email-section"),
+          "email"
+        );
+      }
+      sendVerificationButton.disabled = false;
+    });
+
+    updatePasswordButton = document.getElementById("update-password");
+    updatePasswordButton.addEventListener("click", async () => {
+      updatePasswordButton.disabled = true;
+      const currentPassword = document.getElementById("current-password").value;
+      const newPassword = document.getElementById("new-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+      if (newPassword !== confirmPassword) {
+        app.ui.notification(
+          "alert",
+          "Passwords do not match",
+          "error",
+          document.getElementById("password-section"),
+          "password"
+        );
+        updatePasswordButton.disabled = false;
+        return;
+      }
+      const response = await user.updatePassword(currentPassword, newPassword);
+      if (response.status === "success") {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "success",
+          document.getElementById("password-section"),
+          "password"
+        );
+      } else {
+        if (response.error.code === "INVALID_PASSWORD") {
+          app.ui.notification(
+            "list",
+            [
+              "Password must be at least 8 characters long",
+              "Password must contain at least one uppercase letter",
+              "Password must contain at least one lowercase letter",
+              "Password must contain at least one number",
+              "Password must contain at least one special character",
+            ],
+            "error",
+            document.getElementById("password-section"),
+            "password"
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            document.getElementById("password-section"),
+            "password"
+          );
+        }
+      }
+      updatePasswordButton.disabled = false;
+    });
+  </script>
 </body>
 
 </html>
