@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Tasks</title>
+</head>
+
+<body>
+  <%- include("../../components/main-sidebar.ejs") %>
+  <main class="sm:ml-64 p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-semibold text-text">Classroom Tasks</h1>
+      <a href="/classrooms/<%= classId %>/tasks/new" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">New Task</a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold text-primary-500 mb-2">Task 1: Introduction to AI</h2>
+        <p class="text-sm text-text mb-4 line-clamp-2">
+          This task will introduce you to the fundamentals of AI, including machine learning, neural networks, and practical applications...
+        </p>
+        <a href="/classrooms/<%= classId %>/tasks/1" class="inline-block bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Enter Task</a>
+      </div>
+
+      <div class="bg-background-50 shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-bold text-primary-500 mb-2">Task 2: Data Structures</h2>
+        <p class="text-sm text-text mb-4 line-clamp-2">
+          In this task, you will learn about the core data structures used in computer science, including arrays, linked lists, stacks...
+        </p>
+        <a href="/classrooms/<%= classId %>/tasks/2" class="inline-block bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Enter Task</a>
+      </div>
+
+      <!-- More tasks... -->
+    </div>
+  </main>
+</body>
+
+</html>

@@ -21,6 +21,13 @@ router.get("/:id", (req, res) => {
   res.render("pages/class/classroom", { classId: req.params.id });
 });
 
+router.get("/:id/tasks", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  res.render("pages/class/tasks", { classId: req.params.id });
+});
+
 router.get("/:id/students", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
