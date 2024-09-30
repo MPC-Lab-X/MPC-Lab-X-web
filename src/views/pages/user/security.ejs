@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/user.js"></script>
   <title>MPC Lab | Security</title>
 </head>
 
@@ -21,32 +22,83 @@
             <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Device Info</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="security-records">
           <tr class="border-b">
-            <td class="px-4 py-2">Login</td>
-            <td class="px-4 py-2">2024-09-29 12:34:56</td>
-            <td class="px-4 py-2">192.168.1.1</td>
-            <td class="px-4 py-2">Chrome on Windows</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-4 py-2">Password Change</td>
-            <td class="px-4 py-2">2024-09-28 10:20:30</td>
-            <td class="px-4 py-2">192.168.1.2</td>
-            <td class="px-4 py-2">Firefox on macOS</td>
-          </tr>
-          <!-- Add more records as needed -->
+            <td class="px-4 py-2 text-left text-sm text-gray-600" colspan="4">You have no security records</td>
         </tbody>
       </table>
     </div>
 
     <div class="mt-4 flex justify-between items-center">
-      <span class="text-sm text-gray-600">Showing 1 to 10 of max 100 records</span>
+      <span class="text-sm text-gray-600">Showing <span id="start">0</span> to <span id="end">0</span> of max 100 records</span>
       <div>
-        <button class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Previous</button>
-        <button class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Next</button>
+        <button id="prev" class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Previous</button>
+        <button id="next" class="bg-primary-500 text-white px-3 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Next</button>
       </div>
     </div>
   </main>
+  <script>
+    const user = new User(app);
+
+    let page = 1;
+
+    const getSecurityRecords = async (offset = 0) => {
+      const response = await user.getSafetyRecords(10, offset);
+      if (response.status === "success") {
+        if (page > 1 && response.data.length === 0) {
+          page--;
+          return;
+        }
+        const records = response.data;
+        const securityRecords = document.getElementById("security-records");
+        securityRecords.innerHTML = "";
+        records.forEach((record) => {
+          const tr = document.createElement("tr");
+          tr.classList.add("border-b");
+
+          const type = document.createElement("td");
+          type.classList.add("px-4", "py-2");
+          type.textContent = record.type;
+          tr.appendChild(type);
+
+          const time = document.createElement("td");
+          time.classList.add("px-4", "py-2");
+          time.textContent = new Date(record.date).toLocaleString();
+          tr.appendChild(time);
+
+          const ip = document.createElement("td");
+          ip.classList.add("px-4", "py-2");
+          ip.textContent = record.ip;
+          tr.appendChild(ip);
+
+          const device = document.createElement("td");
+          device.classList.add("px-4", "py-2");
+          device.textContent = record.device;
+          tr.appendChild(device);
+
+          securityRecords.appendChild(tr);
+        });
+        document.getElementById("start").textContent = offset + 1;
+        document.getElementById("end").textContent = offset + records.length;
+      }
+    };
+
+    const prevButton = document.getElementById("prev");
+    prevButton.addEventListener("click", async () => {
+      if (page > 1) {
+        page--;
+        getSecurityRecords((page - 1) * 10);
+      }
+    });
+
+    const nextButton = document.getElementById("next");
+    nextButton.addEventListener("click", async () => {
+      page++;
+      getSecurityRecords((page - 1) * 10);
+    });
+
+    getSecurityRecords();
+  </script>
 </body>
 
 </html>
