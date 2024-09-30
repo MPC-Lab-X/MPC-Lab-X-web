@@ -90,24 +90,25 @@ class Auth {
    * @function setFetch - Replacement for the fetch function with the access token.
    */
   setFetch() {
-    if (!this.app.data.auth?.accessToken) {
+    if (!this.accessToken) {
       return;
     }
 
     window.originalFetch = window.originalFetch || window.fetch;
 
     window.fetch = async function (url, options = {}) {
-      let accessToken = this.app.data.auth.accessToken;
-      if (accessToken) {
+      if (this.accessToken) {
         options.headers = {
           ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${this.accessToken}`,
         };
       }
 
       const refreshToken = async () => {
         try {
           await this.authenticate();
+
+          options.headers.Authorization = `Bearer ${this.accessToken}`;
 
           let response = await window.originalFetch(url, options);
           return response;
@@ -120,12 +121,12 @@ class Auth {
       try {
         let response = await window.originalFetch(url, options);
         if (response.status === 401) {
-          await refreshToken();
+          return await refreshToken();
+        } else {
+          return response;
         }
-
-        return response;
       } catch (error) {
-        await refreshToken();
+        return await refreshToken();
       }
     }.bind(this);
   }
