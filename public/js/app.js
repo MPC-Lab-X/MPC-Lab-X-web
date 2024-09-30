@@ -90,10 +90,14 @@ class Auth {
    * @function setFetch - Replacement for the fetch function with the access token.
    */
   setFetch() {
+    if (!this.app.data.auth?.accessToken) {
+      return;
+    }
+
     window.originalFetch = window.originalFetch || window.fetch;
 
     window.fetch = async function (url, options = {}) {
-      const accessToken = this.app.data.auth.accessToken;
+      let accessToken = this.app.data.auth.accessToken;
       if (accessToken) {
         options.headers = {
           ...options.headers,
@@ -101,15 +105,29 @@ class Auth {
         };
       }
 
-      let response = await window.originalFetch(url, options);
+      const refreshToken = async () => {
+        try {
+          await this.authenticate();
 
-      if (response.status === 401) {
-        await this.authenticate();
-        response = await window.originalFetch(url, options);
+          let response = await window.originalFetch(url, options);
+          return response;
+        } catch (error) {
+          this.destroy();
+          this.app.location.init();
+        }
+      };
+
+      try {
+        let response = await window.originalFetch(url, options);
+        if (response.status === 401) {
+          await refreshToken();
+        }
+
+        return response;
+      } catch (error) {
+        await refreshToken();
       }
-
-      return response;
-    };
+    }.bind(this);
   }
 
   /**
@@ -132,14 +150,19 @@ class Auth {
     });
 
     if (!response.ok) {
+      this.authenticated = false;
       this.removeTokens();
       this.app.location.init();
       throw new Error("Invalid or expired token.");
     } else {
       const data = (await response.json()).data;
 
+      this.authenticated = true;
+
       this.accessToken = data.accessToken;
       this.app.data.auth.accessToken = data.accessToken;
+
+      this.setFetch();
     }
   }
 
@@ -156,6 +179,7 @@ class Auth {
       accessToken,
       refreshToken,
     };
+    this.setFetch();
   }
 
   /**
@@ -163,6 +187,7 @@ class Auth {
    */
   destroy() {
     this.app.data.auth = {};
+    this.setFetch();
   }
 }
 
