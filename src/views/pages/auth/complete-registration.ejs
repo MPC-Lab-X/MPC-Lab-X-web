@@ -47,7 +47,7 @@
         );
 
         setTimeout(() => {
-          window.location.href = "/login";
+          app.location.redirect("/login");
         }, 2000);
       } else {
         completeRegistrationButton.disabled = false;

@@ -62,6 +62,7 @@ class Auth {
     this.app = app;
 
     this.authenticated = false;
+    this.userId = this.app.data.auth?.userId;
     this.accessToken = this.app.data.auth?.accessToken;
     this.refreshToken = this.app.data.auth?.refreshToken;
   }
@@ -71,6 +72,7 @@ class Auth {
    * @returns {boolean} - True if the user is authenticated, false otherwise.
    */
   async init() {
+    this.setFetch();
     if (this.accessToken) {
       this.authenticated = true;
     } else if (this.refreshToken) {
@@ -85,10 +87,40 @@ class Auth {
   }
 
   /**
+   * @function setFetch - Replacement for the fetch function with the access token.
+   */
+  setFetch() {
+    window.originalFetch = window.originalFetch || window.fetch;
+
+    window.fetch = async function (url, options = {}) {
+      const accessToken = this.app.data.auth.accessToken;
+      if (accessToken) {
+        options.headers = {
+          ...options.headers,
+          Authorization: `Bearer ${accessToken}`,
+        };
+      }
+
+      let response = await window.originalFetch(url, options);
+
+      if (response.status === 401) {
+        await this.authenticate();
+        response = await window.originalFetch(url, options);
+      }
+
+      return response;
+    };
+  }
+
+  /**
    * @function authenticate - Authenticates the user. (refresh JWT token)
    * @throws {Error} - If the token is invalid or expired.
    */
   async authenticate() {
+    if (!this.refreshToken) {
+      throw new Error("Invalid or expired token.");
+    }
+
     const response = await fetch(`${this.app.apiURL}/auth/refresh-token`, {
       method: "POST",
       headers: {
@@ -112,22 +144,24 @@ class Auth {
   }
 
   /**
-   * @function setTokens - Sets the tokens in the data.
+   * @function set - Sets the user id and tokens.
+   * @param {String} userId - The user ID.
    * @param {String} accessToken - The access token.
    * @param {String} refreshToken - The refresh token.
    * @returns {Object} - The data with the tokens set.
    */
-  setTokens(accessToken, refreshToken) {
+  set(userId, accessToken, refreshToken) {
     this.app.data.auth = {
+      userId,
       accessToken,
       refreshToken,
     };
   }
 
   /**
-   * @function removeTokens - Removes the tokens from the data.
+   * @function destroy - Destroys the tokens.
    */
-  removeTokens() {
+  destroy() {
     this.app.data.auth = {};
   }
 }
@@ -256,7 +290,7 @@ class UI {
   updateHeader(authenticated) {
     const header = document.querySelector("header");
 
-    if (authenticated) {
+    if (header && authenticated) {
       const loginLink = header.querySelector("[href='/login']");
       const registerLink = header.querySelector("[href='/register']");
 

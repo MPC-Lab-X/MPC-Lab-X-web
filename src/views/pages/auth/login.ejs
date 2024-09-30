@@ -40,8 +40,8 @@
       const password = document.getElementById("password").value;
       const response = await auth.login(identifier, password);
       if (response.status === "success") {
-        app.auth.setTokens(response.data.accessToken, response.data.refreshToken);
-        window.location.href = "/dashboard";
+        app.auth.set(response.data.user._id, response.data.accessToken, response.data.refreshToken);
+        app.location.redirect("/dashboard");
       } else {
         loginButton.disabled = false;
         app.ui.notification(
