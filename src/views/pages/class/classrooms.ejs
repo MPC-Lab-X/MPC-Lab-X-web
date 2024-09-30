@@ -8,6 +8,60 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Classrooms</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-background-50 shadow-lg rounded-lg p-6 relative hover:shadow-xl transition-shadow duration-200">
+        <h2 class="text-xl font-bold mb-2 text-primary-500">Classroom 1</h2>
+        <p class="text-sm text-gray-600 mb-2">
+          <strong>Teacher:</strong> You
+        </p>
+        <p class="text-sm text-gray-600 mb-2">
+          <a href="/classrooms/1/admins"><strong>Admin/Assistants:</strong> <span class="hover:text-primary-400 cursor-pointer" title="user1, user2, user3, more...">user1, user2, ...</span></a>
+        </p>
+        <p class="text-sm text-gray-600 mb-4">
+          <a href="/classrooms/1/students"><strong>Students:</strong> 30</a>
+        </p>
+        <div class="tooltip">
+          <a href="/classrooms/1" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
+            Enter Classroom
+          </a>
+          <span class="tooltip-text bg-dark text-white px-2 py-1 rounded text-sm absolute -top-8 left-1/2 transform -translate-x-1/2 hidden">Enter the classroom</span>
+        </div>
+      </div>
+
+      <div class="bg-background-50 shadow-lg rounded-lg p-6 relative hover:shadow-xl transition-shadow duration-200">
+        <h2 class="text-xl font-bold mb-2 text-primary-500">Classroom 2</h2>
+        <p class="text-sm text-gray-600 mb-2">
+          <strong>Teacher:</strong> user3
+        </p>
+        <p class="text-sm text-gray-600 mb-2">
+          <a href="/classrooms/2/admins"><strong>Admin/Assistants:</strong> <span class="hover:text-primary-400 cursor-pointer" title="user1, user2, more...">user1, ...</span></a>
+        </p>
+        <p class="text-sm text-gray-600 mb-4">
+          <a href="/classrooms/2/admins"><strong>Students:</strong> 25</a>
+        </p>
+        <div class="tooltip">
+          <a href="/classrooms/2" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
+            Enter Classroom
+          </a>
+          <span class="tooltip-text bg-dark text-white px-2 py-1 rounded text-sm absolute -top-8 left-1/2 transform -translate-x-1/2 hidden">Enter the classroom</span>
+        </div>
+      </div>
+      <!-- Add more classrooms as needed -->
+    </div>
+  </main>
+  <script>
+    document.querySelectorAll('.tooltip').forEach(function(el) {
+      el.addEventListener('mouseenter', function() {
+        this.querySelector('.tooltip-text').classList.remove('hidden');
+      });
+      el.addEventListener('mouseleave', function() {
+        this.querySelector('.tooltip-text').classList.add('hidden');
+      });
+    });
+  </script>
 </body>
 
 </html>
