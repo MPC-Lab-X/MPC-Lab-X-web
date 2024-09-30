@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../components/head.ejs") %>
+  <script src="/js/user.js"></script>
   <title>MPC Lab | Dashboard</title>
 </head>
 
@@ -50,6 +51,15 @@
       </div>
     </div>
   </main>
+  <script>
+    const user = new User(app);
+
+    user.getUser().then((response) => {
+      if (response.status === "success") {
+        document.getElementById("user-name").textContent = response.data.displayName;
+      }
+    });
+  </script>
 </body>
 
 </html>
