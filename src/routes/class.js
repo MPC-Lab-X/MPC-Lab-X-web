@@ -62,4 +62,11 @@ router.get("/:id/admins/add", (req, res) => {
   res.render("pages/class/add-admin", { classId: req.params.id });
 });
 
+router.get("/:id/settings", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  res.render("pages/class/settings", { classId: req.params.id });
+});
+
 module.exports = router;

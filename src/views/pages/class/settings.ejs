@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Classroom Settings</title>
+</head>
+
+<body>
+  <%- include("../../components/classroom-sidebar.ejs"), { classId } %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Classroom Settings</h1>
+
+    <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
+      <h2 class="text-xl font-bold mb-4 text-primary-500">Classroom Details</h2>
+
+      <div class="mb-4">
+        <label for="class-name" class="block text-sm font-medium text-text">Classroom Name</label>
+        <input type="text" id="class-name" placeholder="Enter classroom name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+      </div>
+
+      <div class="mb-4">
+        <label for="class-code" class="block text-sm font-medium text-text">Classroom Code</label>
+        <input type="text" id="class-code" value="CLASS1234" readonly class="mt-1 block w-full p-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed" />
+      </div>
+
+      <div class="flex justify-between mt-6">
+        <button id="save-settings" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Save Changes</button>
+        <button id="delete-class" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200">Delete Classroom</button>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
