@@ -48,4 +48,11 @@ router.get("/:id/students/:studentId/edit", (req, res) => {
   });
 });
 
+router.get("/:id/admins", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  res.render("pages/class/admins", { classId: req.params.id });
+});
+
 module.exports = router;

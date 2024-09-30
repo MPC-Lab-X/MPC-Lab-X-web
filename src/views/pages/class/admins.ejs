@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Admins</title>
+</head>
+
+<body>
+  <%- include("../../components/classroom-sidebar.ejs"), { classId } %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Admins / Teaching Assistants</h1>
+
+    <a href="/classrooms/<%= classId %>/admins/add" class="inline-block mb-4 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Admin</a>
+
+    <div class="overflow-x-auto bg-background-50 shadow-md rounded-lg">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-background-50 divide-y divide-gray-200">
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">admin001</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Alice Smith</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200">Delete</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">ta002</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Bob Johnson</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200">Delete</button>
+            </td>
+          </tr>
+
+          <!-- More admin rows can be added here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+
+</html>
