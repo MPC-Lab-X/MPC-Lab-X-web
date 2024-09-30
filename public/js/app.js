@@ -14,23 +14,39 @@ class Data {
    */
   constructor(app) {
     this.app = app;
-
     this.key = "appData";
     this._data = this.loadData();
 
-    return new Proxy(this._data, {
+    return this.createProxy(this._data);
+  }
+
+  /**
+   * @function createProxy - Creates a proxy for the data object.
+   * @param {Object} data - The data object to proxy.
+   * @returns {Object} - The proxied data object.
+   */
+  createProxy(data) {
+    const handler = {
       set: (target, prop, value) => {
+        if (typeof value === "object" && value !== null) {
+          value = this.createProxy(value);
+        }
         target[prop] = value;
-        this.saveData();
+        this.saveData(); // Save data when any property is set
         return true;
       },
       get: (target, prop) => {
         if (prop in target) {
+          if (typeof target[prop] === "object" && target[prop] !== null) {
+            return this.createProxy(target[prop]);
+          }
           return target[prop];
         }
         return undefined;
       },
-    });
+    };
+
+    return new Proxy(data, handler);
   }
 
   /**
