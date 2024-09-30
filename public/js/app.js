@@ -4,96 +4,6 @@
  */
 
 /**
- * @class UI
- * @description Handles the user interface of the application.
- */
-class UI {
-  /**
-   * @constructor - Initializes the UI class.
-   * @param {Object} app - The App class instance.
-   */
-  constructor(app) {
-    this.app = app;
-
-    this.notifications = new Map();
-  }
-
-  /**
-   * @function notify - Displays a notification message in an element.
-   * @param {string} type - The type of notification.
-   * @param {string | string[]} message - The message to display.
-   * @param {string} status - The status of the notification.
-   * @param {HTMLElement} parentElement - The parent element to append the notification to.
-   * @param {string} messageGroup - The message group, auto-removes when a new message is added to the group.
-   * @returns {HTMLElement} The notification element.
-   */
-  notification(type, message, status, parentElement, messageGroup) {
-    let alert = document.createElement("div");
-
-    let colorClasses = "";
-    switch (status) {
-      case "success":
-        colorClasses = "text-green-800 border-green-300 bg-green-50";
-        break;
-      case "info":
-        colorClasses = "text-gray-800 border-gray-300 bg-gray-50";
-        break;
-      case "warning":
-        colorClasses = "text-yellow-800 border-yellow-300 bg-yellow-50";
-        break;
-      case "error":
-        colorClasses = "text-red-800 border-red-300 bg-red-50";
-        break;
-      default:
-        colorClasses = "text-gray-800 border-gray-300 bg-gray-50";
-        break;
-    }
-
-    if (type === "alert") {
-      alert.className = `flex items-center p-4 mt-2 mb-4 text-sm ${colorClasses} border rounded-lg`;
-      alert.role = "alert";
-      alert.innerHTML = `
-          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-          </svg>
-          <span class="sr-only">Info</span>
-          <div>
-            <span class="font-medium">${message}</span>
-          </div>`;
-    } else if (type === "list") {
-      const messageAfterOne = message.slice(1);
-      const list = messageAfterOne.map((item) => `<li>${item}</li>`).join("");
-
-      alert.className = `flex p-4 mt-2 mb-4 text-sm ${colorClasses} rounded-lg`;
-      alert.role = "alert";
-      alert.innerHTML = `
-          <svg class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-          </svg>
-          <span class="sr-only">${message[0]}</span>
-          <div>
-            <span class="font-medium">Ensure that these requirements are met:</span>
-            <ul class="mt-1.5 list-disc list-inside">
-              ${list}
-            </ul>
-          </div>`;
-    }
-
-    parentElement.appendChild(alert);
-
-    if (messageGroup) {
-      if (this.notifications.has(messageGroup)) {
-        this.notifications.get(messageGroup).remove();
-      }
-
-      this.notifications.set(messageGroup, alert);
-    }
-
-    return alert;
-  }
-}
-
-/**
  * @class Data
  * @description Handles the data of the application.
  */
@@ -190,6 +100,8 @@ class Auth {
     });
 
     if (!response.ok) {
+      this.removeTokens();
+      this.app.location.init();
       throw new Error("Invalid or expired token.");
     } else {
       const data = (await response.json()).data;
@@ -210,6 +122,13 @@ class Auth {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * @function removeTokens - Removes the tokens from the data.
+   */
+  removeTokens() {
+    this.app.data.auth = {};
   }
 }
 
@@ -299,6 +218,136 @@ class Location {
 }
 
 /**
+ * @class UI
+ * @description Handles the user interface of the application.
+ */
+class UI {
+  /**
+   * @constructor - Initializes the UI class.
+   * @param {Object} app - The App class instance.
+   */
+  constructor(app) {
+    this.app = app;
+
+    this.notifications = new Map();
+  }
+
+  /**
+   * @function init - Initializes the UI class.
+   */
+  async init() {
+    function init() {
+      this.updateHeader(this.app.auth.authenticated);
+    }
+
+    document.addEventListener("DOMContentLoaded", init.bind(this));
+    if (
+      document.readyState === "complete" ||
+      document.readyState === "interactive"
+    ) {
+      init.bind(this)();
+    }
+  }
+
+  /**
+   * @function updateHeader - Updates the header based on the authentication status.
+   * @param {boolean} authenticated - The authentication status.
+   */
+  updateHeader(authenticated) {
+    const header = document.querySelector("header");
+
+    if (authenticated) {
+      const loginLink = header.querySelector("[href='/login']");
+      const registerLink = header.querySelector("[href='/register']");
+
+      if (loginLink) {
+        loginLink.textContent = "Dashboard";
+        loginLink.href = "/dashboard";
+      }
+
+      if (registerLink) {
+        registerLink.textContent = "Profile";
+        registerLink.href = "/user";
+      }
+    }
+  }
+
+  /**
+   * @function notify - Displays a notification message in an element.
+   * @param {string} type - The type of notification.
+   * @param {string | string[]} message - The message to display.
+   * @param {string} status - The status of the notification.
+   * @param {HTMLElement} parentElement - The parent element to append the notification to.
+   * @param {string} messageGroup - The message group, auto-removes when a new message is added to the group.
+   * @returns {HTMLElement} The notification element.
+   */
+  notification(type, message, status, parentElement, messageGroup) {
+    let alert = document.createElement("div");
+
+    let colorClasses = "";
+    switch (status) {
+      case "success":
+        colorClasses = "text-green-800 border-green-300 bg-green-50";
+        break;
+      case "info":
+        colorClasses = "text-gray-800 border-gray-300 bg-gray-50";
+        break;
+      case "warning":
+        colorClasses = "text-yellow-800 border-yellow-300 bg-yellow-50";
+        break;
+      case "error":
+        colorClasses = "text-red-800 border-red-300 bg-red-50";
+        break;
+      default:
+        colorClasses = "text-gray-800 border-gray-300 bg-gray-50";
+        break;
+    }
+
+    if (type === "alert") {
+      alert.className = `flex items-center p-4 mt-2 mb-4 text-sm ${colorClasses} border rounded-lg`;
+      alert.role = "alert";
+      alert.innerHTML = `
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">${message}</span>
+          </div>`;
+    } else if (type === "list") {
+      const messageAfterOne = message.slice(1);
+      const list = messageAfterOne.map((item) => `<li>${item}</li>`).join("");
+
+      alert.className = `flex p-4 mt-2 mb-4 text-sm ${colorClasses} rounded-lg`;
+      alert.role = "alert";
+      alert.innerHTML = `
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">${message[0]}</span>
+          <div>
+            <span class="font-medium">Ensure that these requirements are met:</span>
+            <ul class="mt-1.5 list-disc list-inside">
+              ${list}
+            </ul>
+          </div>`;
+    }
+
+    parentElement.appendChild(alert);
+
+    if (messageGroup) {
+      if (this.notifications.has(messageGroup)) {
+        this.notifications.get(messageGroup).remove();
+      }
+
+      this.notifications.set(messageGroup, alert);
+    }
+
+    return alert;
+  }
+}
+
+/**
  * @class App
  * @description Main application class.
  */
@@ -326,6 +375,7 @@ class App {
   async init() {
     await this.auth.init();
     this.location.init();
+    this.ui.init();
   }
 }
 
