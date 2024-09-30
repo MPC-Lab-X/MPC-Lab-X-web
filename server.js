@@ -19,7 +19,7 @@ const app = express();
 app.use(express.static("public"));
 
 // Load the renderer (EJS)
-app.set('views', './src/views');
+app.set("views", "./src/views");
 app.set("view engine", "ejs");
 
 // Routes setup

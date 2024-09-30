@@ -137,7 +137,7 @@ class User {
     const response = await fetch(
       `${this.apiURL}/users/${this.app.auth.userId}/email/complete`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },

@@ -14,6 +14,13 @@ router.get("/settings", (req, res) => {
   res.render("pages/user/settings");
 });
 
+router.get("/settings/complete-email-update", (req, res) => {
+  if (!req.query.token) {
+    return res.redirect("/user/settings");
+  }
+  res.render("pages/user/complete-email-update", { token: req.query.token });
+});
+
 router.get("/security", (req, res) => {
   res.render("pages/user/security");
 });
