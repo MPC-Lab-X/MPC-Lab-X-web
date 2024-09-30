@@ -28,4 +28,11 @@ router.get("/:id/students", (req, res) => {
   res.render("pages/class/students", { classId: req.params.id });
 });
 
+router.get("/:id/students/new", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  res.render("pages/class/add-student", { classId: req.params.id });
+});
+
 module.exports = router;
