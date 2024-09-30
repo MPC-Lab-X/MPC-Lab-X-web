@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Edit Student</title>
+</head>
+
+<body>
+  <%- include("../../components/classroom-sidebar.ejs"), { classId } %>
+  <main class="sm:ml-64 p-6">
+    <h1 class="text-2xl font-semibold mb-6">Edit Student Information</h1>
+
+    <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
+      <h2 class="text-xl font-bold mb-4 text-primary-500">Edit Student Details</h2>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-text">Student ID</label>
+        <p id="student-id" class="mt-1 text-lg font-semibold text-gray-700">001</p>
+      </div>
+
+      <div class="mb-4">
+        <label for="student-name" class="block text-sm font-medium text-text">Student Name</label>
+        <input type="text" id="student-name" value="Current Student Name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+      </div>
+
+      <button id="update-student" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Update Student</button>
+
+      <button id="delete-student" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200 mb-4">Delete Student</button>
+    </div>
+  </main>
+</body>
+
+</html>

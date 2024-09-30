@@ -35,4 +35,17 @@ router.get("/:id/students/new", (req, res) => {
   res.render("pages/class/add-student", { classId: req.params.id });
 });
 
+router.get("/:id/students/:studentId/edit", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  if (!req.params.studentId) {
+    return res.redirect(`/classrooms/${req.params.id}/students`);
+  }
+  res.render("pages/class/edit-student", {
+    classId: req.params.id,
+    studentId: req.params.studentId,
+  });
+});
+
 module.exports = router;
