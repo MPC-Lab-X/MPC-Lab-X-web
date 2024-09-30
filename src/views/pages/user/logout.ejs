@@ -14,6 +14,13 @@
       Logout
     </button>
   </main>
+  <script>
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener("click", async () => {
+      app.auth.destroy();
+      app.location.redirect("/login");
+    });
+  </script>
 </body>
 
 </html>
