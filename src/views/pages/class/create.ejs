@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Create Classroom</title>
 </head>
 
@@ -11,7 +12,7 @@
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Create a New Classroom</h1>
 
-    <div class="bg-white shadow-md rounded-lg p-6 max-w-lg">
+    <div id="classroom" class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Classroom Details</h2>
 
       <div class="mb-4">
@@ -22,6 +23,37 @@
       <button id="create-classroom" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Create Classroom</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    const createClassroomButton = document.getElementById("create-classroom");
+    createClassroomButton.addEventListener("click", async () => {
+      createClassroomButton.disabled = true;
+      const classroomName = document.getElementById("classroom-name").value;
+      const response = await classroom.createClass(classroomName);
+      if (response.status === "success") {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "success",
+          document.getElementById("classroom"),
+          "create-classroom"
+        );
+        setTimeout(() => {
+          window.location.href = `/classrooms/${response.data._id}`;
+        }, 2000);
+      } else {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "error",
+          document.getElementById("classroom"),
+          "create-classroom"
+        );
+        createClassroomButton.disabled = false;
+      }
+    });
+  </script>
 </body>
 
 </html>
