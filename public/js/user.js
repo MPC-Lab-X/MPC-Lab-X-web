@@ -18,7 +18,6 @@ class User {
    * @function getUser - Gets the user data.
    * @param {string} userId - The user ID.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async getUser(userId = this.app.auth.userId) {
     const response = await fetch(`${this.apiURL}/users/${userId}`, {
@@ -38,7 +37,6 @@ class User {
    * @param {number} limit - The number of records to return.
    * @param {number} offset - The number of records to skip.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async getSafetyRecords(limit = 10, offset = 0) {
     const response = await fetch(
@@ -60,7 +58,6 @@ class User {
    * @function updateUsername - Updates the username of a user.
    * @param {string} username - The new username.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async updateUsername(username) {
     const response = await fetch(
@@ -83,7 +80,6 @@ class User {
    * @function updateDisplayName - Updates the display name of a user.
    * @param {string} displayName - The new display name.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async updateDisplayName(displayName) {
     const response = await fetch(
@@ -106,7 +102,6 @@ class User {
    * @function updateEmail - Updates the email of a user.
    * @param {string} email - The new email.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async updateEmail(email) {
     const callbackUrl = `${this.baseURL}/user/settings/complete-email-update`;
@@ -131,7 +126,6 @@ class User {
    * @function completeEmailUpdate - Completes the email update of a user.
    * @param {string} token - The email update token.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async completeEmailUpdate(token) {
     const response = await fetch(
@@ -155,7 +149,6 @@ class User {
    * @param {string} currentPassword - The current password.
    * @param {string} newPassword - The new password.
    * @returns {Promise<Object>} - The response object.
-   * @throws {Error} - The error object.
    */
   async updatePassword(currentPassword, newPassword) {
     const response = await fetch(
