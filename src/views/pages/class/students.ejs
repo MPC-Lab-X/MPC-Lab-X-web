@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Students</title>
 </head>
 
@@ -20,30 +21,40 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody class="bg-background-50 divide-y divide-gray-200">
-          <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">001</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Alice</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <button class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
-              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
-            </td>
+        <tbody id="students-table" class="bg-background-50 divide-y divide-gray-200">
+          <tr class="border-b">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" colspan="3">No students found</td>
           </tr>
-
-          <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">002</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Bob</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <button class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
-              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
-            </td>
-          </tr>
-
-          <!-- More student rows can be added here -->
         </tbody>
       </table>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const classroom = response.data;
+        const students = classroom.students;
+        const studentsTable = document.getElementById("students-table");
+        if (students.length > 0) {
+          studentsTable.innerHTML = "";
+        }
+        students.forEach((student) => {
+          const studentRow = document.createElement("tr");
+          studentRow.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.studentNumber}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <button class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
+              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
+            </td>
+          `;
+          studentsTable.appendChild(studentRow);
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>

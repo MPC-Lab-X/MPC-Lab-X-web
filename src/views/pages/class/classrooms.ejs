@@ -41,13 +41,13 @@
               <strong>Teacher:</strong> ${classroom.teacher.username}
             </p>
             <p class="text-sm text-gray-600 mb-2">
-              <a href="/classrooms/${classroom.id}/admins"><strong>Admin/Assistants:</strong> <span class="hover:text-primary-400 cursor-pointer" title="${classroom.admins.map(admin => admin.username).join(', ')}">${classroom.admins.slice(0, 3).map(admin => admin.username).join(', ')}${classroom.admins.length > 3 ? ', ...' : ''}</span></a>
+              <a href="/classrooms/${classroom._id}/admins"><strong>Admin/Assistants:</strong> <span class="hover:text-primary-400 cursor-pointer" title="${classroom.admins.map(admin => admin.username).join(', ')}">${classroom.admins.slice(0, 3).map(admin => admin.username).join(', ')}${classroom.admins.length > 3 ? ', ...' : ''}</span></a>
             </p>
             <p class="text-sm text-gray-600 mb-4">
-              <a href="/classrooms/${classroom.id}/students"><strong>Students:</strong> ${classroom.students.length}</a>
+              <a href="/classrooms/${classroom._id}/students"><strong>Students:</strong> ${classroom.students.length}</a>
             </p>
             <div class="tooltip">
-              <a href="/classrooms/${classroom.id}" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
+              <a href="/classrooms/${classroom._id}" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
                 Enter Classroom
               </a>
               <span class="tooltip-text bg-dark text-white px-2 py-1 rounded text-sm absolute -top-8 left-1/2 transform -translate-x-1/2 hidden">Enter the classroom</span>
