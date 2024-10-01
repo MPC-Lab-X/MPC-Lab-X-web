@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Add Student</title>
 </head>
 
@@ -11,7 +12,7 @@
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Add New Student(s)</h1>
 
-    <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
+    <div id="add-student-form" class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Student Details</h2>
 
       <div class="mb-4">
@@ -22,6 +23,42 @@
       <button id="add-student" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Student(s)</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    const addStudentButton = document.getElementById("add-student");
+    addStudentButton.addEventListener("click", async () => {
+      const studentNames = document.getElementById("student-names").value.split(",").map(name => name.trim());
+      if (studentNames.length > 25) {
+        app.ui.notification(
+          "alert",
+          "You can only add a maximum of 25 students at a time",
+          "error",
+          document.getElementById("add-student-form"),
+          "add-student"
+        );
+        return;
+      }
+      for (let i = 0; i < studentNames.length; i++) {
+        const response = await classroom.addStudent("<%= classId %>", studentNames[i]);
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            `Student ${studentNames[i]} added successfully`,
+            "success",
+            document.getElementById("add-student-form")
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            `Failed to add student ${studentNames[i]}: ${response.message}`,
+            "error",
+            document.getElementById("add-student-form")
+          );
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>
