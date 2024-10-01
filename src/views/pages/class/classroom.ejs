@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/user.js"></script>
   <title>MPC Lab | Classroom</title>
 </head>
 
@@ -46,10 +47,19 @@
       <div class="bg-background-50 p-4 shadow-lg rounded-lg transition-transform transform hover:scale-105">
         <h2 class="font-semibold text-xl">Classroom Code</h2>
         <p class="text-sm text-gray-600">Your unique classroom code for students.</p>
-        <span class="font-bold text-lg">CODE123</span>
+        <span class="font-bold text-lg"><%= classId %></span>
       </div>
     </div>
   </main>
+  <script>
+    const user = new User(app);
+
+    user.getUser().then((response) => {
+      if (response.status === "success") {
+        document.getElementById("user-name").textContent = response.data.displayName;
+      }
+    });
+  </script>
 </body>
 
 </html>
