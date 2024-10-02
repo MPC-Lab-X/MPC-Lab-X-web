@@ -12,7 +12,7 @@
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Add New Student(s)</h1>
 
-    <div id="add-student-form" class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
+    <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Student Details</h2>
 
       <div class="mb-4">
@@ -28,11 +28,12 @@
 
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
         document.title = `MPC Lab | Add Student - ${response.data.name}`;
         document.getElementById("classroom-name").textContent = response.data.name;
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
-        studentsCount.textContent = response.data.students.length;
+        studentsCount.textContent = students.length;
         adminsCount.textContent = response.data.admins.length;
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
@@ -53,7 +54,7 @@
           "alert",
           "You can only add a maximum of 25 students at a time",
           "error",
-          document.getElementById("add-student-form"),
+          document.getElementById("add-student").parentElement,
           "add-student"
         );
         return;
@@ -65,14 +66,14 @@
             "alert",
             `Student ${studentNames[i]} added successfully`,
             "success",
-            document.getElementById("add-student-form")
+            document.getElementById("add-student").parentElement,
           );
         } else {
           app.ui.notification(
             "alert",
             `Failed to add student ${studentNames[i]}: ${response.message}`,
             "error",
-            document.getElementById("add-student-form")
+            document.getElementById("add-student").parentElement,
           );
         }
       }

@@ -58,11 +58,13 @@
 
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
         document.title = `MPC Lab | ${response.data.name}`;
         document.getElementById("classroom-name").textContent = response.data.name;
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
-        studentsCount.textContent = response.data.students.length;
+        studentsCount.textContent = students.length;
         adminsCount.textContent = response.data.admins.length;
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");

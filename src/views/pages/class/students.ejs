@@ -35,15 +35,17 @@
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const classroom = response.data;
+        const students = classroom.students.filter((student) => !student.deleted);
+
         document.title = `MPC Lab | Students - ${classroom.name}`;
         document.getElementById("classroom-name").textContent = classroom.name;
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
-        studentsCount.textContent = classroom.students.length;
+        studentsCount.textContent = students.length;
         adminsCount.textContent = classroom.admins.length;
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
-        const students = classroom.students;
+
         const studentsTable = document.getElementById("students-table");
         if (students.length > 0) {
           studentsTable.innerHTML = "";
@@ -54,8 +56,8 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.studentNumber}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.name}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <button class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
-              <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
+              <button onclick="app.location.redirect('/classrooms/${classroom._id}/students/${student.studentNumber}/edit')" class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
+              <button onclick="deleteStudent(this, '${classroom._id}', '${student.studentNumber}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
             </td>
           `;
           studentsTable.appendChild(studentRow);
@@ -68,6 +70,22 @@
         }
       }
     });
+
+    const deleteStudent = async (deleteButton, classId, studentId) => {
+      deleteButton.textContent = "Confirm";
+      deleteButton.classList.remove("bg-red-500");
+      deleteButton.classList.add("bg-red-700");
+      deleteButton.onclick = async () => {
+        deleteButton.disabled = true;
+        deleteButton.textContent = "Deleting...";
+        const response = await classroom.deleteStudent(classId, studentId);
+        if (response.status === "success") {
+          deleteButton.parentElement.parentElement.remove();
+        } else {
+          deleteButton.disabled = false;
+        }
+      };
+    };
   </script>
 </body>
 

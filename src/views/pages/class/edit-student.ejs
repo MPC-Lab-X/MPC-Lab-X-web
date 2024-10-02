@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Edit Student</title>
 </head>
 
@@ -16,12 +17,12 @@
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-text">Student ID</label>
-        <p id="student-id" class="mt-1 text-lg font-semibold text-gray-700">001</p>
+        <p id="student-id" class="mt-1 text-lg font-semibold text-gray-700"></p>
       </div>
 
       <div class="mb-4">
         <label for="student-name" class="block text-sm font-medium text-text">Student Name</label>
-        <input type="text" id="student-name" value="Current Student Name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+        <input type="text" id="student-name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
       </div>
 
       <button id="update-student" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Update Student</button>
@@ -29,6 +30,95 @@
       <button id="delete-student" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200 mb-4">Delete Student</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | Edit Student - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+
+        const studentId = "<%= studentId %>";
+        const student = students.find((student) => student.studentNumber === parseInt(studentId));
+        if (student) {
+          document.getElementById("student-id").textContent = student.studentNumber;
+          document.getElementById("student-name").value = student.name;
+        } else {
+          app.location.showNotFound();
+        }
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const updateStudentButton = document.getElementById("update-student");
+    updateStudentButton.addEventListener("click", async () => {
+      const studentName = document.getElementById("student-name").value;
+      const studentId = "<%= studentId %>";
+      const classId = "<%= classId %>";
+
+      classroom.renameStudent(classId, parseInt(studentId), studentName).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            document.getElementById("update-student").parentElement,
+            "update-student"
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            document.getElementById("update-student").parentElement,
+            "update-student"
+          );
+        }
+      });
+    });
+
+    const deleteStudentButton = document.getElementById("delete-student");
+    deleteStudentButton.addEventListener("click", async () => {
+      const studentId = "<%= studentId %>";
+      const classId = "<%= classId %>";
+
+      classroom.deleteStudent(classId, parseInt(studentId)).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            document.getElementById("delete-student").parentElement,
+            "delete-student"
+          );
+          setTimeout(() => {
+            app.location.redirect(`/classrooms/${classId}/students`);
+          }, 2000);
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            document.getElementById("delete-student").parentElement,
+            "delete-student"
+          );
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
