@@ -45,7 +45,7 @@ class Classroom {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ className: name }),
+      body: JSON.stringify({ name }),
     });
 
     const data = await response.json();

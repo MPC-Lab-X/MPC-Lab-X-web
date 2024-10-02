@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Classroom Settings</title>
 </head>
 
@@ -21,7 +22,7 @@
 
       <div class="mb-4">
         <label for="class-code" class="block text-sm font-medium text-text">Classroom Code</label>
-        <input type="text" id="class-code" value="CLASS1234" readonly class="mt-1 block w-full p-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed" />
+        <input type="text" id="class-code" value="<%= classId %>" readonly class="mt-1 block w-full p-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed" />
       </div>
 
       <div class="flex justify-between mt-6">
@@ -30,6 +31,83 @@
       </div>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+
+        document.getElementById("class-name").value = response.data.name;
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const saveSettingsButton = document.getElementById("save-settings");
+    saveSettingsButton.addEventListener("click", () => {
+      const className = document.getElementById("class-name").value;
+
+      classroom.renameClass("<%= classId %>", className).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            saveSettingsButton.parentElement.parentElement,
+            "save-settings"
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            saveSettingsButton.parentElement.parentElement,
+            "save-settings"
+          );
+        }
+      });
+    });
+
+    const deleteClassButton = document.getElementById("delete-class");
+    deleteClassButton.addEventListener("click", () => {
+      let deleteClassLockTimeout = 30;
+      const deleteClassLockTimeoutInterval = setInterval(() => {
+        deleteClassButton.textContent = `Available in ${deleteClassLockTimeout}s`;
+        deleteClassLockTimeout--;
+        if (deleteClassLockTimeout === 0) {
+          deleteClassButton.textContent = "Confirm Delete";
+          deleteClassButton.classList.remove("bg-red-500");
+          deleteClassButton.classList.add("bg-red-700");
+          deleteClassButton.onclick = async () => {
+            deleteClassButton.disabled = true;
+            deleteClassButton.textContent = "Deleting...";
+            const response = await classroom.deleteClass("<%= classId %>");
+            if (response.status === "success") {
+              app.location.redirect("/classrooms");
+            } else {
+              deleteClassButton.disabled = false;
+              deleteClassButton.textContent = "Delete Classroom";
+            }
+          };
+          clearInterval(deleteClassLockTimeoutInterval);
+        }
+      }, 1000);
+    });
+  </script>
 </body>
 
 </html>
