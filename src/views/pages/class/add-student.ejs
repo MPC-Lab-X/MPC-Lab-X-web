@@ -26,6 +26,25 @@
   <script>
     const classroom = new Classroom(app);
 
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        document.title = `MPC Lab | Add Student - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = response.data.students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
     const addStudentButton = document.getElementById("add-student");
     addStudentButton.addEventListener("click", async () => {
       const studentNames = document.getElementById("student-names").value.split(",").map(name => name.trim());

@@ -291,6 +291,20 @@ class Location {
   refresh() {
     window.location.reload();
   }
+
+  /**
+   * @function showNotFound - Shows the 404 page.
+   */
+  showNotFound() {
+    this.redirect(`${this.app.baseURL}/404?path=${this.path}`);
+  }
+
+  /**
+   * @function showForbidden - Shows the 403 page.
+   */
+  showForbidden() {
+    this.redirect(`${this.app.baseURL}/403?page=${this.path}`);
+  }
 }
 
 /**

@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <script src="/js/user.js"></script>
   <title>MPC Lab | Classroom</title>
 </head>
@@ -52,7 +53,27 @@
     </div>
   </main>
   <script>
+    const classroom = new Classroom(app);
     const user = new User(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        document.title = `MPC Lab | ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = response.data.students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
 
     user.getUser().then((response) => {
       if (response.status === "success") {

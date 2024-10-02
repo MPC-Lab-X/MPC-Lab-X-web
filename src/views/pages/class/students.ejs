@@ -35,6 +35,14 @@
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const classroom = response.data;
+        document.title = `MPC Lab | Students - ${classroom.name}`;
+        document.getElementById("classroom-name").textContent = classroom.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = classroom.students.length;
+        adminsCount.textContent = classroom.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
         const students = classroom.students;
         const studentsTable = document.getElementById("students-table");
         if (students.length > 0) {
@@ -52,6 +60,12 @@
           `;
           studentsTable.appendChild(studentRow);
         });
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
       }
     });
   </script>
