@@ -38,7 +38,7 @@
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
 
-        document.title = `MPC Lab | ${response.data.name}`;
+        document.title = `MPC Lab | Classroom Settings - ${response.data.name}`;
         document.getElementById("classroom-name").textContent = response.data.name;
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
@@ -83,7 +83,10 @@
     });
 
     const deleteClassButton = document.getElementById("delete-class");
+    let unlockDeleteClass = false;
     deleteClassButton.addEventListener("click", () => {
+      if (unlockDeleteClass) return;
+      deleteClassButton.disabled = true;
       let deleteClassLockTimeout = 30;
       const deleteClassLockTimeoutInterval = setInterval(() => {
         deleteClassButton.textContent = `Available in ${deleteClassLockTimeout}s`;
@@ -92,6 +95,7 @@
           deleteClassButton.textContent = "Confirm Delete";
           deleteClassButton.classList.remove("bg-red-500");
           deleteClassButton.classList.add("bg-red-700");
+          deleteClassButton.disabled = false;
           deleteClassButton.onclick = async () => {
             deleteClassButton.disabled = true;
             deleteClassButton.textContent = "Deleting...";
@@ -101,9 +105,11 @@
             } else {
               deleteClassButton.disabled = false;
               deleteClassButton.textContent = "Delete Classroom";
+              app.ui.alert(response.message, "error", 5000);
             }
           };
           clearInterval(deleteClassLockTimeoutInterval);
+          unlockDeleteClass = true;
         }
       }, 1000);
     });

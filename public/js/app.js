@@ -363,7 +363,58 @@ class UI {
   }
 
   /**
-   * @function notify - Displays a notification message in an element.
+   * @function alert - Displays an alert message at the top-left corner of the page.
+   * @param {string} message - The message to display.
+   * @param {string} status - The status of the alert (e.g., "success", "info", "warning", "error").
+   * @param {number} duration - The duration in milliseconds for which the alert should be visible.
+   */
+  alert(message, status = "info", duration = 3000) {
+    const alertBox = document.createElement("div");
+
+    let colorClasses = "";
+    switch (status) {
+      case "success":
+        colorClasses = "text-green-800 border-green-300 bg-green-50";
+        break;
+      case "info":
+        colorClasses = "text-blue-800 border-blue-300 bg-blue-50";
+        break;
+      case "warning":
+        colorClasses = "text-yellow-800 border-yellow-300 bg-yellow-50";
+        break;
+      case "error":
+        colorClasses = "text-red-800 border-red-300 bg-red-50";
+        break;
+      default:
+        colorClasses = "text-gray-800 border-gray-300 bg-gray-50";
+        break;
+    }
+
+    alertBox.className = `fixed right-4 top-4 z-50 p-4 text-sm ${colorClasses} border rounded-lg opacity-0 transition-opacity duration-500`;
+    alertBox.role = "alert";
+    alertBox.innerHTML = `
+    <div class="flex items-center">
+      <span>${message}</span>
+    </div>`;
+
+    document.body.appendChild(alertBox);
+
+    setTimeout(() => {
+      alertBox.classList.add("opacity-100");
+    }, 10);
+
+    setTimeout(() => {
+      alertBox.classList.remove("opacity-100");
+      alertBox.classList.add("opacity-0");
+
+      setTimeout(() => {
+        alertBox.remove();
+      }, 500);
+    }, duration);
+  }
+
+  /**
+   * @function notification - Displays a notification message in an element.
    * @param {string} type - The type of notification.
    * @param {string | string[]} message - The message to display.
    * @param {string} status - The status of the notification.
@@ -371,7 +422,13 @@ class UI {
    * @param {string} messageGroup - The message group, auto-removes when a new message is added to the group.
    * @returns {HTMLElement} The notification element.
    */
-  notification(type, message, status, parentElement, messageGroup) {
+  notification(
+    type = "alert",
+    message,
+    status = "info",
+    parentElement,
+    messageGroup
+  ) {
     let alert = document.createElement("div");
 
     let colorClasses = "";

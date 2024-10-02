@@ -40,7 +40,7 @@
         const students = classroom.students.filter((student) => !student.deleted);
         const admins = classroom.admins;
 
-        document.title = `MPC Lab | Students - ${classroom.name}`;
+        document.title = `MPC Lab | Admins - ${classroom.name}`;
         document.getElementById("classroom-name").textContent = classroom.name;
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
@@ -86,6 +86,7 @@
         } else {
           button.disabled = false;
           button.textContent = "Remove";
+          app.ui.alert(response.message, "error", 5000);
         }
       };
     };
