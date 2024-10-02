@@ -303,7 +303,7 @@ class Location {
    * @function showForbidden - Shows the 403 page.
    */
   showForbidden() {
-    this.redirect(`${this.app.baseURL}/403?page=${this.path}`);
+    this.redirect(`${this.app.baseURL}/403?path=${this.path}`);
   }
 }
 

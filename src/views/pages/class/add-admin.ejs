@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Add Admin</title>
 </head>
 
@@ -19,13 +20,64 @@
       </p>
 
       <div class="mb-4">
-        <label for="admin-username" class="block text-sm font-medium text-text">Username</label>
-        <input type="text" id="admin-username" placeholder="Enter admin username" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+        <label for="admin-identifier" class="block text-sm font-medium text-text">Admin Username/Email/User ID</label>
+        <input type="text" id="admin-identifier" placeholder="Enter admin username, email, or user ID" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
       </div>
 
       <button id="add-admin" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Admin</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+        document.title = `MPC Lab | Add Admin - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const addAdminButton = document.getElementById("add-admin");
+    addAdminButton.addEventListener("click", async () => {
+      addAdminButton.disabled = true;
+      const adminIdentifier = document.getElementById("admin-identifier").value;
+      const response = await classroom.addAdmin("<%= classId %>", adminIdentifier);
+      if (response.status === "success") {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "success",
+          document.getElementById("add-admin").parentElement,
+          "add-admin"
+        );
+        setTimeout(() => {
+          app.location.redirect(`/classrooms/<%= classId %>/admins`);
+        }, 2000);
+      } else {
+        app.ui.notification(
+          "alert",
+          response.message,
+          "error",
+          document.getElementById("add-admin").parentElement,
+          "add-admin"
+        );
+        addAdminButton.disabled = false;
+      }
+    });
+  </script>
 </body>
 
 </html>

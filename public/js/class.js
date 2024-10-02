@@ -91,16 +91,16 @@ class Classroom {
   /**
    * @function addAdmin - Adds an admin to a class.
    * @param {string} id - The ID of the class.
-   * @param {string} userId - The ID of the user.
+   * @param {string} identifier - The id, email, or username of the user.
    * @returns {Promise<Object>} - The response object.
    */
-  async addAdmin(id, userId) {
+  async addAdmin(id, identifier) {
     const response = await fetch(`${this.apiURL}/classes/${id}/admins`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ identifier }),
     });
 
     const data = await response.json();
