@@ -12,6 +12,10 @@
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Student List</h1>
 
+    <div class="mb-6">
+      <input type="text" id="search" placeholder="Search students by name or ID..." class="border border-gray-300 rounded p-2 w-full" oninput="filterStudents()" />
+    </div>
+
     <div class="overflow-x-auto bg-background-50 shadow-md rounded-lg">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100">
@@ -35,33 +39,19 @@
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const classroom = response.data;
-        const students = classroom.students.filter((student) => !student.deleted);
+        allStudents = classroom.students.filter((student) => !student.deleted);
 
         document.title = `MPC Lab | Students - ${classroom.name}`;
         document.getElementById("classroom-name").textContent = classroom.name;
+
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
-        studentsCount.textContent = students.length;
+        studentsCount.textContent = allStudents.length;
         adminsCount.textContent = classroom.admins.length;
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
 
-        const studentsTable = document.getElementById("students-table");
-        if (students.length > 0) {
-          studentsTable.innerHTML = "";
-        }
-        students.forEach((student) => {
-          const studentRow = document.createElement("tr");
-          studentRow.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.studentNumber}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.name}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <button onclick="app.location.redirect('/classrooms/${classroom._id}/students/${student.studentNumber}/edit')" class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
-              <button onclick="deleteStudent(this, '${classroom._id}', '${student.studentNumber}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
-            </td>
-          `;
-          studentsTable.appendChild(studentRow);
-        });
+        renderStudents(allStudents);
       } else {
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
@@ -70,6 +60,38 @@
         }
       }
     });
+
+    let allStudents = [];
+
+    function renderStudents(students) {
+      const studentsTable = document.getElementById("students-table");
+      studentsTable.innerHTML = "";
+      if (students.length > 0) {
+        students.forEach((student) => {
+          const studentRow = document.createElement("tr");
+          studentRow.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.studentNumber}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+              <button onclick="app.location.redirect('/classrooms/<%= classId %>/students/${student.studentNumber}/edit')" class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
+              <button onclick="deleteStudent(this, '<%= classId %>', '${student.studentNumber}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
+            </td>
+          `;
+          studentsTable.appendChild(studentRow);
+        });
+      } else {
+        studentsTable.innerHTML = `<tr><td class="px-6 py-4 text-center text-sm text-gray-500" colspan="3">No students found.</td></tr>`;
+      }
+    }
+
+    function filterStudents() {
+      const searchTerm = document.getElementById("search").value.toLowerCase();
+      const filteredStudents = allStudents.filter((student) =>
+        student.studentNumber.toString().includes(searchTerm) ||
+        student.name.toLowerCase().includes(searchTerm)
+      );
+      renderStudents(filteredStudents);
+    }
 
     const deleteStudent = async (deleteButton, classId, studentId) => {
       deleteButton.textContent = "Confirm";
