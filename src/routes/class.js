@@ -35,6 +35,19 @@ router.get("/:id/tasks/new", (req, res) => {
   res.render("pages/class/new-task", { classId: req.params.id });
 });
 
+router.get("/:id/tasks/:taskId", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  }
+  if (!req.params.taskId) {
+    return res.redirect(`/classrooms/${req.params.id}/tasks`);
+  }
+  res.render("pages/class/task", {
+    classId: req.params.id,
+    taskId: req.params.taskId,
+  });
+});
+
 router.get("/:id/students", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
