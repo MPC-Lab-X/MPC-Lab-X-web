@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Tasks</title>
 </head>
 
@@ -14,26 +15,73 @@
       <a href="/classrooms/<%= classId %>/tasks/new" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">New Task</a>
     </div>
 
-    <div class="grid grid-cols-1 gap-6">
-      <div class="bg-background-50 shadow-md rounded-lg p-6">
-        <h2 class="text-xl font-bold text-primary-500 mb-2">Task 1: Introduction to AI</h2>
-        <p class="text-sm text-text mb-4 line-clamp-2">
-          This task will introduce you to the fundamentals of AI, including machine learning, neural networks, and practical applications...
-        </p>
-        <a href="/classrooms/<%= classId %>/tasks/1" class="inline-block bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Enter Task</a>
-      </div>
-
-      <div class="bg-background-50 shadow-md rounded-lg p-6">
-        <h2 class="text-xl font-bold text-primary-500 mb-2">Task 2: Data Structures</h2>
-        <p class="text-sm text-text mb-4 line-clamp-2">
-          In this task, you will learn about the core data structures used in computer science, including arrays, linked lists, stacks...
-        </p>
-        <a href="/classrooms/<%= classId %>/tasks/2" class="inline-block bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Enter Task</a>
-      </div>
-
-      <!-- More tasks... -->
+    <div class="mb-6">
+      <input type="text" id="search" placeholder="Search tasks..." class="border border-gray-300 rounded p-2 w-full" oninput="filterTasks()" />
     </div>
+
+    <div id="tasks" class="grid grid-cols-1 gap-6"></div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | Tasks - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    let allTasks = [];
+
+    classroom.getTasks("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        allTasks = response.data;
+        renderTasks(allTasks);
+      }
+    });
+
+    function renderTasks(tasks) {
+      const tasksContainer = document.getElementById("tasks");
+      tasksContainer.innerHTML = "";
+      if (tasks.length > 0) {
+        tasks.forEach((task) => {
+          const taskCard = document.createElement("div");
+          taskCard.classList.add("bg-background-50", "shadow-md", "rounded-lg", "p-6");
+          taskCard.innerHTML = `
+            <h2 class="text-xl font-bold text-primary-500 mb-2">${task.name}</h2>
+            <p class="text-sm text-text mb-4 line-clamp-2">${task.description}</p>
+            <a href="/classrooms/<%= classId %>/tasks/${task._id}" class="inline-block bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Enter Task</a>
+          `;
+          tasksContainer.appendChild(taskCard);
+        });
+      } else {
+        tasksContainer.innerHTML = `<p class="text-gray-500">No tasks found.</p>`;
+      }
+    }
+
+    function filterTasks() {
+      const searchTerm = document.getElementById("search").value.toLowerCase();
+      const filteredTasks = allTasks.filter(task =>
+        task.name.toLowerCase().includes(searchTerm) ||
+        task.description.toLowerCase().includes(searchTerm)
+      );
+      renderTasks(filteredTasks);
+    }
+  </script>
 </body>
 
 </html>
