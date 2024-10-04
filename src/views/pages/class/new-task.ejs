@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | New Task</title>
 </head>
 
@@ -13,87 +14,149 @@
 
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-bold">Task Sections</h2>
-      <button class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">New Task Section</button>
+      <button id="add-section" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">New Task Section</button>
     </div>
 
-    <div class="grid grid-cols-1 gap-6">
-      <div class="bg-background-50 shadow-md rounded-lg p-6">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h3 class="text-lg font-bold">Algebraic Equations</h3>
-            <p class="text-gray-600">Mathematics > Algebra > Equations</p>
-          </div>
-          <div class="flex space-x-4">
-            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 transition duration-200">Edit</button>
-            <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition duration-200">Delete</button>
-          </div>
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Number of questions</label>
-          <input type="number" min="1" value="10" class="p-3 border border-gray-300 rounded-md w-full mt-1" />
-          <p class="text-gray-500 text-sm">Specify the number of questions for this task type.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Difficulty Level</label>
-            <input type="range" min="1" max="10" class="w-full mt-1" />
-            <input type="number" min="1" max="10" class="p-3 border border-gray-300 rounded-md mt-1 w-full" placeholder="Level" />
-            <p class="text-gray-500 text-sm">Choose a difficulty level from 1 to 10.</p>
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Allow Negative Numbers</label>
-            <label class="inline-flex items-center mt-1">
-              <input type="checkbox" class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
-              <span class="ml-3">Enable</span>
-              <span class="absolute left-1 top-0.5 w-4 h-4 bg-white rounded-full shadow-md checked:transform checked:translate-x-5 transition-transform duration-200"></span>
-            </label>
-            <p class="text-gray-500 text-sm">Toggle to allow or disallow negative numbers.</p>
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Equation Format</label>
-            <input type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter format" />
-            <p class="text-gray-500 text-sm">Specify the format for the algebraic equation.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Repeat for other task types -->
-    </div>
+    <%- include("../../components/task-sections-manager.ejs") %>
+    <%- include("../../components/problem-type-selector.ejs") %>
 
     <div class="mt-8 p-6 bg-background-50 shadow-md rounded-lg">
       <h2 class="text-xl font-bold mb-4">Task Settings</h2>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Task Name</label>
-        <input type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task name" />
+        <input id="task-name" type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task name" />
       </div>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Task Description</label>
-        <textarea class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task description"></textarea>
+        <textarea id="task-description" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task description"></textarea>
       </div>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Unique Questions for Each Student</label>
         <label class="inline-flex items-center mt-1">
-          <input type="checkbox" class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
+          <input id="unique-questions" type="checkbox" class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
           <span class="ml-3">Enable</span>
-          <span class="absolute left-1 top-0.5 w-4 h-4 bg-white rounded-full shadow-md checked:transform checked:translate-x-5 transition-transform duration-200"></span>
         </label>
       </div>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Randomize Questions Order</label>
         <label class="inline-flex items-center mt-1">
-          <input type="checkbox" class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
+          <input id="randomize-questions" type="checkbox" class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
           <span class="ml-3">Enable</span>
-          <span class="absolute left-1 top-0.5 w-4 h-4 bg-white rounded-full shadow-md checked:transform checked:translate-x-5 transition-transform duration-200"></span>
         </label>
       </div>
 
-      <button class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">Create Task</button>
+      <button id="create-task" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">Create Task</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | New Task - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    let taskSectionsManager;
+
+    fetch("/api/problems")
+      .then((response) => response.json())
+      .then((data) => {
+        const problemTypeSelector = new ProblemTypeSelector(
+          document.getElementById("problem-type-selector"),
+          data.data
+        );
+        taskSectionsManager = new TaskSectionsManager(
+          document.getElementById("task-sections-manager"),
+          data.data
+        );
+
+        const addSectionButton = document.getElementById("add-section");
+        addSectionButton.addEventListener("click", () => {
+          problemTypeSelector.show().then((problemPath) => {
+            taskSectionsManager.newSection(problemPath, (topicId) => {
+              problemTypeSelector.show().then((problemPath) => {
+                taskSectionsManager.editSection(topicId, problemPath);
+              }).catch((error) => {
+                /* Selector closed */
+              });
+            });
+          }).catch((error) => {
+            /* Selector closed */
+          });
+        });
+      });
+
+    const createTaskButton = document.getElementById("create-task");
+    createTaskButton.addEventListener("click", async () => {
+      const taskName = document.getElementById("task-name").value;
+      const taskDescription = document.getElementById("task-description").value;
+      const uniqueQuestions = document.getElementById("unique-questions").checked;
+      const randomizeQuestions = document.getElementById("randomize-questions").checked;
+      const topics = taskSectionsManager.getTopics();
+
+      const classId = "<%= classId %>";
+
+      if (topics.length === 0) {
+        app.ui.notification(
+          "alert",
+          "Please add at least one task section.",
+          "error",
+          createTaskButton.parentElement,
+          "create-task"
+        );
+        return;
+      }
+
+      const options = {
+        isIndividualTask: uniqueQuestions,
+        shuffle: randomizeQuestions,
+        topics,
+      };
+
+      classroom.createTask(classId, taskName, taskDescription, options).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            createTaskButton.parentElement,
+            "create-task"
+          );
+          setTimeout(() => {
+            app.location.redirect(`/classrooms/${classId}/tasks/${response.data.taskId}`);
+          }, 2000);
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            createTaskButton.parentElement,
+            "create-task"
+          );
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

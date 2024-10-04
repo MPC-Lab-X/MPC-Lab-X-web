@@ -62,11 +62,13 @@ class TaskSectionsManager {
    * @function newTopic - Adds a new topic (section) to the topics map.
    * @param {Array} path - The path to the section.
    * @param {Object} topic - The topic to add.
+   * @param {Function} onEdit - The function to call when editing the section.
    */
-  newTopic(path, topic) {
+  newTopic(path, topic, onEdit) {
     this.topics.set(this.topicId, {
       path,
       options: this.getDefaults(topic.parameters),
+      _onEdit: onEdit,
     });
 
     this.topicId++;
@@ -79,9 +81,12 @@ class TaskSectionsManager {
    * @param {Object} topic - The topic to add.
    */
   editTopic(topicId, path, topic) {
+    const previousTopic = this.topics.get(topicId);
     this.topics.set(topicId, {
       path,
       options: this.getDefaults(topic.parameters),
+      _element: previousTopic._element,
+      _onEdit: previousTopic._onEdit,
     });
   }
 
@@ -124,7 +129,7 @@ class TaskSectionsManager {
       "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 transition duration-200";
     editButton.innerHTML = "Edit";
     editButton.addEventListener("click", () => {
-      this.editSection(topicId);
+      topic._onEdit(topicId);
     });
 
     const deleteButton = document.createElement("button");
@@ -154,8 +159,14 @@ class TaskSectionsManager {
       "p-3 border border-gray-300 rounded-md w-full mt-1";
     questionsCountInput.value = options.count;
 
-    questionsCountInput.addEventListener("change", (event) => {
-      this.topics.get(topicId).options.count = Number(event.target.value);
+    questionsCountInput.addEventListener("input", (event) => {
+      const value = Number(event.target.value);
+      if (value < event.target.min) {
+        event.target.value = event.target.min;
+      } else if (value > event.target.max) {
+        event.target.value = event.target.max;
+      }
+      this.topics.get(topicId).options.count = value;
     });
 
     const questionsCountDescription = document.createElement("p");
@@ -184,7 +195,7 @@ class TaskSectionsManager {
           textInput.className =
             "p-3 border border-gray-300 rounded-md w-full mt-1";
           textInput.value = options[key];
-          textInput.addEventListener("change", (event) => {
+          textInput.addEventListener("input", (event) => {
             this.topics.get(topicId).options[key] = event.target.value;
           });
 
@@ -200,9 +211,15 @@ class TaskSectionsManager {
           numberInput.max = parameter.max;
           numberInput.className = "w-full mt-1";
           numberInput.value = options[key];
-          numberInput.addEventListener("change", (event) => {
+          numberInput.addEventListener("input", (event) => {
+            const value = Number(event.target.value);
+            if (value < event.target.min) {
+              event.target.value = event.target.min;
+            } else if (value > event.target.max) {
+              event.target.value = event.target.max;
+            }
             numberInputNumber.value = event.target.value;
-            this.topics.get(topicId).options[key] = Number(event.target.value);
+            this.topics.get(topicId).options[key] = value;
           });
 
           numberInputNumber.type = "number";
@@ -211,9 +228,15 @@ class TaskSectionsManager {
           numberInputNumber.className =
             "p-3 border border-gray-300 rounded-md mt-1 w-full";
           numberInputNumber.value = options[key];
-          numberInputNumber.addEventListener("change", (event) => {
+          numberInputNumber.addEventListener("input", (event) => {
+            const value = Number(event.target.value);
+            if (value < event.target.min) {
+              event.target.value = event.target.min;
+            } else if (value > event.target.max) {
+              event.target.value = event.target.max;
+            }
             numberInput.value = event.target.value;
-            this.topics.get(topicId).options[key] = Number(event.target.value);
+            this.topics.get(topicId).options[key] = value;
           });
 
           parameterElement.appendChild(numberInput);
@@ -257,7 +280,13 @@ class TaskSectionsManager {
     topicElement.appendChild(parametersElement);
 
     if (this.topics.get(topicId)._element) {
-      this.topics.get(topicId)._element.replaceWith(topicElement);
+      this.topics
+        .get(topicId)
+        ._element.parentElement.replaceChild(
+          topicElement,
+          this.topics.get(topicId)._element
+        );
+      this.topics.get(topicId)._element = topicElement;
     } else {
       this.topics.get(topicId)._element = topicElement;
       this.element.appendChild(topicElement);
@@ -267,12 +296,13 @@ class TaskSectionsManager {
   /**
    * @function newSection - Adds a new section (topic) to the task.
    * @param {Array} path - The path to the section.
+   * @param {Function} onEdit - The function to call when editing the section.
    */
-  newSection(path) {
+  newSection(path, onEdit) {
     const topic = this.getTopic(path);
     const topicId = this.topicId;
 
-    this.newTopic(path, topic);
+    this.newTopic(path, topic, onEdit);
     this.renderSection(topicId);
 
     this.topicId++;
@@ -281,12 +311,12 @@ class TaskSectionsManager {
   /**
    * @function editSection - Edits a section (topic) in the task.
    * @param {number} topicId - The ID of the topic.
+   * @param {Array} path - The path to the section.
    */
-  editSection(topicId) {
-    const topic = this.topics.get(topicId);
-    const path = topic.path;
+  editSection(topicId, path) {
+    const topic = this.getTopic(path);
 
-    this.editTopic(topicId, path, this.getTopic(path));
+    this.editTopic(topicId, path, topic);
     this.renderSection(topicId);
   }
 

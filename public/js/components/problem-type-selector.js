@@ -16,6 +16,8 @@ class ProblemTypeSelector {
     this.descriptionElement = element.querySelector(
       "#problem-type-selector-description"
     );
+    this.closeButton = element.querySelector("#problem-type-selector-close");
+    this.cancelButton = element.querySelector("#problem-type-selector-cancel");
     this.selectButton = element.querySelector("#problem-type-selector-select");
     this.problemIndex = problemIndex;
 
@@ -24,6 +26,7 @@ class ProblemTypeSelector {
     this.selectPromises = [];
 
     this.render();
+    this.addListeners();
   }
 
   /**
@@ -81,6 +84,21 @@ class ProblemTypeSelector {
       renderTopics(this.problemIndex[topic], topicElement, [topic]);
       this.renderElement.appendChild(topicElement);
     }
+  }
+
+  /**
+   * @function addListeners - Adds event listeners to the component.
+   */
+  addListeners() {
+    this.closeButton.addEventListener("click", () => {
+      this.hide();
+    });
+    this.cancelButton.addEventListener("click", () => {
+      this.hide();
+    });
+    this.selectButton.addEventListener("click", () => {
+      this.select();
+    });
   }
 
   /**
