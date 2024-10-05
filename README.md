@@ -33,6 +33,7 @@ npm install
 ```env
 PORT=3000 # Port number for the server (default: 3000)
 HOST=localhost # Host address for the server (default: localhost)
+DESMOS_API_KEY=dcb31709b452b1cf9dc26972add0fda6 # API key for Desmos API (required for graphing)
 ```
 
 4. Start the server:

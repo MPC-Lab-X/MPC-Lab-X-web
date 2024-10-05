@@ -78,6 +78,7 @@ router.get("/:id/tasks/:taskId/print", (req, res) => {
   res.render("pages/class/task-print", {
     classId: req.params.id,
     taskId: req.params.taskId,
+    desmosApiKey: process.env.DESMOS_API_KEY,
   });
 });
 
