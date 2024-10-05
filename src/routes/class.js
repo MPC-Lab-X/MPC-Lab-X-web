@@ -120,6 +120,24 @@ router.get("/:id/tasks/:taskId/grade/flow", (req, res) => {
   });
 });
 
+router.get("/:id/tasks/:taskId/edit", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  } else if (!req.params.taskId) {
+    return res.redirect(`/classrooms/${req.params.id}/tasks`);
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/tasks/${
+        req.params.taskId
+      }/edit`
+    );
+  }
+  res.render("pages/class/edit-task", {
+    classId: req.params.id,
+    taskId: req.params.taskId,
+  });
+});
+
 router.get("/:id/students", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
