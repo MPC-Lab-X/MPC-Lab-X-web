@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <%- include("../../components/libraries.ejs", { desmosApiKey }) %>
+  <title>MPC Lab | Flow Mode</title>
+</head>
+
+<body class="relative">
+  <div id="exit-flow-mode" class="fixed top-4 right-4 z-50 bg-black bg-opacity-70 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-opacity-80">
+    <span>Exit Flow Mode (<b>Esc</b>)</span>
+  </div>
+
+  <div class="fixed top-0 left-0 w-full h-1 z-50">
+    <div id="progress-bar" class="bg-primary-600 h-1" style="width: 10%;"></div>
+
+    <div class="absolute top-1 left-4 text-sm text-gray-700">
+      <span id="graded-students">1</span>/<span id="total-students">10</span> students graded
+    </div>
+  </div>
+
+  <main class="p-6 h-screen flex justify-center items-center">
+    <div class="fixed top-1/2 left-4 transform -translate-y-1/2 z-50">
+      <button id="previous-student" class="bg-black bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80">
+        <b>&#8592;</b>
+      </button>
+    </div>
+
+    <section class="w-full max-w-5xl bg-gray-50 rounded-lg shadow-md p-6 h-full overflow-y-auto">
+      <div class="space-y-6 mb-6">
+        <h2 id="current-student-name" class="text-2xl font-semibold">Student 1</h2>
+        <button id="mark-graded" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Mark as Graded (↵ Enter)
+        </button>
+      </div>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <div id="problems" class="space-y-8 mb-6">
+        <div class="space-y-6 border-b last:border-0 pb-8 last:pb-0">
+          <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
+          <div class="mb-6">
+            <h3 class="text-lg font-bold mb-4">Problem</h3>
+            <div class="mb-2">
+              <span class="text-gray-700">Solve for x:</span>
+            </div>
+            <div class="bg-gray-300 p-2 rounded mb-2">
+              <span class="katex">\(5x + 12 = 2\)</span>
+            </div>
+            <div class="space-y-2 mb-2">
+              <span class="text-gray-700">Select one of the following:</span>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">A:</span> <span class="text-gray-700">Text type choice</span>
+              </div>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">B:</span> <span class="katex">\(x = \\frac{-10}{5}\)</span>
+              </div>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">C:</span>
+                <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
+                  <span class="text-gray-500">Graph Placeholder</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <div class="space-y-6">
+        <button id="next-student-graded-bottom" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Mark as Graded and Next (&#8679; &#8594;)
+        </button>
+        <button id="next-student-bottom" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
+          Next Ungraded (&#8594;)
+        </button>
+      </div>
+    </section>
+
+    <div class="fixed top-1/2 right-4 transform -translate-y-1/2 z-50">
+      <button id="next-student" class="bg-black bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80">
+        &#8594;
+      </button>
+    </div>
+  </main>
+</body>
+
+</html>

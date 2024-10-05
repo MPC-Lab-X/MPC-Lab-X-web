@@ -4,7 +4,7 @@
 <head>
   <%- include("../../components/head.ejs") %>
   <%- include("../../components/libraries.ejs", { desmosApiKey }) %>
-  <title>MPC Lab | Print Task</title>
+  <title>MPC Lab | Grade Task</title>
 </head>
 
 <body>
@@ -16,72 +16,56 @@
 
       <hr class="border-t border-gray-300 mb-6" />
 
-      <h2 class="text-xl font-semibold mb-4">Print Options</h2>
+      <h2 class="text-xl font-semibold mb-4">Grade Options</h2>
       <div class="mb-4">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Display Task Name</label>
-          <input id="display-task-name" type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task name" />
+        <div class="flex items-start flex-col mb-4">
+          <a href="/classroom/<%= classId %>/tasks/<%= taskId %>/grade/flow" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500 mb-1">
+            Enter Flow Mode
+          </a>
+          <span class="text-gray-500 text-sm">A streamlined grading mode allows you to grade tasks without having to switch between students.</span>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Display Task Description</label>
-          <textarea id="display-task-description" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task description"></textarea>
+        <div class="flex items-start flex-col mb-4">
+          <button id="grade-all" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500 mb-1">
+            Grade All
+          </button>
+          <span class="text-gray-500 text-sm">Mark all students are graded for this task.</span>
         </div>
-
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Display Student ID</label>
-          <label class="inline-flex items-center mt-1">
-            <input id="display-student-id" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
-            <span class="ml-3">Enable</span>
-          </label>
-        </div>
-
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Display Student Names</label>
-          <label class="inline-flex items-center mt-1">
-            <input id="display-student-names" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
-            <span class="ml-3">Enable</span>
-          </label>
-        </div>
-
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Display Page Numbers</label>
-          <label class="inline-flex items-center mt-1">
-            <input id="display-page-numbers" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
-            <span class="ml-3">Enable</span>
-          </label>
-        </div>
-
-        <button id="print-all" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
-          Print All
-        </button>
       </div>
 
       <hr class="border-t border-gray-300 mb-6" />
 
       <h2 class="text-xl font-semibold mb-4">Students</h2>
       <ul id="students" class="space-y-2">
-        <li class="p-2 bg-primary-100 rounded-md cursor-pointer">Student 1</li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 2</li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 3</li>
+        <li class="p-2 bg-primary-100 rounded-md cursor-pointer flex justify-between items-center">
+          Student 1
+          <span class="px-2 bg-background-50 text-green-500 rounded-md">&#10003;</span>
+        </li>
+        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer flex justify-between items-center">
+          Student 2
+        </li>
+        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer flex justify-between items-center">
+          Student 3
+          <span class="px-2 bg-background-50 text-green-500 rounded-md">&#10003;</span>
+        </li>
         <!-- Add more students -->
       </ul>
     </section>
 
     <section class="w-full lg:w-2/3 bg-background-50 rounded-lg shadow-md p-6 lg:overflow-y-auto h-auto lg:h-full">
       <div class="space-y-6 mb-6">
-        <h2 id="current-student-name" class="text-xl font-semibold">Print (Student 1)</h2>
-        <button id="print" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
-          Print
+        <h2 id="current-student-name" class="text-xl font-semibold">Student 1</h2>
+        <button id="next-student-graded" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Mark as Graded and Next
         </button>
-        <button id="print-solution" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
-          Print (Problem + Solution and Steps)
+        <button id="next-student" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
+          Next Ungraded
         </button>
       </div>
 
       <hr class="border-t border-gray-300 mb-6" />
 
-      <div id="problems" class="space-y-8">
+      <div id="problems" class="space-y-8 mb-6">
         <div class="space-y-6 border-b last:border-0 pb-8 last:pb-0">
           <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
 
@@ -166,6 +150,17 @@
             </details>
           </div>
         </div>
+      </div>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <div class="space-y-6">
+        <button id="next-student-graded-bottom" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Mark as Graded and Next
+        </button>
+        <button id="next-student-bottom" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
+          Next Ungraded
+        </button>
       </div>
     </section>
   </main>
