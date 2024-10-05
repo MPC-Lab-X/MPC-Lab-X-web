@@ -17,6 +17,8 @@ router.get("/new", (req, res) => {
 router.get("/:id", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(`/classrooms/${req.params.id.toLocaleUpperCase()}`);
   }
   res.render("pages/class/classroom", { classId: req.params.id });
 });
@@ -24,6 +26,10 @@ router.get("/:id", (req, res) => {
 router.get("/:id/tasks", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/tasks`
+    );
   }
   res.render("pages/class/tasks", { classId: req.params.id });
 });
@@ -31,6 +37,10 @@ router.get("/:id/tasks", (req, res) => {
 router.get("/:id/tasks/new", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/tasks/new`
+    );
   }
   res.render("pages/class/new-task", { classId: req.params.id });
 });
@@ -38,11 +48,34 @@ router.get("/:id/tasks/new", (req, res) => {
 router.get("/:id/tasks/:taskId", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
-  }
-  if (!req.params.taskId) {
+  } else if (!req.params.taskId) {
     return res.redirect(`/classrooms/${req.params.id}/tasks`);
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/tasks/${
+        req.params.taskId
+      }`
+    );
   }
   res.render("pages/class/task", {
+    classId: req.params.id,
+    taskId: req.params.taskId,
+  });
+});
+
+router.get("/:id/tasks/:taskId/print", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/classrooms");
+  } else if (!req.params.taskId) {
+    return res.redirect(`/classrooms/${req.params.id}/tasks`);
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/tasks/${
+        req.params.taskId
+      }/print`
+    );
+  }
+  res.render("pages/class/task-print", {
     classId: req.params.id,
     taskId: req.params.taskId,
   });
@@ -51,6 +84,10 @@ router.get("/:id/tasks/:taskId", (req, res) => {
 router.get("/:id/students", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/students`
+    );
   }
   res.render("pages/class/students", { classId: req.params.id });
 });
@@ -58,6 +95,10 @@ router.get("/:id/students", (req, res) => {
 router.get("/:id/students/new", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/students/new`
+    );
   }
   res.render("pages/class/add-student", { classId: req.params.id });
 });
@@ -65,9 +106,14 @@ router.get("/:id/students/new", (req, res) => {
 router.get("/:id/students/:studentId/edit", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
-  }
-  if (!req.params.studentId) {
+  } else if (!req.params.studentId) {
     return res.redirect(`/classrooms/${req.params.id}/students`);
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/students/${
+        req.params.studentId
+      }/edit`
+    );
   }
   res.render("pages/class/edit-student", {
     classId: req.params.id,
@@ -78,6 +124,10 @@ router.get("/:id/students/:studentId/edit", (req, res) => {
 router.get("/:id/admins", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/admins`
+    );
   }
   res.render("pages/class/admins", { classId: req.params.id });
 });
@@ -85,6 +135,10 @@ router.get("/:id/admins", (req, res) => {
 router.get("/:id/admins/add", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/admins/add`
+    );
   }
   res.render("pages/class/add-admin", { classId: req.params.id });
 });
@@ -92,6 +146,10 @@ router.get("/:id/admins/add", (req, res) => {
 router.get("/:id/settings", (req, res) => {
   if (!req.params.id) {
     return res.redirect("/classrooms");
+  } else if (req.params.id.toLocaleUpperCase() !== req.params.id) {
+    return res.redirect(
+      `/classrooms/${req.params.id.toLocaleUpperCase()}/settings`
+    );
   }
   res.render("pages/class/settings", { classId: req.params.id });
 });

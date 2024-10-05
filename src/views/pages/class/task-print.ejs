@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../../components/head.ejs") %>
+  <title>MPC Lab | Print Task</title>
+</head>
+
+<body>
+  <%- include("../../components/classroom-sidebar.ejs"), { classId } %>
+  <main class="sm:ml-64 p-6 flex flex-col sm:flex-row h-screen">
+    <section class="w-full sm:w-1/3 bg-background-50 rounded-lg shadow-md overflow-hidden sm:overflow-auto h-full sm:mr-6 mb-6 sm:mb-0 p-4">
+      <h1 id="task-name" class="text-2xl font-semibold mb-4">Task Name</h1>
+      <p id="task-description" class="text-gray-700 mb-4">This is a short description of the task that outlines the key objectives and details.</p>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <h2 class="text-xl font-semibold mb-4">Print Options</h2>
+      <div class="mb-4">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Display Task Name</label>
+          <input id="display-task-name" type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task name" />
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Display Task Description</label>
+          <textarea id="display-task-description" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task description"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Display Student ID</label>
+          <label class="inline-flex items-center mt-1">
+            <input id="display-student-id" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
+            <span class="ml-3">Enable</span>
+          </label>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Display Student Names</label>
+          <label class="inline-flex items-center mt-1">
+            <input id="display-student-names" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
+            <span class="ml-3">Enable</span>
+          </label>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Display Page Numbers</label>
+          <label class="inline-flex items-center mt-1">
+            <input id="display-page-numbers" type="checkbox" checked class="toggle-checkbox appearance-none w-10 h-5 bg-gray-300 rounded-full checked:bg-green-500 transition-all duration-200 relative">
+            <span class="ml-3">Enable</span>
+          </label>
+        </div>
+
+        <button id="print-all" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Print All
+        </button>
+      </div>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <h2 class="text-xl font-semibold mb-4">Students</h2>
+      <ul id="students" class="space-y-2">
+        <li class="p-2 bg-primary-100 rounded-md cursor-pointer">Student 1</li>
+        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 2</li>
+        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 3</li>
+        <!-- Add more students -->
+      </ul>
+    </section>
+
+    <section class="w-full sm:w-2/3 bg-background-50 rounded-lg shadow-md p-6 overflow-hidden sm:overflow-auto h-full">
+      <div class="space-y-6 mb-6">
+        <h2 id="current-student-name" class="text-xl font-semibold">Print (Student 1)</h2>
+        <button id="print" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Print
+        </button>
+        <button id="print-solution" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
+          Print (Problem + Solution and Steps)
+        </button>
+      </div>
+
+      <hr class="border-t border-gray-300 mb-6" />
+
+      <div id="problems">
+        <div class="space-y-6 border-b last:border-0 mb-8 last:mb-0 pb-8 last:pb-0">
+          <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
+
+          <div class="mb-6">
+            <h3 class="text-lg font-bold mb-4">Problem</h3>
+
+            <div class="mb-2">
+              <span class="text-gray-700">Solve for x:</span>
+            </div>
+
+            <div class="mb-2">
+              <div class="bg-gray-300 p-2 rounded">
+                <span class="katex">\(5x + 12 = 2\)</span>
+              </div>
+            </div>
+
+            <div class="space-y-2 mb-2">
+              <span class="text-gray-700">Select one of the following:</span>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">A:</span> <span class="text-gray-700">Text type choice</span>
+              </div>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">B:</span>
+                <span class="katex">\(x = \\frac{-10}{5}\)</span>
+              </div>
+              <div class="bg-gray-100 p-2 rounded">
+                <span class="font-semibold">C:</span>
+                <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
+                  <span class="text-gray-500">Graph Placeholder</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="text-lg font-bold mb-4">Steps</h3>
+
+            <details class="bg-gray-100 rounded-lg p-4">
+              <summary class="cursor-pointer text-primary-600 mb-2">Show Steps</summary>
+              <div class="space-y-4 mb-2">
+                <div class="mb-2">
+                  <span class="text-gray-700">Subtract the constant term from both sides of the equation.</span>
+                </div>
+                <div class="mb-2">
+                  <div class="bg-gray-300 p-2 rounded">
+                    <span class="katex">5x = -10</span>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <span class="text-gray-700">Divide both sides by the coefficient of the variable.</span>
+                </div>
+                <div class="mb-2">
+                  <div class="bg-gray-300 p-2 rounded">
+                    <span class="katex">x = -2</span>
+                  </div>
+                </div>
+
+                <div class="mb-2">
+                  <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
+                    <span class="text-gray-500">Graph Placeholder</span>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div class="mb-2">
+            <h3 class="text-lg font-bold mb-4">Solution</h3>
+
+            <details class="bg-gray-100 rounded-lg p-4">
+              <summary class="cursor-pointer text-primary-600 mb-2">Show Solution</summary>
+              <div class="space-y-4 mb-2">
+                <div class="mb-2">
+                  <span class="text-gray-800 text-lg font-semibold">-2</span>
+                  <span class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-200 rounded-full">
+                    Numerical - Decimal
+                  </span>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
