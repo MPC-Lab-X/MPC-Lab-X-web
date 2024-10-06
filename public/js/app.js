@@ -185,9 +185,9 @@ class Auth {
 
   /**
    * @function set - Sets the user id and tokens.
-   * @param {String} userId - The user ID.
-   * @param {String} accessToken - The access token.
-   * @param {String} refreshToken - The refresh token.
+   * @param {string} userId - The user ID.
+   * @param {string} accessToken - The access token.
+   * @param {string} refreshToken - The refresh token.
    * @returns {Object} - The data with the tokens set.
    */
   set(userId, accessToken, refreshToken) {

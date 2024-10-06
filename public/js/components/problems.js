@@ -146,7 +146,9 @@ class Problems {
   renderProblemSolution(element, solution) {
     const problemSolutionLabel = document.createElement("span");
     problemSolutionLabel.className = "text-gray-700";
-    problemSolutionLabel.textContent = solution.label + ": " || "Solution: ";
+    problemSolutionLabel.textContent = solution.label
+      ? solution.label + ": "
+      : "Solution: ";
     element.appendChild(problemSolutionLabel);
 
     switch (solution.type) {
