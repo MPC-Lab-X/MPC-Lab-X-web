@@ -153,7 +153,7 @@ class Problems {
 
     switch (solution.type) {
       case "numeric": {
-        if (solution.decimal) {
+        if (solution.decimal !== undefined) {
           const problemSolutionElementDecimal = document.createElement("div");
           problemSolutionElementDecimal.className = "mb-2";
           problemSolutionElementDecimal.textContent = solution.decimal;
@@ -168,9 +168,12 @@ class Problems {
         if (solution.fraction) {
           const problemSolutionElementFraction = document.createElement("div");
           problemSolutionElementFraction.className = "mb-2";
-          problemSolutionElementFraction.textContent = `${
-            solution.fraction.s ? "-" : ""
-          }}\\frac{${solution.fraction.n}}{${solution.fraction.d}}`;
+          katex.render(
+            `${solution.fraction.s ? "-" : ""}\\frac{${solution.fraction.n}}{${
+              solution.fraction.d
+            }}`,
+            problemSolutionElementFraction
+          );
 
           const problemSolutionTypeFraction = document.createElement("span");
           problemSolutionTypeFraction.className =
@@ -282,22 +285,39 @@ class Problems {
   /**
    * @function renderProblemGraph - Renders a problem graph. (Desmos, etc.)
    * @param {string} graph - The graph to render.
+   * @param {boolean} graph.printMode - Whether to render in print mode or not.
    * @returns {HTMLElement} - The rendered problem graph element.
    */
   renderProblemGraph(graph) {
     const element = document.createElement("div");
     element.className =
-      "bg-gray-300 rounded-lg h-32 flex items-center justify-center";
-
-    const graphPlaceholder = document.createElement("span");
-    graphPlaceholder.className = "text-gray-500";
-    graphPlaceholder.textContent = "Graph";
-    element.appendChild(graphPlaceholder);
+      "graph-container bg-gray-300 rounded-lg flex items-center justify-center";
+    if (graph.printMode) {
+      element.classList.add("h-64", "w-64");
+    } else {
+      element.classList.add("h-64", "w-full");
+    }
 
     if (graph.renderEngine === "desmos") {
-      const calculator = Desmos.GraphingCalculator(element, graph.options);
-      calculator.setMathBounds(graph.mathBounds);
-      for (const expression of graph.expressions) {
+      const defaultOptions = {
+        keypad: false,
+        expressions: false,
+        settingsMenu: false,
+        zoomButtons: false,
+        expressionsTopbar: false,
+        pointsOfInterest: false,
+        trace: false,
+        border: false,
+        lockViewport: true,
+      };
+      const calculator = Desmos.GraphingCalculator(element, {
+        ...defaultOptions,
+        ...graph.options,
+      });
+      calculator.setMathBounds(
+        graph.mathBounds || { left: -10, right: 10, bottom: -10, top: 10 }
+      );
+      for (const expression of graph.expressions || []) {
         calculator.setExpression(expression);
       }
     }

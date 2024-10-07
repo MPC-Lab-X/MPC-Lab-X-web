@@ -4,10 +4,11 @@
 <head>
   <%- include("../../components/head.ejs") %>
   <%- include("../../components/libraries.ejs", { desmosApiKey }) %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Print Task</title>
 </head>
 
-<body>
+<body class="lg:overflow-y-hidden">
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
   <main class="sm:ml-64 p-6 flex flex-col lg:flex-row h-screen">
     <section class="w-full lg:w-1/3 bg-background-50 rounded-lg shadow-md p-4 lg:overflow-y-auto h-auto lg:h-full lg:mr-6 mb-6 lg:mb-0">
@@ -78,17 +79,12 @@
       <hr class="border-t border-gray-300 mb-6" />
 
       <h2 class="text-xl font-semibold mb-4">Students</h2>
-      <ul id="students" class="space-y-2">
-        <li class="p-2 bg-primary-100 rounded-md cursor-pointer">Student 1</li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 2</li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer">Student 3</li>
-        <!-- Add more students -->
-      </ul>
+      <ul id="students" class="space-y-2"></ul>
     </section>
 
     <section class="w-full lg:w-2/3 bg-background-50 rounded-lg shadow-md p-6 lg:overflow-y-auto h-auto lg:h-full">
       <div class="space-y-6 mb-6">
-        <h2 id="current-student-name" class="text-xl font-semibold">Print (Student 1)</h2>
+        <h2 id="current-student-name" class="text-xl font-semibold"></h2>
         <button id="print" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
           Print
         </button>
@@ -99,94 +95,190 @@
 
       <hr class="border-t border-gray-300 mb-6" />
 
-      <div id="problems" class="space-y-8">
-        <div class="space-y-6 border-b last:border-0 pb-8 last:pb-0">
-          <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
-
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-4">Problem</h3>
-
-            <div class="mb-2">
-              <span class="text-gray-700">Solve for x:</span>
-            </div>
-
-            <div class="mb-2">
-              <div class="bg-gray-300 p-2 rounded">
-                <span class="katex">\(5x + 12 = 2\)</span>
-              </div>
-            </div>
-
-            <div class="space-y-2 mb-2">
-              <span class="text-gray-700">Select one of the following:</span>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">A:</span> <span class="text-gray-700">Text type choice</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">B:</span>
-                <span class="katex">\(x = \\frac{-10}{5}\)</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">C:</span>
-                <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
-                  <span class="text-gray-500">Graph Placeholder</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-4">Steps</h3>
-
-            <details class="bg-gray-100 rounded-lg p-4">
-              <summary class="cursor-pointer text-primary-600 mb-2">Show Steps</summary>
-
-              <div class="space-y-4 mb-2">
-                <div class="mb-2">
-                  <span class="text-gray-700">Subtract the constant term from both sides of the equation.</span>
-                </div>
-                <div class="mb-2">
-                  <div class="bg-gray-300 p-2 rounded">
-                    <span class="katex">5x = -10</span>
-                  </div>
-                </div>
-                <div class="mb-2">
-                  <span class="text-gray-700">Divide both sides by the coefficient of the variable.</span>
-                </div>
-                <div class="mb-2">
-                  <div class="bg-gray-300 p-2 rounded">
-                    <span class="katex">x = -2</span>
-                  </div>
-                </div>
-
-                <div class="mb-2">
-                  <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
-                    <span class="text-gray-500">Graph Placeholder</span>
-                  </div>
-                </div>
-              </div>
-            </details>
-          </div>
-
-          <div class="mb-2">
-            <h3 class="text-lg font-bold mb-4">Solution</h3>
-
-            <details class="bg-gray-100 rounded-lg p-4">
-              <summary class="cursor-pointer text-primary-600 mb-2">Show Solution</summary>
-
-              <div class="space-y-4 mb-2">
-                <div class="mb-2">
-                  <span class="text-gray-800 text-lg font-semibold">-2</span>
-                  <span class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-200 rounded-full">
-                    Numerical - Decimal
-                  </span>
-                </div>
-              </div>
-            </details>
-          </div>
-        </div>
-      </div>
+      <%- include("../../components/problems.ejs") %>
     </section>
   </main>
+  <%- include("../../components/problems-printer.ejs") %>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | Print Task - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+
+        const studentsList = document.getElementById("students");
+        students.forEach((student) => {
+          const studentElement = document.createElement("li");
+          studentElement.className = "p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer";
+          studentElement.textContent = student.name;
+          studentElement.addEventListener("click", (event) => {
+            event.target.parentElement.querySelectorAll("li").forEach((element) => {
+              element.classList.remove("bg-primary-100");
+              element.classList.add("bg-white");
+              element.classList.add("hover:bg-gray-100");
+            });
+            event.target.classList.add("bg-primary-100");
+            event.target.classList.remove("bg-white");
+            event.target.classList.remove("hover:bg-gray-100");
+            document.getElementById("current-student-name").textContent = `Print (${student.name})`;
+            viewStudentTask(student);
+          });
+          studentsList.appendChild(studentElement);
+        });
+
+        const printAllButton = document.getElementById("print-all");
+        printAllButton.addEventListener("click", () => {
+          printAllButton.disabled = true;
+          printAllButton.textContent = "Getting tasks...";
+          const tasksPromises = students.map((student) => getCachedTaskProblems("<%= taskId %>", student.studentNumber));
+          Promise.all(tasksPromises).then((responses) => {
+            printAllButton.textContent = "Generating PDF...";
+            const tasks = responses.map((response, index) => ({
+              problems: response.data,
+              studentId: students[index].studentNumber,
+              studentName: students[index].name,
+            }));
+            const printOptions = getPrintOptions();
+            problemsPrinter.render(tasks, printOptions);
+            setTimeout(() => {
+              problemsPrinter.print();
+              printAllButton.disabled = false;
+              printAllButton.textContent = "Print All";
+            }, tasks.length * tasks.reduce((acc, task) => acc + task.problems.length, 0) * 20);
+          });
+        });
+      } else {
+        handleClassError(response);
+      }
+    });
+
+    classroom.getTask("<%= taskId %>").then((response) => {
+      if (response.status === "success") {
+        document.getElementById("task-name").textContent = response.data.name;
+        document.getElementById("task-description").textContent = response.data.description;
+
+        document.getElementById("display-task-name").value = response.data.name;
+        document.getElementById("display-task-description").value = response.data.description;
+      } else {
+        handleTaskError(response);
+      }
+    });
+
+    const problems = new Problems(document.getElementById("problems"));
+    const problemsPrinter = new ProblemsPrinter(document.getElementById("problems-printer"));
+
+    let currentProblems = null;
+    let currentStudent = null;
+
+    function viewStudentTask(student) {
+      getCachedTaskProblems("<%= taskId %>", student.studentNumber).then((response) => {
+        if (response.status === "success") {
+          currentProblems = response.data;
+          currentStudent = student;
+          problems.render(response.data);
+        } else {
+          app.ui.alert(response.message, "error", 5000);
+        }
+      });
+    }
+
+    const printButton = document.getElementById("print");
+    printButton.addEventListener("click", () => {
+      if (currentProblems) {
+        problemsPrinter.render([{
+          problems: currentProblems,
+          studentId: currentStudent.studentNumber,
+          studentName: currentStudent.name,
+        }], {
+          ...getPrintOptions(),
+          withAnswers: false,
+        });
+
+        printButton.disabled = true;
+        printButton.textContent = "Generating PDF...";
+        setTimeout(() => {
+          problemsPrinter.print();
+          printButton.disabled = false;
+          printButton.textContent = "Print";
+        }, problems.length * 20);
+      }
+    });
+
+    const printSolutionButton = document.getElementById("print-solution");
+    printSolutionButton.addEventListener("click", () => {
+      if (currentProblems) {
+        problemsPrinter.render([{
+          problems: currentProblems,
+          studentId: currentStudent.studentNumber,
+          studentName: currentStudent.name,
+        }], {
+          ...getPrintOptions(),
+          withAnswers: true,
+        });
+
+        printSolutionButton.disabled = true;
+        printSolutionButton.textContent = "Generating PDF...";
+        setTimeout(() => {
+          problemsPrinter.print();
+          printSolutionButton.disabled = false;
+          printSolutionButton.textContent = "Print (Problem + Solution and Steps)";
+        }, problems.length * 60);
+      }
+    });
+
+    const taskCache = new Map();
+
+    function getCachedTaskProblems(taskId, studentNumber) {
+      const cacheKey = `${taskId}-${studentNumber}`;
+      if (taskCache.has(cacheKey)) {
+        return Promise.resolve(taskCache.get(cacheKey));
+      }
+      return classroom.getTaskProblems(taskId, studentNumber).then((response) => {
+        if (response.status === "success") {
+          taskCache.set(cacheKey, response);
+        }
+        return response;
+      });
+    }
+
+    function getPrintOptions() {
+      return {
+        name: document.getElementById("display-task-name").value,
+        description: document.getElementById("display-task-description").value,
+        schoolName: document.getElementById("display-school-name").value,
+        teacherName: document.getElementById("display-teacher-name").value,
+        displayStudentId: document.getElementById("display-student-id").checked,
+        displayStudentName: document.getElementById("display-student-names").checked,
+        displayTitlePage: document.getElementById("display-title-page").checked,
+        twoColumns: document.getElementById("two-column-layout").checked,
+      };
+    }
+
+    function handleClassError(response) {
+      if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+        app.location.showNotFound();
+      } else if (response.error.code === "ACCESS_DENIED") {
+        app.location.showForbidden();
+      }
+    }
+
+    function handleTaskError(response) {
+      if (response.error.code === "TASK_NOT_FOUND" || response.error.code === "CLASS_NOT_FOUND") {
+        app.location.showNotFound();
+      } else if (response.error.code === "ACCESS_DENIED") {
+        app.location.showForbidden();
+      }
+    }
+  </script>
 </body>
 
 </html>

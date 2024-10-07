@@ -185,21 +185,55 @@ class ProblemsPrinter extends Problems {
 
       if (key === "problem") {
         for (const problemPart of problem[key]) {
+          if (problemPart.type === "graph") {
+            problemPart.value.printMode = true;
+          } else if (problemPart.type === "options") {
+            for (const option of problemPart.value) {
+              if (option.type === "graph") {
+                option.value.printMode = true;
+              }
+            }
+          }
           this.renderProblemPart(problemPartsElement, problemPart);
         }
         if (!withAnswers) {
-          const problemPlaceholderElement = this.renderProblemPlaceholder();
-          problemPartsElement.appendChild(problemPlaceholderElement);
+          for (const problemPart of problem["solution"]) {
+            if (problemPart.type === "graph") {
+              const emptyCoordinateElement = this.renderEmptyCoordinate();
+              problemPartsElement.appendChild(emptyCoordinateElement);
+            } else {
+              const problemPlaceholderElement = this.renderProblemPlaceholder();
+              problemPartsElement.appendChild(problemPlaceholderElement);
+            }
+          }
         }
       } else if (withAnswers) {
         if (key === "steps") {
           problemPartsElement.className = "steps";
           for (const step of problem[key]) {
+            if (step.type === "graph") {
+              step.value.printMode = true;
+            } else if (step.type === "options") {
+              for (const option of step.value) {
+                if (option.type === "graph") {
+                  option.value.printMode = true;
+                }
+              }
+            }
             this.renderProblemPart(problemPartsElement, step);
           }
         } else if (key === "solution") {
           problemPartsElement.className = "answer";
           for (const solution of problem[key]) {
+            if (solution.type === "graph") {
+              solution.value.printMode = true;
+            } else if (solution.type === "options") {
+              for (const option of solution.value) {
+                if (option.type === "graph") {
+                  option.value.printMode = true;
+                }
+              }
+            }
             this.renderProblemSolution(problemPartsElement, solution);
           }
         }
@@ -219,6 +253,30 @@ class ProblemsPrinter extends Problems {
     const problemPlaceholderElement = document.createElement("div");
     problemPlaceholderElement.className = "problem-placeholder";
     return problemPlaceholderElement;
+  }
+
+  /**
+   * @function renderEmptyCoordinate - Renders an empty coordinate.
+   * @returns {HTMLElement} - The rendered empty coordinate element.
+   */
+  renderEmptyCoordinate() {
+    const emptyCoordinateElement = this.renderProblemGraph({
+      renderEngine: "desmos",
+      mathBounds: {
+        left: -5,
+        right: 5,
+        bottom: -5,
+        top: 5,
+      },
+      options: {
+        xAxisArrowMode: "BOTH",
+        yAxisArrowMode: "BOTH",
+        xAxisNumbers: false,
+        yAxisNumbers: false,
+      },
+      printMode: true,
+    });
+    return emptyCoordinateElement;
   }
 
   /**
