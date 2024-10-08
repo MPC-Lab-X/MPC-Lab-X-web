@@ -4,6 +4,7 @@
 <head>
   <%- include("../../components/head.ejs") %>
   <%- include("../../components/libraries.ejs", { desmosApiKey }) %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Grade Task</title>
 </head>
 
@@ -11,15 +12,15 @@
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
   <main class="sm:ml-64 p-6 flex flex-col lg:flex-row h-screen">
     <section class="w-full lg:w-1/3 bg-background-50 rounded-lg shadow-md p-4 lg:overflow-y-auto h-auto lg:h-full lg:mr-6 mb-6 lg:mb-0">
-      <h1 id="task-name" class="text-2xl font-semibold mb-4">Task Name</h1>
-      <p id="task-description" class="text-gray-700 mb-4">This is a short description of the task that outlines the key objectives and details.</p>
+      <h1 id="task-name" class="text-2xl font-semibold mb-4"></h1>
+      <p id="task-description" class="text-gray-700 mb-4"></p>
 
       <hr class="border-t border-gray-300 mb-6" />
 
       <h2 class="text-xl font-semibold mb-4">Grade Options</h2>
       <div class="mb-4">
         <div class="flex items-start flex-col mb-4">
-          <a href="/classroom/<%= classId %>/tasks/<%= taskId %>/grade/flow" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500 mb-1">
+          <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/grade/flow" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500 mb-1">
             Enter Flow Mode
           </a>
           <span class="text-gray-500 text-sm">A streamlined grading mode allows you to grade tasks without having to switch between students.</span>
@@ -36,25 +37,12 @@
       <hr class="border-t border-gray-300 mb-6" />
 
       <h2 class="text-xl font-semibold mb-4">Students</h2>
-      <ul id="students" class="space-y-2">
-        <li class="p-2 bg-primary-100 rounded-md cursor-pointer flex justify-between items-center">
-          Student 1
-          <span class="px-2 bg-background-50 text-green-500 rounded-md">&#10003;</span>
-        </li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer flex justify-between items-center">
-          Student 2
-        </li>
-        <li class="p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer flex justify-between items-center">
-          Student 3
-          <span class="px-2 bg-background-50 text-green-500 rounded-md">&#10003;</span>
-        </li>
-        <!-- Add more students -->
-      </ul>
+      <ul id="students" class="space-y-2"></ul>
     </section>
 
     <section class="w-full lg:w-2/3 bg-background-50 rounded-lg shadow-md p-6 lg:overflow-y-auto h-auto lg:h-full">
       <div class="space-y-6 mb-6">
-        <h2 id="current-student-name" class="text-xl font-semibold">Student 1</h2>
+        <h2 id="current-student-name" class="text-xl font-semibold"></h2>
         <button id="next-student-graded" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
           Mark as Graded and Next
         </button>
@@ -65,92 +53,7 @@
 
       <hr class="border-t border-gray-300 mb-6" />
 
-      <div id="problems" class="space-y-8 mb-6">
-        <div class="space-y-6 border-b last:border-0 pb-8 last:pb-0">
-          <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
-
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-4">Problem</h3>
-
-            <div class="mb-2">
-              <span class="text-gray-700">Solve for x:</span>
-            </div>
-
-            <div class="mb-2">
-              <div class="bg-gray-300 p-2 rounded">
-                <span class="katex">\(5x + 12 = 2\)</span>
-              </div>
-            </div>
-
-            <div class="space-y-2 mb-2">
-              <span class="text-gray-700">Select one of the following:</span>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">A:</span> <span class="text-gray-700">Text type choice</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">B:</span>
-                <span class="katex">\(x = \\frac{-10}{5}\)</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">C:</span>
-                <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
-                  <span class="text-gray-500">Graph Placeholder</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-4">Steps</h3>
-
-            <details class="bg-gray-100 rounded-lg p-4">
-              <summary class="cursor-pointer text-primary-600 mb-2">Show Steps</summary>
-
-              <div class="space-y-4 mb-2">
-                <div class="mb-2">
-                  <span class="text-gray-700">Subtract the constant term from both sides of the equation.</span>
-                </div>
-                <div class="mb-2">
-                  <div class="bg-gray-300 p-2 rounded">
-                    <span class="katex">5x = -10</span>
-                  </div>
-                </div>
-                <div class="mb-2">
-                  <span class="text-gray-700">Divide both sides by the coefficient of the variable.</span>
-                </div>
-                <div class="mb-2">
-                  <div class="bg-gray-300 p-2 rounded">
-                    <span class="katex">x = -2</span>
-                  </div>
-                </div>
-
-                <div class="mb-2">
-                  <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
-                    <span class="text-gray-500">Graph Placeholder</span>
-                  </div>
-                </div>
-              </div>
-            </details>
-          </div>
-
-          <div class="mb-2">
-            <h3 class="text-lg font-bold mb-4">Solution</h3>
-
-            <details class="bg-gray-100 rounded-lg p-4">
-              <summary class="cursor-pointer text-primary-600 mb-2">Show Solution</summary>
-
-              <div class="space-y-4 mb-2">
-                <div class="mb-2">
-                  <span class="text-gray-800 text-lg font-semibold">-2</span>
-                  <span class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-200 rounded-full">
-                    Numerical - Decimal
-                  </span>
-                </div>
-              </div>
-            </details>
-          </div>
-        </div>
-      </div>
+      <%- include("../../components/problems.ejs") %>
 
       <hr class="border-t border-gray-300 mb-6" />
 
@@ -164,6 +67,229 @@
       </div>
     </section>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getTask("<%= taskId %>").then((response) => {
+      if (response.status === "success") {
+        document.getElementById("task-name").textContent = response.data.name;
+        document.getElementById("task-description").textContent = response.data.description;
+
+        const userTasks = response.data.userTasks;
+
+        classroom.getClass("<%= classId %>").then((response) => {
+          if (response.status === "success") {
+            const classStudents = response.data.students;
+            const taskStudents = userTasks.map((userTask) => classStudents.find((student) => student.studentNumber === userTask.studentNumber));
+
+            const students = response.data.students.filter((student) => !student.deleted);
+
+            document.title = `MPC Lab | Grade Task - ${response.data.name}`;
+            document.getElementById("classroom-name").textContent = response.data.name;
+            const studentsCount = document.getElementById("students-count");
+            const adminsCount = document.getElementById("admins-count");
+            studentsCount.textContent = students.length;
+            adminsCount.textContent = response.data.admins.length;
+            studentsCount.classList.remove("hidden");
+            adminsCount.classList.remove("hidden");
+
+            const studentsList = document.getElementById("students");
+            let studentsListObject = [];
+            taskStudents.forEach((student) => {
+              const studentElement = document.createElement("li");
+              studentElement.className = "p-2 bg-white hover:bg-gray-100 rounded-md border cursor-pointer flex justify-between items-center";
+              studentElement.textContent = student.name;
+              const checkElement = document.createElement("span");
+              checkElement.className = "hidden px-2 bg-background-50 text-green-500 rounded-md";
+              checkElement.textContent = "\u2713";
+              if (student.graded) checkElement.classList.remove("hidden");
+              studentElement.appendChild(checkElement);
+              studentsList.appendChild(studentElement);
+
+              studentsListObject.push({
+                student: {
+                  ...student,
+                  graded: userTasks.find((userTask) => userTask.studentNumber === student.studentNumber).graded
+                },
+                element: studentElement
+              });
+            });
+
+            const gradeQueue = new GradeCircularQueue(studentsListObject);
+
+            const gradeAllButton = document.getElementById("grade-all");
+            gradeAllButton.addEventListener("click", () => {
+              gradeQueue.markAllGraded();
+            });
+
+            const nextStudentGradedButton = document.getElementById("next-student-graded");
+            nextStudentGradedButton.onclick = () => {
+              gradeQueue.markGraded();
+            };
+            const nextStudentGradedBottomButton = document.getElementById("next-student-graded-bottom");
+            nextStudentGradedBottomButton.onclick = () => {
+              gradeQueue.markGraded();
+            };
+
+            const nextStudentButton = document.getElementById("next-student");
+            nextStudentButton.addEventListener("click", () => {
+              gradeQueue.nextStudent();
+            });
+            const nextStudentBottomButton = document.getElementById("next-student-bottom");
+            nextStudentBottomButton.addEventListener("click", () => {
+              gradeQueue.nextStudent();
+            });
+          } else {
+            if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+              app.location.showNotFound();
+            } else if (response.error.code === "ACCESS_DENIED") {
+              app.location.showForbidden();
+            }
+          }
+        });
+      } else {
+        if (response.error.code === "TASK_NOT_FOUND" || response.error.code === "CLASS_NOT_FOUND") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const problems = new Problems(document.getElementById("problems"));
+
+    class GradeCircularQueue {
+      constructor(students) {
+        this.students = students;
+        this.queue = [];
+        this.index = 0;
+        this.students.forEach((student, index) => {
+          student.element.addEventListener("click", () => this.viewStudent(index));
+
+          if (!student.student.graded) {
+            this.queue.push(index);
+          } else {
+            student.element.querySelector("span").classList.remove("hidden");
+          }
+        });
+
+        if (this.queue.length > 0) {
+          this.viewStudent(this.queue[0]);
+        } else {
+          this.viewStudent(0);
+        }
+      }
+
+      viewStudent(index) {
+        this.index = index;
+        const student = this.students[index];
+        document.getElementById("current-student-name").textContent = student.student.name;
+
+        this.students.forEach((student) => {
+          student.element.classList.remove("bg-primary-100");
+          student.element.classList.add("bg-white");
+          student.element.classList.add("hover:bg-gray-100");
+        });
+        student.element.classList.add("bg-primary-100");
+        student.element.classList.remove("bg-white");
+        student.element.classList.remove("hover:bg-gray-100");
+
+        if (student.student.graded) {
+          app.ui.alert("This student has already been graded.", "info", 3000);
+
+          const nextStudentGradedButton = document.getElementById("next-student-graded");
+          nextStudentGradedButton.textContent = "Mark as Ungraded";
+          nextStudentGradedButton.onclick = () => {
+            this.markUngraded();
+          };
+          const nextStudentGradedBottomButton = document.getElementById("next-student-graded-bottom");
+          nextStudentGradedBottomButton.textContent = "Mark as Ungraded";
+          nextStudentGradedBottomButton.onclick = () => {
+            this.markUngraded();
+          };
+        } else {
+          const nextStudentGradedButton = document.getElementById("next-student-graded");
+          nextStudentGradedButton.textContent = "Mark as Graded and Next";
+          nextStudentGradedButton.onclick = () => {
+            this.markGraded();
+          };
+          const nextStudentGradedBottomButton = document.getElementById("next-student-graded-bottom");
+          nextStudentGradedBottomButton.textContent = "Mark as Graded and Next";
+          nextStudentGradedBottomButton.onclick = () => {
+            this.markGraded();
+          };
+        }
+
+        getCachedTaskProblems("<%= taskId %>", student.student.studentNumber).then((response) => {
+          if (response.status === "success") {
+            problems.render(response.data);
+          } else {
+            app.ui.alert(response.message, "error", 5000);
+          }
+        });
+      }
+
+      nextStudent() {
+        if (this.queue.length === 0) {
+          this.viewStudent(this.index);
+          app.ui.alert("All students have been graded.", "info", 5000);
+          return;
+        }
+
+        do {
+          this.index = (this.index + 1) % this.students.length;
+        } while (this.students[this.index].student.graded && this.queue.length > 0);
+        this.viewStudent(this.index);
+      }
+
+      async markGraded() {
+        const student = this.students[this.index];
+        student.student.graded = true;
+        student.element.querySelector("span").classList.remove("hidden");
+
+        await classroom.updateGradingStatus("<%= taskId %>", student.student.studentNumber, true);
+
+        this.queue = this.queue.filter((index) => index !== this.index);
+        this.nextStudent();
+      }
+
+      async markUngraded() {
+        const student = this.students[this.index];
+        student.student.graded = false;
+        student.element.querySelector("span").classList.add("hidden");
+
+        await classroom.updateGradingStatus("<%= taskId %>", student.student.studentNumber, false);
+
+        this.queue.push(this.index);
+        this.viewStudent(this.index);
+      }
+
+      async markAllGraded() {
+        for (const student of this.students) {
+          student.student.graded = true;
+          student.element.querySelector("span").classList.remove("hidden");
+          await classroom.updateGradingStatus("<%= taskId %>", student.student.studentNumber, true);
+        }
+        this.queue = [];
+        this.viewStudent(this.index);
+      }
+    }
+
+    const taskCache = new Map();
+
+    function getCachedTaskProblems(taskId, studentNumber) {
+      const cacheKey = `${taskId}-${studentNumber}`;
+      if (taskCache.has(cacheKey)) {
+        return Promise.resolve(taskCache.get(cacheKey));
+      }
+      return classroom.getTaskProblems(taskId, studentNumber).then((response) => {
+        if (response.status === "success") {
+          taskCache.set(cacheKey, response);
+        }
+        return response;
+      });
+    }
+  </script>
 </body>
 
 </html>
