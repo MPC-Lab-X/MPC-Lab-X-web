@@ -13,6 +13,10 @@ MPC-Lab-X-web is the frontend component of the MPC-Lab-X project, built using Ex
 ## Prerequisites
 
 - Node.js
+- A Desmos API key (required for graphing)
+- Backend services ([MPC-Lab-X-server](https://github.com/MPC-Lab-X/MPC-Lab-X-server))
+
+> **Note:** This project is part of the MPC-Lab-X project. To use this application, you must have the backend services up and running. And configure the backend services URL in the `/public/js/api.js` file (default: `/api`). For more information, refer to the [MPC-Lab-X-server](https://github.com/MPC-Lab-X/MPC-Lab-X-server) repository.
 
 ## Installation
 
@@ -41,6 +45,13 @@ DESMOS_API_KEY=dcb31709b452b1cf9dc26972add0fda6 # API key for Desmos API (requir
 ```bash
 npm start
 ```
+
+## Acknowledgements
+
+- [Express.js](https://expressjs.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [KaTeX](https://katex.org/)
+- [Desmos API](https://www.desmos.com/api)
 
 ## License
 
