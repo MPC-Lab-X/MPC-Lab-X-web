@@ -3,6 +3,7 @@
 
 <head>
   <%- include("../../components/head.ejs") %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Edit Task</title>
 </head>
 
@@ -29,6 +30,117 @@
       <button id="delete-task" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition duration-200">Delete Task</button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getClass("<%= classId %>").then((response) => {
+      if (response.status === "success") {
+        const students = response.data.students.filter((student) => !student.deleted);
+
+        document.title = `MPC Lab | Edit Task - ${response.data.name}`;
+        document.getElementById("classroom-name").textContent = response.data.name;
+        const studentsCount = document.getElementById("students-count");
+        const adminsCount = document.getElementById("admins-count");
+        studentsCount.textContent = students.length;
+        adminsCount.textContent = response.data.admins.length;
+        studentsCount.classList.remove("hidden");
+        adminsCount.classList.remove("hidden");
+      } else {
+        if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    classroom.getTask("<%= taskId %>").then((response) => {
+      if (response.status === "success") {
+        document.getElementById("task-name").value = response.data.name;
+        document.getElementById("task-description").value = response.data.description;
+      } else {
+        if (response.error.code === "TASK_NOT_FOUND" || response.error.code === "CLASS_NOT_FOUND") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const saveTaskNameButton = document.getElementById("save-task-name");
+    saveTaskNameButton.addEventListener("click", () => {
+      const taskName = document.getElementById("task-name").value;
+      classroom.renameTask("<%= taskId %>", taskName).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            saveTaskNameButton.parentElement,
+            "rename-task"
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            saveTaskNameButton.parentElement,
+            "rename-task"
+          );
+        }
+      });
+    });
+
+    const saveTaskDescriptionButton = document.getElementById("save-task-description");
+    saveTaskDescriptionButton.addEventListener("click", () => {
+      const taskDescription = document.getElementById("task-description").value;
+      classroom.updateTaskDescription("<%= taskId %>", taskDescription).then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            saveTaskDescriptionButton.parentElement,
+            "update-task-description"
+          );
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            saveTaskDescriptionButton.parentElement,
+            "update-task-description"
+          );
+        }
+      });
+    });
+
+    const deleteTaskButton = document.getElementById("delete-task");
+    deleteTaskButton.addEventListener("click", () => {
+      classroom.deleteTask("<%= taskId %>").then((response) => {
+        if (response.status === "success") {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "success",
+            deleteTaskButton.parentElement,
+            "delete-task"
+          );
+          setTimeout(() => {
+            app.location.redirect(`/classrooms/${response.data.classId}/tasks`);
+          }, 2000);
+        } else {
+          app.ui.notification(
+            "alert",
+            response.message,
+            "error",
+            deleteTaskButton.parentElement,
+            "delete-task"
+          );
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

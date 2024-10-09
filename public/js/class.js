@@ -313,12 +313,12 @@ class Classroom {
   }
 
   /**
-   * @function updateDescription - Updates the description of a task.
+   * @function updateTaskDescription - Updates the description of a task.
    * @param {string} taskId - The ID of the task.
    * @param {string} description - The new description of the task.
    * @returns {Promise<Object>} - The response object.
    */
-  async updateDescription(taskId, description) {
+  async updateTaskDescription(taskId, description) {
     const response = await fetch(`${this.apiURL}/tasks/${taskId}/description`, {
       method: "PUT",
       headers: {
