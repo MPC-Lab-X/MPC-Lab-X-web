@@ -11,6 +11,8 @@ class ProblemsPrinter extends Problems {
   constructor(element) {
     super(element);
     this.element = element;
+
+    this.renderComplexity = 0;
   }
 
   /**
@@ -27,7 +29,10 @@ class ProblemsPrinter extends Problems {
    * @param {boolean} options.displayStudentId - The flag to display the student id.
    * @param {boolean} options.displayStudentName - The flag to display the student name.
    */
-  render(tasks, options) {
+  async render(tasks, options) {
+    this.renderComplexity = 0;
+    this.element.style.display = "block";
+
     this.element.innerHTML = "";
     for (const task of tasks) {
       const taskElement = this.renderTask({
@@ -36,6 +41,13 @@ class ProblemsPrinter extends Problems {
       });
       this.element.appendChild(taskElement);
     }
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.element.style.display = "none";
+        resolve();
+      }, 50 * this.renderComplexity);
+    });
   }
 
   /**
@@ -186,10 +198,12 @@ class ProblemsPrinter extends Problems {
       if (key === "problem") {
         for (const problemPart of problem[key]) {
           if (problemPart.type === "graph") {
+            this.renderComplexity++;
             problemPart.value.printMode = true;
           } else if (problemPart.type === "options") {
             for (const option of problemPart.value) {
               if (option.type === "graph") {
+                this.renderComplexity++;
                 option.value.printMode = true;
               }
             }
@@ -199,9 +213,10 @@ class ProblemsPrinter extends Problems {
         if (!withAnswers) {
           for (const problemPart of problem["solution"]) {
             if (problemPart.type === "graph") {
+              this.renderComplexity++;
               const emptyCoordinateElement = this.renderEmptyCoordinate();
               problemPartsElement.appendChild(emptyCoordinateElement);
-            } else {
+            } else if (problemPart.type !== "options") {
               const problemPlaceholderElement = this.renderProblemPlaceholder();
               problemPartsElement.appendChild(problemPlaceholderElement);
             }
@@ -212,10 +227,12 @@ class ProblemsPrinter extends Problems {
           problemPartsElement.className = "steps";
           for (const step of problem[key]) {
             if (step.type === "graph") {
+              this.renderComplexity++;
               step.value.printMode = true;
             } else if (step.type === "options") {
               for (const option of step.value) {
                 if (option.type === "graph") {
+                  this.renderComplexity++;
                   option.value.printMode = true;
                 }
               }
@@ -226,10 +243,12 @@ class ProblemsPrinter extends Problems {
           problemPartsElement.className = "answer";
           for (const solution of problem[key]) {
             if (solution.type === "graph") {
+              this.renderComplexity++;
               solution.value.printMode = true;
             } else if (solution.type === "options") {
               for (const option of solution.value) {
                 if (option.type === "graph") {
+                  this.renderComplexity++;
                   option.value.printMode = true;
                 }
               }
