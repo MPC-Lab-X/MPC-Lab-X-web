@@ -4,74 +4,47 @@
 <head>
   <%- include("../../components/head.ejs") %>
   <%- include("../../components/libraries.ejs", { desmosApiKey }) %>
+  <script src="/js/class.js"></script>
   <title>MPC Lab | Flow Mode</title>
 </head>
 
-<body class="relative">
+<body class="overflow-y-hidden relative">
   <div id="exit-flow-mode" class="fixed top-4 right-4 z-50 bg-black bg-opacity-70 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-opacity-80">
     <span>Exit Flow Mode (<b>Esc</b>)</span>
   </div>
 
   <div class="fixed top-0 left-0 w-full h-1 z-50">
-    <div id="progress-bar" class="bg-primary-600 h-1" style="width: 10%;"></div>
+    <div id="progress-bar" class="bg-primary-600 h-1" style="width: 0%;"></div>
 
     <div class="absolute top-1 left-4 text-sm text-gray-700">
-      <span id="graded-students">1</span>/<span id="total-students">10</span> students graded
+      <span id="graded-students">0</span>/<span id="total-students">0</span> students graded | current student: <b><span id="current-student-number"></span> (<span id="current-student-name-top"></span>)</b>
     </div>
   </div>
 
   <main class="p-6 h-screen flex justify-center items-center">
     <div class="fixed top-1/2 left-4 transform -translate-y-1/2 z-50">
       <button id="previous-student" class="bg-black bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80">
-        <b>&#8592;</b>
+        &#8592;
       </button>
     </div>
 
     <section class="w-full max-w-5xl bg-gray-50 rounded-lg shadow-md p-6 h-full overflow-y-auto">
       <div class="space-y-6 mb-6">
-        <h2 id="current-student-name" class="text-2xl font-semibold">Student 1</h2>
+        <h2 id="current-student-name" class="text-2xl font-semibold"></h2>
         <button id="mark-graded" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
-          Mark as Graded (↵ Enter)
+          Mark as Graded & Next (&#8629; Enter)
         </button>
       </div>
 
       <hr class="border-t border-gray-300 mb-6" />
 
-      <div id="problems" class="space-y-8 mb-6">
-        <div class="space-y-6 border-b last:border-0 pb-8 last:pb-0">
-          <h2 class="text-xl font-semibold mb-6">Problem No. 1</h2>
-          <div class="mb-6">
-            <h3 class="text-lg font-bold mb-4">Problem</h3>
-            <div class="mb-2">
-              <span class="text-gray-700">Solve for x:</span>
-            </div>
-            <div class="bg-gray-300 p-2 rounded mb-2">
-              <span class="katex">\(5x + 12 = 2\)</span>
-            </div>
-            <div class="space-y-2 mb-2">
-              <span class="text-gray-700">Select one of the following:</span>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">A:</span> <span class="text-gray-700">Text type choice</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">B:</span> <span class="katex">\(x = \\frac{-10}{5}\)</span>
-              </div>
-              <div class="bg-gray-100 p-2 rounded">
-                <span class="font-semibold">C:</span>
-                <div class="bg-gray-300 rounded-lg h-32 flex items-center justify-center">
-                  <span class="text-gray-500">Graph Placeholder</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <%- include("../../components/problems.ejs") %>
 
       <hr class="border-t border-gray-300 mb-6" />
 
       <div class="space-y-6">
-        <button id="next-student-graded-bottom" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
-          Mark as Graded and Next (&#8679; &#8594;)
+        <button id="mark-graded-bottom" class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-500">
+          Mark as Graded & Next (&#8629; Enter)
         </button>
         <button id="next-student-bottom" class="bg-secondary-600 text-white px-4 py-2 rounded-lg hover:bg-secondary-500">
           Next Ungraded (&#8594;)
@@ -85,6 +58,170 @@
       </button>
     </div>
   </main>
+  <script>
+    const classroom = new Classroom(app);
+
+    classroom.getTask("<%= taskId %>").then((response) => {
+      if (response.status === "success") {
+        const userTasks = response.data.userTasks;
+
+        classroom.getClass("<%= classId %>").then((response) => {
+          if (response.status === "success") {
+            const classStudents = response.data.students;
+            const taskStudents = userTasks.map((userTask) => {
+              const student = classStudents.find((student) => student.studentNumber === userTask.studentNumber);
+              return {
+                ...student,
+                graded: userTasks.find((userTask) => userTask.studentNumber === student.studentNumber).graded
+              };
+            });
+
+            document.getElementById("total-students").textContent = taskStudents.length;
+
+            const gradeQueue = new GradeCircularQueue(taskStudents);
+
+            document.getElementById("exit-flow-mode").addEventListener("click", () => {
+              app.location.redirect(`/classrooms/<%= classId %>/tasks/<%= taskId %>/grade`);
+            });
+
+            document.getElementById("mark-graded").onclick = () => {
+              gradeQueue.markGraded();
+            };
+            document.getElementById("mark-graded-bottom").onclick = () => {
+              gradeQueue.markGraded();
+            };
+
+            const previousStudent = () => {
+              gradeQueue.previousStudent();
+            };
+            document.getElementById("previous-student").addEventListener("click", previousStudent);
+
+            const nextStudent = () => {
+              gradeQueue.nextStudent();
+            };
+            document.getElementById("next-student").addEventListener("click", nextStudent);
+            document.getElementById("next-student-bottom").addEventListener("click", nextStudent);
+            document.getElementById("previous-student").addEventListener("click", previousStudent);
+
+            document.addEventListener("keydown", (event) => {
+              if (event.key === "ArrowRight") {
+                nextStudent();
+              } else if (event.key === "ArrowLeft") {
+                previousStudent();
+              } else if (event.key === "Enter") {
+                gradeQueue.markGraded();
+              } else if (event.key === "Escape") {
+                app.location.redirect(`/classrooms/<%= classId %>/tasks/<%= taskId %>/grade`);
+              }
+            });
+          } else {
+            if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
+              app.location.showNotFound();
+            } else if (response.error.code === "ACCESS_DENIED") {
+              app.location.showForbidden();
+            }
+          }
+        });
+      } else {
+        if (response.error.code === "TASK_NOT_FOUND" || response.error.code === "CLASS_NOT_FOUND") {
+          app.location.showNotFound();
+        } else if (response.error.code === "ACCESS_DENIED") {
+          app.location.showForbidden();
+        }
+      }
+    });
+
+    const problems = new Problems(document.getElementById("problems"));
+
+    class GradeCircularQueue {
+      constructor(students) {
+        this.students = students;
+        this.queue = [];
+        this.index = 0;
+        this.students.forEach((student, index) => {
+          if (!student.graded) {
+            this.queue.push(index);
+          }
+        });
+
+        if (this.queue.length > 0) {
+          document.getElementById("graded-students").textContent = this.students.filter((student) => student.graded).length;
+          document.getElementById("progress-bar").style.width = `${(this.students.filter((student) => student.graded).length / this.students.length) * 100}%`;
+
+          this.showStudent(this.queue[0]);
+        } else {
+          app.ui.alert("All students have been graded.", "info", 2000);
+          setTimeout(() => {
+            app.location.redirect(`/classrooms/<%= classId %>/tasks/<%= taskId %>/grade`);
+          }, 2000);
+        }
+      }
+
+      showStudent(index) {
+        this.index = index;
+        const student = this.students[index];
+        document.getElementById("current-student-name-top").textContent = student.name;
+        document.getElementById("current-student-number").textContent = student.studentNumber;
+        document.getElementById("current-student-name").textContent = student.name;
+
+        getCachedTaskProblems("<%= taskId %>", student.studentNumber).then((response) => {
+          if (response.status === "success") {
+            problems.render(response.data);
+          } else {
+            app.ui.alert(response.message, "error", 5000);
+          }
+        });
+      }
+
+      async markGraded() {
+        const student = this.students[this.index];
+        student.graded = true;
+        this.queue.shift();
+        document.getElementById("graded-students").textContent = this.students.filter((student) => student.graded).length;
+        document.getElementById("progress-bar").style.width = `${(this.students.filter((student) => student.graded).length / this.students.length) * 100}%`;
+
+        await classroom.updateGradingStatus("<%= taskId %>", student.studentNumber, true);
+
+        if (this.queue.length > 0) {
+          this.showStudent(this.queue[0]);
+        } else {
+          app.ui.alert("All students have been graded.", "info", 2000);
+          setTimeout(() => {
+            app.location.redirect(`/classrooms/<%= classId %>/tasks/<%= taskId %>/grade`);
+          }, 2000);
+        }
+      }
+
+      nextStudent() {
+        if (this.queue.length > 0) {
+          this.queue.push(this.queue.shift());
+          this.showStudent(this.queue[0]);
+        }
+      }
+
+      previousStudent() {
+        if (this.queue.length > 0) {
+          this.queue.unshift(this.queue.pop());
+          this.showStudent(this.queue[0]);
+        }
+      }
+    }
+
+    const taskCache = new Map();
+
+    function getCachedTaskProblems(taskId, studentNumber) {
+      const cacheKey = `${taskId}-${studentNumber}`;
+      if (taskCache.has(cacheKey)) {
+        return Promise.resolve(taskCache.get(cacheKey));
+      }
+      return classroom.getTaskProblems(taskId, studentNumber).then((response) => {
+        if (response.status === "success") {
+          taskCache.set(cacheKey, response);
+        }
+        return response;
+      });
+    }
+  </script>
 </body>
 
 </html>
