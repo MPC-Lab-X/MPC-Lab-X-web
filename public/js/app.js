@@ -233,7 +233,7 @@ class Location {
       }
     } else {
       if (!this.app.auth.authenticated) {
-        this.redirect(`${this.app.baseURL}/login`);
+        this.redirect(`${this.app.baseURL}/login?redirect=${this.path}`);
       }
     }
   }

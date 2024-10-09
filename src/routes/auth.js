@@ -18,7 +18,7 @@ router.get("/register/complete", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("pages/auth/login");
+  res.render("pages/auth/login", { redirect: req.query.redirect });
 });
 
 router.get("/password-reset", (req, res) => {

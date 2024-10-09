@@ -41,7 +41,7 @@
       const response = await auth.login(identifier, password);
       if (response.status === "success") {
         app.auth.set(response.data.user._id, response.data.accessToken, response.data.refreshToken);
-        app.location.redirect("/dashboard");
+        app.location.redirect("<%= redirect %>" || "/dashboard");
       } else {
         loginButton.disabled = false;
         app.ui.notification(
