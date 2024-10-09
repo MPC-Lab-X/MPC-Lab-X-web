@@ -9,9 +9,11 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Edit Student Information</h1>
 
+    <!-- Student details form -->
     <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Edit Student Details</h2>
 
@@ -26,13 +28,15 @@
       </div>
 
       <button id="update-student" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Update Student</button>
-
       <button id="delete-student" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200 mb-4">Delete Student</button>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Fetch class details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
@@ -52,9 +56,10 @@
           document.getElementById("student-id").textContent = student.studentNumber;
           document.getElementById("student-name").value = student.name;
         } else {
-          app.location.showNotFound();
+          app.location.showNotFound(); // Show not found if student does not exist
         }
       } else {
+        // Handle errors
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -63,6 +68,7 @@
       }
     });
 
+    // Update student information
     const updateStudentButton = document.getElementById("update-student");
     updateStudentButton.addEventListener("click", async () => {
       const studentName = document.getElementById("student-name").value;
@@ -75,7 +81,7 @@
             "alert",
             response.message,
             "success",
-            document.getElementById("update-student").parentElement,
+            updateStudentButton.parentElement,
             "update-student"
           );
         } else {
@@ -83,13 +89,14 @@
             "alert",
             response.message,
             "error",
-            document.getElementById("update-student").parentElement,
+            updateStudentButton.parentElement,
             "update-student"
           );
         }
       });
     });
 
+    // Delete student from classroom
     const deleteStudentButton = document.getElementById("delete-student");
     deleteStudentButton.addEventListener("click", async () => {
       const studentId = "<%= studentId %>";
@@ -101,9 +108,10 @@
             "alert",
             response.message,
             "success",
-            document.getElementById("delete-student").parentElement,
+            deleteStudentButton.parentElement,
             "delete-student"
           );
+          // Redirect to students list after a delay
           setTimeout(() => {
             app.location.redirect(`/classrooms/${classId}/students`);
           }, 2000);
@@ -112,7 +120,7 @@
             "alert",
             response.message,
             "error",
-            document.getElementById("delete-student").parentElement,
+            deleteStudentButton.parentElement,
             "delete-student"
           );
         }

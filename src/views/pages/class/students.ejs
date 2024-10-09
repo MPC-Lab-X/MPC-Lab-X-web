@@ -9,13 +9,16 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Student List</h1>
 
+    <!-- Search Input -->
     <div class="mb-6">
       <input type="text" id="search" placeholder="Search students by name or ID..." class="border border-gray-300 rounded p-2 w-full" oninput="filterStudents()" />
     </div>
 
+    <!-- Students Table -->
     <div class="overflow-x-auto bg-background-50 shadow-md rounded-lg">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100">
@@ -33,26 +36,34 @@
       </table>
     </div>
   </main>
-  <script>
-    const classroom = new Classroom(app);
 
+  <script>
+    // Initialize Classroom instance
+    const classroom = new Classroom(app);
+    let allStudents = [];
+
+    // Fetch classroom details and student list
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
-        const classroom = response.data;
-        allStudents = classroom.students.filter((student) => !student.deleted);
+        const classroomData = response.data;
+        allStudents = classroomData.students.filter((student) => !student.deleted);
 
-        document.title = `MPC Lab | Students - ${classroom.name}`;
-        document.getElementById("classroom-name").textContent = classroom.name;
+        // Update document title and classroom name
+        document.title = `MPC Lab | Students - ${classroomData.name}`;
+        document.getElementById("classroom-name").textContent = classroomData.name;
 
+        // Update student and admin counts
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
         studentsCount.textContent = allStudents.length;
-        adminsCount.textContent = classroom.admins.length;
+        adminsCount.textContent = classroomData.admins.length;
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
 
+        // Render student list
         renderStudents(allStudents);
       } else {
+        // Handle errors based on response code
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -61,11 +72,11 @@
       }
     });
 
-    let allStudents = [];
-
+    // Render student rows in the table
     function renderStudents(students) {
       const studentsTable = document.getElementById("students-table");
       studentsTable.innerHTML = "";
+
       if (students.length > 0) {
         students.forEach((student) => {
           const studentRow = document.createElement("tr");
@@ -73,8 +84,10 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.studentNumber}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${student.name}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <button onclick="app.location.redirect('/classrooms/<%= classId %>/students/${student.studentNumber}/edit')" class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
-              <button onclick="deleteStudent(this, '<%= classId %>', '${student.studentNumber}')" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
+              <button onclick="app.location.redirect('/classrooms/<%= classId %>/students/${student.studentNumber}/edit')" 
+                class="bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-400 transition-colors duration-200">Edit</button>
+              <button onclick="deleteStudent(this, '<%= classId %>', '${student.studentNumber}')" 
+                class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-400 transition-colors duration-200 ml-2">Delete</button>
             </td>
           `;
           studentsTable.appendChild(studentRow);
@@ -84,6 +97,7 @@
       }
     }
 
+    // Filter students based on search input
     function filterStudents() {
       const searchTerm = document.getElementById("search").value.toLowerCase();
       const filteredStudents = allStudents.filter((student) =>
@@ -93,13 +107,16 @@
       renderStudents(filteredStudents);
     }
 
+    // Delete a student
     const deleteStudent = async (deleteButton, classId, studentId) => {
       deleteButton.textContent = "Confirm";
       deleteButton.classList.remove("bg-red-500");
       deleteButton.classList.add("bg-red-700");
+
       deleteButton.onclick = async () => {
         deleteButton.disabled = true;
         deleteButton.textContent = "Deleting...";
+
         const response = await classroom.deleteStudent(classId, studentId);
         if (response.status === "success") {
           deleteButton.parentElement.parentElement.remove();

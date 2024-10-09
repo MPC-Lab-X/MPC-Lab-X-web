@@ -9,23 +9,27 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Settings</h1>
 
     <div class="bg-background-50 shadow-md rounded-lg p-6">
 
+      <!-- Username Section -->
       <div id="username-section" class="mb-6">
         <label for="username" class="block text-sm font-medium text-text">Username</label>
         <input type="text" id="username" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
         <button id="update-username" class="mt-2 w-full bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Modify</button>
       </div>
 
+      <!-- Email Section -->
       <div id="email-section" class="mb-6">
         <label for="email" class="block text-sm font-medium text-text">Email</label>
         <input type="email" id="email" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
         <button id="send-verification" class="mt-2 w-full bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Update Email</button>
       </div>
 
+      <!-- Password Section -->
       <div id="password-section" class="mb-6">
         <label class="block text-sm font-medium text-text">Password</label>
         <div class="mt-1 grid grid-cols-1 gap-4">
@@ -39,9 +43,11 @@
 
     </div>
   </main>
-  <script>
-    const user = new User(app);
 
+  <script>
+    const user = new User(app); // Instantiate User object
+
+    // Fetch and display current user information
     user.getUser().then((response) => {
       if (response.status === "success") {
         document.getElementById("username").value = response.data.username;
@@ -49,7 +55,8 @@
       }
     });
 
-    updateUsernameButton = document.getElementById("update-username");
+    // Update Username Button Event Listener
+    const updateUsernameButton = document.getElementById("update-username");
     updateUsernameButton.addEventListener("click", async () => {
       updateUsernameButton.disabled = true;
       const username = document.getElementById("username").value;
@@ -71,10 +78,11 @@
           "username"
         );
       }
-      updateUsernameButton.disabled = false;
+      updateUsernameButton.disabled = false; // Re-enable button
     });
 
-    sendVerificationButton = document.getElementById("send-verification");
+    // Send Verification Button Event Listener
+    const sendVerificationButton = document.getElementById("send-verification");
     sendVerificationButton.addEventListener("click", async () => {
       sendVerificationButton.disabled = true;
       const email = document.getElementById("email").value;
@@ -96,15 +104,18 @@
           "email"
         );
       }
-      sendVerificationButton.disabled = false;
+      sendVerificationButton.disabled = false; // Re-enable button
     });
 
-    updatePasswordButton = document.getElementById("update-password");
+    // Update Password Button Event Listener
+    const updatePasswordButton = document.getElementById("update-password");
     updatePasswordButton.addEventListener("click", async () => {
       updatePasswordButton.disabled = true;
       const currentPassword = document.getElementById("current-password").value;
       const newPassword = document.getElementById("new-password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
+
+      // Check if new passwords match
       if (newPassword !== confirmPassword) {
         app.ui.notification(
           "alert",
@@ -113,9 +124,10 @@
           document.getElementById("password-section"),
           "password"
         );
-        updatePasswordButton.disabled = false;
+        updatePasswordButton.disabled = false; // Re-enable button
         return;
       }
+
       const response = await user.updatePassword(currentPassword, newPassword);
       if (response.status === "success") {
         app.ui.notification(
@@ -126,6 +138,7 @@
           "password"
         );
       } else {
+        // Handle specific error cases
         if (response.error.code === "INVALID_PASSWORD") {
           app.ui.notification(
             "list",
@@ -150,7 +163,7 @@
           );
         }
       }
-      updatePasswordButton.disabled = false;
+      updatePasswordButton.disabled = false; // Re-enable button
     });
   </script>
 </body>

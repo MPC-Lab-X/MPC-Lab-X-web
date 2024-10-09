@@ -9,23 +9,29 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Add New Student(s)</h1>
 
     <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Student Details</h2>
 
+      <!-- Input for student names -->
       <div class="mb-4">
         <label for="student-names" class="block text-sm font-medium text-text">Student Names (comma separated)</label>
         <input type="text" id="student-names" placeholder="Enter student names" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
       </div>
 
+      <!-- Add Student(s) button -->
       <button id="add-student" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Student(s)</button>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Get classroom details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
@@ -38,6 +44,7 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
       } else {
+        // Handle errors based on the response
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -46,9 +53,12 @@
       }
     });
 
+    // Add Student(s) button event listener
     const addStudentButton = document.getElementById("add-student");
     addStudentButton.addEventListener("click", async () => {
       const studentNames = document.getElementById("student-names").value.split(",").map(name => name.trim());
+
+      // Validate the number of student names
       if (studentNames.length > 25) {
         app.ui.notification(
           "alert",
@@ -59,6 +69,8 @@
         );
         return;
       }
+
+      // Add each student
       for (let i = 0; i < studentNames.length; i++) {
         const response = await classroom.addStudent("<%= classId %>", studentNames[i]);
         if (response.status === "success") {

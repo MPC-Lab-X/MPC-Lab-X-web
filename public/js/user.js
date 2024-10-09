@@ -15,7 +15,7 @@ class User {
   }
 
   /**
-   * @function getUser - Gets the user data.
+   * @method getUser - Gets the user data.
    * @param {string} userId - The user ID.
    * @returns {Promise<Object>} - The response object.
    */
@@ -33,7 +33,7 @@ class User {
   }
 
   /**
-   * @function getSafetyRecords - Gets the safety records of a user.
+   * @method getSafetyRecords - Gets the safety records of a user.
    * @param {number} limit - The number of records to return.
    * @param {number} offset - The number of records to skip.
    * @returns {Promise<Object>} - The response object.
@@ -55,7 +55,7 @@ class User {
   }
 
   /**
-   * @function updateUsername - Updates the username of a user.
+   * @method updateUsername - Updates the username of a user.
    * @param {string} username - The new username.
    * @returns {Promise<Object>} - The response object.
    */
@@ -77,7 +77,7 @@ class User {
   }
 
   /**
-   * @function updateDisplayName - Updates the display name of a user.
+   * @method updateDisplayName - Updates the display name of a user.
    * @param {string} displayName - The new display name.
    * @returns {Promise<Object>} - The response object.
    */
@@ -99,7 +99,7 @@ class User {
   }
 
   /**
-   * @function updateEmail - Updates the email of a user.
+   * @method updateEmail - Updates the email of a user.
    * @param {string} email - The new email.
    * @returns {Promise<Object>} - The response object.
    */
@@ -123,7 +123,7 @@ class User {
   }
 
   /**
-   * @function completeEmailUpdate - Completes the email update of a user.
+   * @method completeEmailUpdate - Completes the email update of a user.
    * @param {string} token - The email update token.
    * @returns {Promise<Object>} - The response object.
    */
@@ -145,7 +145,7 @@ class User {
   }
 
   /**
-   * @function updatePassword - Updates the password of a user.
+   * @method updatePassword - Updates the password of a user.
    * @param {string} currentPassword - The current password.
    * @param {string} newPassword - The new password.
    * @returns {Promise<Object>} - The response object.

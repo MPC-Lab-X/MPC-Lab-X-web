@@ -9,73 +9,75 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Profile</h1>
 
     <div id="profile" class="bg-background-50 shadow-md rounded-lg p-6">
       <h2 class="text-xl font-bold mb-4">User Information</h2>
 
+      <!-- Display Name Input -->
       <div class="mb-4">
         <label for="display-name" class="block text-sm font-medium text-text">Display Name</label>
         <input type="text" id="display-name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500" />
       </div>
 
+      <!-- Username Display -->
       <div class="mb-4">
         <p class="text-sm text-text"><strong>@<span id="username"></span></strong></p>
       </div>
 
+      <!-- Email Display -->
       <div class="mb-4">
         <p class="text-sm text-text"><strong>Email:</strong> <span id="email"></span></p>
       </div>
 
+      <!-- Joined Date Display -->
       <div class="mb-4">
         <p class="text-sm text-text"><strong>Joined:</strong> <span id="joined-at"></span></p>
       </div>
 
+      <!-- Update Profile Button -->
       <button id="update-profile" class="mt-4 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Save Changes</button>
 
+      <!-- Additional Links -->
       <div class="mt-6 text-sm text-text">
         <p class="mb-2">Didn't find what you were looking for?</p>
         <a href="/user/settings" class="text-primary-500 hover:underline">Edit your account settings</a>
       </div>
     </div>
   </main>
+
   <script>
     const user = new User(app);
 
+    // Fetch user information on page load
     user.getUser().then((response) => {
       if (response.status === "success") {
         document.getElementById("display-name").value = response.data.displayName;
         document.getElementById("username").textContent = response.data.username;
         document.getElementById("email").textContent = response.data.email;
-        document.getElementById("display-name").value = response.data.displayName;
         document.getElementById("joined-at").textContent = new Date(response.data.createdAt).toLocaleDateString();
       }
     });
 
-    updateProfileButton = document.getElementById("update-profile");
+    // Update profile button event listener
+    const updateProfileButton = document.getElementById("update-profile");
     updateProfileButton.addEventListener("click", async () => {
-      updateProfileButton.disabled = true;
+      updateProfileButton.disabled = true; // Disable button to prevent multiple clicks
       const displayName = document.getElementById("display-name").value;
       const response = await user.updateDisplayName(displayName);
-      if (response.status === "success") {
-        app.ui.notification(
-          "alert",
-          response.message,
-          "success",
-          document.getElementById("profile"),
-          "profile"
-        );
-      } else {
-        app.ui.notification(
-          "alert",
-          response.message,
-          "error",
-          document.getElementById("profile"),
-          "profile"
-        );
-      }
-      updateProfileButton.disabled = false;
+
+      // Notify user of update status
+      app.ui.notification(
+        "alert",
+        response.message,
+        response.status === "success" ? "success" : "error",
+        document.getElementById("profile"),
+        "profile"
+      );
+
+      updateProfileButton.disabled = false; // Re-enable button
     });
   </script>
 </body>

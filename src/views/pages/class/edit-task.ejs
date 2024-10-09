@@ -9,36 +9,50 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-3xl font-semibold mb-6">Edit Task</h1>
 
+    <!-- Task settings section -->
     <div class="mt-8 p-6 bg-background-50 shadow-md rounded-lg">
       <h2 class="text-xl font-bold mb-4">Task Settings</h2>
 
+      <!-- Task Name Input -->
       <div class="mb-6">
         <label class="block text-sm font-medium text-gray-700">Task Name</label>
         <input id="task-name" type="text" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task name" />
-        <button id="save-task-name" class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">Save Task Name</button>
+        <button id="save-task-name" class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">
+          Save Task Name
+        </button>
       </div>
 
+      <!-- Task Description Input -->
       <div class="mb-6">
         <label class="block text-sm font-medium text-gray-700">Task Description</label>
         <textarea id="task-description" class="p-3 border border-gray-300 rounded-md w-full mt-1" placeholder="Enter task description"></textarea>
-        <button id="save-task-description" class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">Save Task Description</button>
+        <button id="save-task-description" class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">
+          Save Task Description
+        </button>
       </div>
 
-      <button id="delete-task" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition duration-200">Delete Task</button>
+      <!-- Delete Task Button -->
+      <button id="delete-task" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500 transition duration-200">
+        Delete Task
+      </button>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Fetch class details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
-
         document.title = `MPC Lab | Edit Task - ${response.data.name}`;
-        document.getElementById("classroom-name").textContent = response.data.name;
+
+        // Update student and admin counts
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
         studentsCount.textContent = students.length;
@@ -46,6 +60,7 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
       } else {
+        // Handle errors
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -54,11 +69,13 @@
       }
     });
 
+    // Fetch task details
     classroom.getTask("<%= taskId %>").then((response) => {
       if (response.status === "success") {
         document.getElementById("task-name").value = response.data.name;
         document.getElementById("task-description").value = response.data.description;
       } else {
+        // Handle errors
         if (response.error.code === "TASK_NOT_FOUND" || response.error.code === "CLASS_NOT_FOUND") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -67,76 +84,53 @@
       }
     });
 
+    // Save task name
     const saveTaskNameButton = document.getElementById("save-task-name");
     saveTaskNameButton.addEventListener("click", () => {
       const taskName = document.getElementById("task-name").value;
       classroom.renameTask("<%= taskId %>", taskName).then((response) => {
-        if (response.status === "success") {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "success",
-            saveTaskNameButton.parentElement,
-            "rename-task"
-          );
-        } else {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "error",
-            saveTaskNameButton.parentElement,
-            "rename-task"
-          );
-        }
+        app.ui.notification(
+          "alert",
+          response.message,
+          response.status === "success" ? "success" : "error",
+          saveTaskNameButton.parentElement,
+          "rename-task"
+        );
       });
     });
 
+    // Save task description
     const saveTaskDescriptionButton = document.getElementById("save-task-description");
     saveTaskDescriptionButton.addEventListener("click", () => {
       const taskDescription = document.getElementById("task-description").value;
       classroom.updateTaskDescription("<%= taskId %>", taskDescription).then((response) => {
-        if (response.status === "success") {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "success",
-            saveTaskDescriptionButton.parentElement,
-            "update-task-description"
-          );
-        } else {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "error",
-            saveTaskDescriptionButton.parentElement,
-            "update-task-description"
-          );
-        }
+        app.ui.notification(
+          "alert",
+          response.message,
+          response.status === "success" ? "success" : "error",
+          saveTaskDescriptionButton.parentElement,
+          "update-task-description"
+        );
       });
     });
 
+    // Delete task
     const deleteTaskButton = document.getElementById("delete-task");
     deleteTaskButton.addEventListener("click", () => {
       classroom.deleteTask("<%= taskId %>").then((response) => {
+        app.ui.notification(
+          "alert",
+          response.message,
+          response.status === "success" ? "success" : "error",
+          deleteTaskButton.parentElement,
+          "delete-task"
+        );
+
+        // Redirect to tasks list after a delay if the deletion was successful
         if (response.status === "success") {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "success",
-            deleteTaskButton.parentElement,
-            "delete-task"
-          );
           setTimeout(() => {
             app.location.redirect(`/classrooms/${response.data.classId}/tasks`);
           }, 2000);
-        } else {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "error",
-            deleteTaskButton.parentElement,
-            "delete-task"
-          );
         }
       });
     });

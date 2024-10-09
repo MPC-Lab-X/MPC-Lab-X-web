@@ -9,9 +9,11 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Create a New Classroom</h1>
 
+    <!-- Classroom details form -->
     <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Classroom Details</h2>
 
@@ -23,34 +25,42 @@
       <button id="create-classroom" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Create Classroom</button>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Handle classroom creation on button click
     const createClassroomButton = document.getElementById("create-classroom");
     createClassroomButton.addEventListener("click", async () => {
-      createClassroomButton.disabled = true;
+      createClassroomButton.disabled = true; // Disable button during process
       const classroomName = document.getElementById("classroom-name").value;
+
+      // Create a new classroom
       const response = await classroom.createClass(classroomName);
       if (response.status === "success") {
+        // Notify user of success
         app.ui.notification(
           "alert",
           response.message,
           "success",
-          document.getElementById("create-classroom").parentElement,
+          createClassroomButton.parentElement,
           "create-classroom"
         );
+        // Redirect to the new classroom page after a delay
         setTimeout(() => {
           app.location.redirect(`/classrooms/${response.data._id}`);
         }, 2000);
       } else {
+        // Notify user of failure
         app.ui.notification(
           "alert",
           response.message,
           "error",
-          document.getElementById("create-classroom").parentElement,
+          createClassroomButton.parentElement,
           "create-classroom"
         );
-        createClassroomButton.disabled = false;
+        createClassroomButton.disabled = false; // Re-enable button on error
       }
     });
   </script>

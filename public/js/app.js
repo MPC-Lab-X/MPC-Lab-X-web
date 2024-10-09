@@ -21,7 +21,7 @@ class Data {
   }
 
   /**
-   * @function createProxy - Creates a proxy for the data object.
+   * @method createProxy - Creates a proxy for the data object.
    * @param {Object} data - The data object to proxy.
    * @returns {Object} - The proxied data object.
    */
@@ -50,7 +50,7 @@ class Data {
   }
 
   /**
-   * @function loadData - Loads data from the local-storage.
+   * @method loadData - Loads data from the local-storage.
    */
   loadData() {
     const storedData = localStorage.getItem(this.key);
@@ -58,7 +58,7 @@ class Data {
   }
 
   /**
-   * @function saveData - Saves data to the local-storage.
+   * @method saveData - Saves data to the local-storage.
    */
   saveData() {
     localStorage.setItem(this.key, JSON.stringify(this._data));
@@ -84,7 +84,7 @@ class Auth {
   }
 
   /**
-   * @function init - Initializes the Auth class.
+   * @method init - Initializes the Auth class.
    * @returns {boolean} - True if the user is authenticated, false otherwise.
    */
   async init() {
@@ -103,7 +103,7 @@ class Auth {
   }
 
   /**
-   * @function setFetch - Replacement for the fetch function with the access token.
+   * @method setFetch - Replacement for the fetch function with the access token.
    */
   setFetch() {
     if (!this.accessToken) {
@@ -148,7 +148,7 @@ class Auth {
   }
 
   /**
-   * @function authenticate - Authenticates the user. (refresh JWT token)
+   * @method authenticate - Authenticates the user. (refresh JWT token)
    * @throws {Error} - If the token is invalid or expired.
    */
   async authenticate() {
@@ -184,7 +184,7 @@ class Auth {
   }
 
   /**
-   * @function set - Sets the user id and tokens.
+   * @method set - Sets the user id and tokens.
    * @param {string} userId - The user ID.
    * @param {string} accessToken - The access token.
    * @param {string} refreshToken - The refresh token.
@@ -200,7 +200,7 @@ class Auth {
   }
 
   /**
-   * @function destroy - Destroys the tokens.
+   * @method destroy - Destroys the tokens.
    */
   destroy() {
     this.app.data.auth = {};
@@ -224,7 +224,7 @@ class Location {
   }
 
   /**
-   * @function init - Initializes the redirect.
+   * @method init - Initializes the redirect.
    */
   init() {
     if (this.isPublicRoute(this.path)) {
@@ -239,7 +239,7 @@ class Location {
   }
 
   /**
-   * @function isPublicRoute - Checks if the route is public.
+   * @method isPublicRoute - Checks if the route is public.
    * @param {string} route - The route to check.
    * @returns {boolean} - True if the route is public, false otherwise.
    */
@@ -261,7 +261,7 @@ class Location {
   }
 
   /**
-   * @function isAuthRoute - Checks if the route is for authentication purposes.
+   * @method isAuthRoute - Checks if the route is for authentication purposes.
    * @param {string} route - The route to check.
    * @returns {boolean} - True if the route is authentication required, false otherwise.
    */
@@ -276,7 +276,7 @@ class Location {
   }
 
   /**
-   * @function redirect - Redirects the user to the specified URL.
+   * @method redirect - Redirects the user to the specified URL.
    * @param {string} url - The URL to redirect to.
    */
   redirect(url) {
@@ -286,21 +286,21 @@ class Location {
   }
 
   /**
-   * @function refresh - Refreshes the page.
+   * @method refresh - Refreshes the page.
    */
   refresh() {
     window.location.reload();
   }
 
   /**
-   * @function showNotFound - Shows the 404 page.
+   * @method showNotFound - Shows the 404 page.
    */
   showNotFound() {
     this.redirect(`${this.app.baseURL}/404?path=${this.path}`);
   }
 
   /**
-   * @function showForbidden - Shows the 403 page.
+   * @method showForbidden - Shows the 403 page.
    */
   showForbidden() {
     this.redirect(`${this.app.baseURL}/403?path=${this.path}`);
@@ -323,7 +323,7 @@ class UI {
   }
 
   /**
-   * @function init - Initializes the UI class.
+   * @method init - Initializes the UI class.
    */
   async init() {
     function init() {
@@ -340,7 +340,7 @@ class UI {
   }
 
   /**
-   * @function updateHeader - Updates the header based on the authentication status.
+   * @method updateHeader - Updates the header based on the authentication status.
    * @param {boolean} authenticated - The authentication status.
    */
   updateHeader(authenticated) {
@@ -363,7 +363,7 @@ class UI {
   }
 
   /**
-   * @function alert - Displays an alert message at the top-left corner of the page.
+   * @method alert - Displays an alert message at the top-left corner of the page.
    * @param {string} message - The message to display.
    * @param {string} status - The status of the alert (e.g., "success", "info", "warning", "error").
    * @param {number} duration - The duration in milliseconds for which the alert should be visible.
@@ -414,7 +414,7 @@ class UI {
   }
 
   /**
-   * @function notification - Displays a notification message in an element.
+   * @method notification - Displays a notification message in an element.
    * @param {string} type - The type of notification.
    * @param {string | string[]} message - The message to display.
    * @param {string} status - The status of the notification.
@@ -517,7 +517,7 @@ class App {
   }
 
   /**
-   * @function init - Initializes the App class.
+   * @method init - Initializes the App class.
    */
   async init() {
     await this.auth.init();

@@ -9,37 +9,48 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Classroom Settings</h1>
 
+    <!-- Classroom Settings Container -->
     <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Classroom Details</h2>
 
+      <!-- Classroom Name Input -->
       <div class="mb-4">
         <label for="class-name" class="block text-sm font-medium text-text">Classroom Name</label>
         <input type="text" id="class-name" placeholder="Enter classroom name" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
       </div>
 
+      <!-- Classroom Code Input -->
       <div class="mb-4">
         <label for="class-code" class="block text-sm font-medium text-text">Classroom Code</label>
         <input type="text" id="class-code" value="<%= classId %>" readonly class="mt-1 block w-full p-3 border border-gray-300 bg-gray-100 rounded-md cursor-not-allowed" />
       </div>
 
+      <!-- Action Buttons -->
       <div class="flex justify-between mt-6">
         <button id="save-settings" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Save Changes</button>
         <button id="delete-class" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition-colors duration-200">Delete Classroom</button>
       </div>
     </div>
   </main>
+
   <script>
+    // Initialize Classroom instance
     const classroom = new Classroom(app);
 
+    // Fetch classroom details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
 
+        // Update document title and classroom name
         document.title = `MPC Lab | Classroom Settings - ${response.data.name}`;
         document.getElementById("classroom-name").textContent = response.data.name;
+
+        // Update student and admin counts
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
         studentsCount.textContent = students.length;
@@ -47,8 +58,10 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
 
+        // Populate classroom name input
         document.getElementById("class-name").value = response.data.name;
       } else {
+        // Handle errors based on response code
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -57,49 +70,50 @@
       }
     });
 
+    // Save classroom settings
     const saveSettingsButton = document.getElementById("save-settings");
     saveSettingsButton.addEventListener("click", () => {
       const className = document.getElementById("class-name").value;
 
       classroom.renameClass("<%= classId %>", className).then((response) => {
-        if (response.status === "success") {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "success",
-            saveSettingsButton.parentElement.parentElement,
-            "save-settings"
-          );
-        } else {
-          app.ui.notification(
-            "alert",
-            response.message,
-            "error",
-            saveSettingsButton.parentElement.parentElement,
-            "save-settings"
-          );
-        }
+        // Show notification based on response status
+        app.ui.notification(
+          "alert",
+          response.message,
+          response.status === "success" ? "success" : "error",
+          saveSettingsButton.parentElement.parentElement,
+          "save-settings"
+        );
       });
     });
 
+    // Delete classroom functionality
     const deleteClassButton = document.getElementById("delete-class");
     let unlockDeleteClass = false;
+
     deleteClassButton.addEventListener("click", () => {
       if (unlockDeleteClass) return;
       deleteClassButton.disabled = true;
+
       let deleteClassLockTimeout = 30;
       const deleteClassLockTimeoutInterval = setInterval(() => {
         deleteClassButton.textContent = `Available in ${deleteClassLockTimeout}s`;
         deleteClassLockTimeout--;
+
+        // Unlock delete button after countdown
         if (deleteClassLockTimeout === 0) {
           deleteClassButton.textContent = "Confirm Delete";
           deleteClassButton.classList.remove("bg-red-500");
           deleteClassButton.classList.add("bg-red-700");
           deleteClassButton.disabled = false;
+
+          // Confirm deletion action
           deleteClassButton.onclick = async () => {
             deleteClassButton.disabled = true;
             deleteClassButton.textContent = "Deleting...";
             const response = await classroom.deleteClass("<%= classId %>");
+
+            // Redirect or show error notification based on response
             if (response.status === "success") {
               app.location.redirect("/classrooms");
             } else {
@@ -108,6 +122,7 @@
               app.ui.alert(response.message, "error", 5000);
             }
           };
+
           clearInterval(deleteClassLockTimeoutInterval);
           unlockDeleteClass = true;
         }

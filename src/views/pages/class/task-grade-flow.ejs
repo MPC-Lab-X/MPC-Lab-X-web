@@ -9,25 +9,28 @@
 </head>
 
 <body class="overflow-y-hidden relative">
+  <!-- Exit Flow Mode Button -->
   <div id="exit-flow-mode" class="fixed top-4 right-4 z-50 bg-black bg-opacity-70 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-opacity-80">
     <span>Exit Flow Mode (<b>Esc</b>)</span>
   </div>
 
+  <!-- Progress Bar -->
   <div class="fixed top-0 left-0 w-full h-1 z-50">
     <div id="progress-bar" class="bg-primary-600 h-1" style="width: 0%;"></div>
-
     <div class="absolute top-1 left-4 text-sm text-gray-700">
       <span id="graded-students">0</span>/<span id="total-students">0</span> students graded | current student: <b><span id="current-student-number"></span> (<span id="current-student-name-top"></span>)</b>
     </div>
   </div>
 
   <main class="p-6 h-screen flex justify-center items-center">
+    <!-- Previous Student Button -->
     <div class="fixed top-1/2 left-4 transform -translate-y-1/2 z-50">
       <button id="previous-student" class="bg-black bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80">
         &#8592;
       </button>
     </div>
 
+    <!-- Main Content Section -->
     <section class="w-full max-w-5xl bg-gray-50 rounded-lg shadow-md p-6 h-full overflow-y-auto">
       <div class="space-y-6 mb-6">
         <h2 id="current-student-name" class="text-2xl font-semibold"></h2>
@@ -38,6 +41,7 @@
 
       <hr class="border-t border-gray-300 mb-6" />
 
+      <!-- Problems Section -->
       <%- include("../../components/problems.ejs") %>
 
       <hr class="border-t border-gray-300 mb-6" />
@@ -52,15 +56,18 @@
       </div>
     </section>
 
+    <!-- Next Student Button -->
     <div class="fixed top-1/2 right-4 transform -translate-y-1/2 z-50">
       <button id="next-student" class="bg-black bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80">
         &#8594;
       </button>
     </div>
   </main>
+
   <script>
     const classroom = new Classroom(app);
 
+    // Fetch the task and associated student data
     classroom.getTask("<%= taskId %>").then((response) => {
       if (response.status === "success") {
         const userTasks = response.data.userTasks;
@@ -76,14 +83,17 @@
               };
             });
 
+            // Update total students count
             document.getElementById("total-students").textContent = taskStudents.length;
 
             const gradeQueue = new GradeCircularQueue(taskStudents);
 
+            // Exit Flow Mode Handler
             document.getElementById("exit-flow-mode").addEventListener("click", () => {
               app.location.redirect(`/classrooms/<%= classId %>/tasks/<%= taskId %>/grade`);
             });
 
+            // Mark Graded Handlers
             document.getElementById("mark-graded").onclick = () => {
               gradeQueue.markGraded();
             };
@@ -91,6 +101,7 @@
               gradeQueue.markGraded();
             };
 
+            // Previous and Next Student Handlers
             const previousStudent = () => {
               gradeQueue.previousStudent();
             };
@@ -103,6 +114,7 @@
             document.getElementById("next-student-bottom").addEventListener("click", nextStudent);
             document.getElementById("previous-student").addEventListener("click", previousStudent);
 
+            // Keyboard Shortcuts
             document.addEventListener("keydown", (event) => {
               if (event.key === "ArrowRight") {
                 nextStudent();
@@ -138,16 +150,18 @@
         this.students = students;
         this.queue = [];
         this.index = 0;
+
+        // Populate the queue with ungraded students
         this.students.forEach((student, index) => {
           if (!student.graded) {
             this.queue.push(index);
           }
         });
 
+        // Show the first student or alert if all are graded
         if (this.queue.length > 0) {
           document.getElementById("graded-students").textContent = this.students.filter((student) => student.graded).length;
           document.getElementById("progress-bar").style.width = `${(this.students.filter((student) => student.graded).length / this.students.length) * 100}%`;
-
           this.showStudent(this.queue[0]);
         } else {
           app.ui.alert("All students have been graded.", "info", 2000);
@@ -157,6 +171,7 @@
         }
       }
 
+      // Show the current student based on the index
       showStudent(index) {
         this.index = index;
         const student = this.students[index];
@@ -173,10 +188,13 @@
         });
       }
 
+      // Mark the current student as graded
       async markGraded() {
         const student = this.students[this.index];
         student.graded = true;
         this.queue.shift();
+
+        // Update graded student count and progress bar
         document.getElementById("graded-students").textContent = this.students.filter((student) => student.graded).length;
         document.getElementById("progress-bar").style.width = `${(this.students.filter((student) => student.graded).length / this.students.length) * 100}%`;
 
@@ -192,6 +210,7 @@
         }
       }
 
+      // Move to the next student in the queue
       nextStudent() {
         if (this.queue.length > 0) {
           this.queue.push(this.queue.shift());
@@ -199,6 +218,7 @@
         }
       }
 
+      // Move to the previous student in the queue
       previousStudent() {
         if (this.queue.length > 0) {
           this.queue.unshift(this.queue.pop());

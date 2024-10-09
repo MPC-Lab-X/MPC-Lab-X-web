@@ -16,7 +16,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function render - Renders the tasks.
+   * @method render - Renders the tasks.
    * @param {Array<Object>} tasks - The tasks to render.
    * @param {Object} options - The options to render the tasks.
    * @param {string} options.name - The name of the task. (Required if displayTitlePage is true)
@@ -51,7 +51,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderTask - Renders a task.
+   * @method renderTask - Renders a task.
    * @param {Object} task - The task to render.
    * @param {Array<Object>} task.problems - The problems to render.
    * @param {string} task.name - The name of the task. (Required if displayTitlePage is true)
@@ -87,7 +87,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderTitlePage - Renders a title page.
+   * @method renderTitlePage - Renders a title page.
    * @param {Object} task - The task to render.
    * @param {string} task.name - The name of the task.
    * @param {string} task.description - The description of the task.
@@ -156,7 +156,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderProblems - Renders a list of problems.
+   * @method renderProblems - Renders a list of problems.
    * @param {Array<Object>} problems - The problems to render.
    * @param {boolean} withAnswers - The flag to render the answers and steps.
    * @param {boolean} twoColumns - The flag to render the problems in two columns.
@@ -178,7 +178,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderProblem - Renders a problem.
+   * @method renderProblem - Renders a problem.
    * @param {Object} problem - The problem to render.
    * @param {number} index - The index of the problem.
    * @param {boolean} withAnswers - The flag to render the answers and steps.
@@ -265,7 +265,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderProblemPlaceholder - Renders a problem placeholder.
+   * @method renderProblemPlaceholder - Renders a problem placeholder.
    * @returns {HTMLElement} - The rendered problem placeholder element.
    */
   renderProblemPlaceholder() {
@@ -275,7 +275,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function renderEmptyCoordinate - Renders an empty coordinate.
+   * @method renderEmptyCoordinate - Renders an empty coordinate.
    * @returns {HTMLElement} - The rendered empty coordinate element.
    */
   renderEmptyCoordinate() {
@@ -299,7 +299,7 @@ class ProblemsPrinter extends Problems {
   }
 
   /**
-   * @function print - Prints the tasks.
+   * @method print - Prints the tasks.
    */
   print() {
     window.print();

@@ -13,7 +13,7 @@ class Problems {
   }
 
   /**
-   * @function render - Renders the problems.
+   * @method render - Renders the problems.
    * @param {Array<Object>} problems - The problems to render.
    */
   render(problems) {
@@ -25,7 +25,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblem - Renders a problem.
+   * @method renderProblem - Renders a problem.
    * @param {Object} problem - The problem to render.
    * @param {number} index - The index of the problem.
    * @returns {HTMLElement} - The rendered problem element.
@@ -100,7 +100,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemPart - Renders a problem part.
+   * @method renderProblemPart - Renders a problem part.
    * @param {HTMLElement} element - The element to render the problem part to.
    * @param {Object} part - The part to render
    */
@@ -139,7 +139,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemSolution - Renders a problem solution.
+   * @method renderProblemSolution - Renders a problem solution.
    * @param {HTMLElement} element - The element to render the problem solution to.
    * @param {Object} solution - The solution to render.
    */
@@ -240,7 +240,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemHeader - Renders a problem header.
+   * @method renderProblemHeader - Renders a problem header.
    * @param {string} title - The title to render.
    * @returns {HTMLElement} - The rendered problem header element.
    */
@@ -253,7 +253,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemText - Renders a problem text.
+   * @method renderProblemText - Renders a problem text.
    * @param {string} text - The text to render.
    * @returns {HTMLElement} - The rendered problem text element.
    */
@@ -266,7 +266,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemFormula - Renders a problem formula. (Katex)
+   * @method renderProblemFormula - Renders a problem formula. (Katex)
    * @param {string} formula - The formula to render.
    * @returns {HTMLElement} - The rendered problem formula element.
    */
@@ -283,7 +283,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemGraph - Renders a problem graph. (Desmos, etc.)
+   * @method renderProblemGraph - Renders a problem graph. (Desmos, etc.)
    * @param {string} graph - The graph to render.
    * @param {boolean} graph.printMode - Whether to render in print mode or not.
    * @returns {HTMLElement} - The rendered problem graph element.
@@ -326,7 +326,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemChart - Renders a problem chart. (Chart.js, etc.)
+   * @method renderProblemChart - Renders a problem chart. (Chart.js, etc.)
    * @param {string} chart - The chart to render.
    * @returns {HTMLElement} - The rendered problem chart element.
    */
@@ -342,7 +342,7 @@ class Problems {
   }
 
   /**
-   * @function renderProblemOptions - Renders a problem options.
+   * @method renderProblemOptions - Renders a problem options.
    * @param {Array<Object>} options - The options to render
    * @returns {HTMLElement} - The rendered problem options element.
    */

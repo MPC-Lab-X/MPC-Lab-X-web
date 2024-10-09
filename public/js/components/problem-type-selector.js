@@ -30,7 +30,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function render - Renders the component.
+   * @method render - Renders the component.
    */
   render() {
     // DON'T REMOVE (TAILWIND CLASS-NAME): bg-primary-100 bg-primary-200 bg-primary-300 bg-primary-400 hover:bg-primary-200 hover:bg-primary-300 hover:bg-primary-400 hover:bg-primary-500
@@ -42,7 +42,7 @@ class ProblemTypeSelector {
       subTopicsElement.className = "ml-4 hidden";
 
       if (topic.topics) {
-        topicElement.innerHTML = topic.name;
+        topicElement.textContent = topic.name;
         topicElement.className = `w-full text-left mt-2 py-2 px-4 bg-primary-${
           currentLevel <= 4 ? currentLevel : 4
         }00 rounded hover:bg-primary-${
@@ -64,7 +64,7 @@ class ProblemTypeSelector {
           subTopicsElement.appendChild(subTopicElement);
         }
       } else {
-        topicElement.innerHTML = topic.name;
+        topicElement.textContent = topic.name;
         topicElement.className = `w-full text-left mt-2 py-2 px-4 bg-primary-${
           currentLevel <= 4 ? currentLevel : 4
         }00 rounded hover:bg-primary-${
@@ -87,7 +87,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function addListeners - Adds event listeners to the component.
+   * @method addListeners - Adds event listeners to the component.
    */
   addListeners() {
     this.closeButton.addEventListener("click", () => {
@@ -102,7 +102,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function toggleTopic - Toggles the topic.
+   * @method toggleTopic - Toggles the topic.
    * @param {HTMLElement} subTopicsElement - The sub topics element.
    */
   toggleTopic(subTopicsElement) {
@@ -111,7 +111,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function toggleProblemType - Toggles the problem type.
+   * @method toggleProblemType - Toggles the problem type.
    * @param {Object} problemType - The problem type to toggle.
    * @param {Array} problemPath - The problem path.
    */
@@ -131,7 +131,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function show - Shows the component.
+   * @method show - Shows the component.
    * @returns {Promise<Array>} The problem path.
    */
   async show() {
@@ -143,7 +143,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function hide - Hides the component.
+   * @method hide - Hides the component.
    */
   hide() {
     this.element.classList.add("hidden");
@@ -164,7 +164,7 @@ class ProblemTypeSelector {
   }
 
   /**
-   * @function select - Problem type selected.
+   * @method select - Problem type selected.
    */
   select() {
     for (const selectPromise of this.selectPromises) {

@@ -9,9 +9,11 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Classrooms</h1>
 
+    <!-- Classrooms grid -->
     <div id="classrooms" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="bg-background-50 shadow-lg rounded-lg p-6 relative hover:shadow-xl transition-shadow duration-200">
         <h2 class="text-xl font-bold mb-2 text-primary-500">Create a Classroom</h2>
@@ -22,16 +24,23 @@
       </div>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Fetch classrooms
     classroom.getClasses().then((response) => {
       if (response.status === "success") {
         const classrooms = response.data;
         const classroomsContainer = document.getElementById("classrooms");
+
+        // Clear existing classrooms if any
         if (classrooms.length > 0) {
           classroomsContainer.innerHTML = "";
         }
+
+        // Create classroom cards
         classrooms.forEach((classroom) => {
           const classroomCard = document.createElement("div");
           classroomCard.classList.add("bg-background-50", "shadow-lg", "rounded-lg", "p-6", "relative", "hover:shadow-xl", "transition-shadow", "duration-200");
@@ -41,10 +50,17 @@
               <strong>Teacher:</strong> ${classroom.teacher.username}
             </p>
             <p class="text-sm text-gray-600 mb-2">
-              <a href="/classrooms/${classroom._id}/admins"><strong>Admin/Assistants:</strong> <span class="hover:text-primary-400 cursor-pointer" title="${classroom.admins.map(admin => admin.username).join(', ')}">${classroom.admins.slice(0, 3).map(admin => admin.username).join(', ')}${classroom.admins.length > 3 ? ', ...' : ''}</span></a>
+              <a href="/classrooms/${classroom._id}/admins">
+                <strong>Admin/Assistants:</strong> 
+                <span class="hover:text-primary-400 cursor-pointer" title="${classroom.admins.map(admin => admin.username).join(', ')}">
+                  ${classroom.admins.slice(0, 3).map(admin => admin.username).join(', ')}${classroom.admins.length > 3 ? ', ...' : ''}
+                </span>
+              </a>
             </p>
             <p class="text-sm text-gray-600 mb-4">
-              <a href="/classrooms/${classroom._id}/students"><strong>Students:</strong> ${classroom.students.length}</a>
+              <a href="/classrooms/${classroom._id}/students">
+                <strong>Students:</strong> ${classroom.students.length}
+              </a>
             </p>
             <div class="tooltip">
               <a href="/classrooms/${classroom._id}" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
@@ -57,6 +73,7 @@
         });
       }
 
+      // Tooltip functionality
       document.querySelectorAll('.tooltip').forEach(function(el) {
         el.addEventListener('mouseenter', function() {
           this.querySelector('.tooltip-text').classList.remove('hidden');

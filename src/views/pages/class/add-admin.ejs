@@ -9,27 +9,32 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Add Admin</h1>
 
     <div class="bg-background-50 shadow-md rounded-lg p-6 max-w-lg">
       <h2 class="text-xl font-bold mb-4 text-primary-500">Admin Details</h2>
-
       <p class="text-sm text-gray-600 mb-4">
         Please ensure the administrator has registered an account before inviting them.
       </p>
 
+      <!-- Admin identifier input -->
       <div class="mb-4">
         <label for="admin-identifier" class="block text-sm font-medium text-text">Admin Username/Email/User ID</label>
         <input type="text" id="admin-identifier" placeholder="Enter admin username, email, or user ID" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
       </div>
 
+      <!-- Add Admin button -->
       <button id="add-admin" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Admin</button>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Get classroom details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
@@ -42,6 +47,7 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
       } else {
+        // Handle errors based on the response
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -50,11 +56,13 @@
       }
     });
 
+    // Add admin button event listener
     const addAdminButton = document.getElementById("add-admin");
     addAdminButton.addEventListener("click", async () => {
-      addAdminButton.disabled = true;
-      const adminIdentifier = document.getElementById("admin-identifier").value;
+      addAdminButton.disabled = true; // Disable button during processing
+      const adminIdentifier = document.getElementById("admin-identifier").value; // Get admin identifier
       const response = await classroom.addAdmin("<%= classId %>", adminIdentifier);
+
       if (response.status === "success") {
         app.ui.notification(
           "alert",
@@ -64,7 +72,7 @@
           "add-admin"
         );
         setTimeout(() => {
-          app.location.redirect(`/classrooms/<%= classId %>/admins`);
+          app.location.redirect(`/classrooms/<%= classId %>/admins`); // Redirect after 2 seconds
         }, 2000);
       } else {
         app.ui.notification(
@@ -74,7 +82,7 @@
           document.getElementById("add-admin").parentElement,
           "add-admin"
         );
-        addAdminButton.disabled = false;
+        addAdminButton.disabled = false; // Re-enable button on error
       }
     });
   </script>

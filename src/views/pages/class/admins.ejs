@@ -9,11 +9,14 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Admins / Teaching Assistants</h1>
 
+    <!-- Link to add admin -->
     <a href="/classrooms/<%= classId %>/admins/add" class="inline-block mb-4 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">Add Admin</a>
 
+    <!-- Admins table -->
     <div class="overflow-x-auto bg-background-50 shadow-md rounded-lg">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100">
@@ -31,9 +34,12 @@
       </table>
     </div>
   </main>
+
   <script>
+    // Initialize classroom module
     const classroom = new Classroom(app);
 
+    // Get classroom details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const classroom = response.data;
@@ -49,6 +55,7 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
 
+        // Populate admins table
         const adminsTable = document.getElementById("admins-table");
         if (admins.length > 0) {
           adminsTable.innerHTML = "";
@@ -65,6 +72,7 @@
           adminsTable.appendChild(adminRow);
         });
       } else {
+        // Handle errors based on the response
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -73,6 +81,7 @@
       }
     });
 
+    // Function to remove admin
     const removeAdmin = async (button, classId, adminId) => {
       button.textContent = "Confirm";
       button.classList.remove("bg-red-500");

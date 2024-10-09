@@ -9,6 +9,7 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
     <h1 class="text-2xl font-semibold mb-6">Security Records</h1>
 
@@ -30,6 +31,7 @@
       </table>
     </div>
 
+    <!-- Pagination Controls -->
     <div class="mt-4 flex justify-between items-center">
       <span class="text-sm text-gray-600">Showing <span id="start">0</span> to <span id="end">0</span> of max 100 records</span>
       <div>
@@ -38,25 +40,31 @@
       </div>
     </div>
   </main>
+
   <script>
     const user = new User(app);
+    let page = 1; // Current page number
 
-    let page = 1;
-
+    // Function to fetch security records
     const getSecurityRecords = async (offset = 0) => {
       const response = await user.getSafetyRecords(10, offset);
       if (response.status === "success") {
+        // Adjust page if no records are returned
         if (page > 1 && response.data.length === 0) {
           page--;
           return;
         }
-        const records = response.data;
+
+        // Clear existing records
         const securityRecords = document.getElementById("security-records");
         securityRecords.innerHTML = "";
-        records.forEach((record) => {
+
+        // Populate the table with new records
+        response.data.forEach((record) => {
           const tr = document.createElement("tr");
           tr.classList.add("border-b");
 
+          // Create and append cells for each record property
           const type = document.createElement("td");
           type.classList.add("px-4", "py-2");
           type.textContent = record.type;
@@ -79,11 +87,14 @@
 
           securityRecords.appendChild(tr);
         });
+
+        // Update pagination display
         document.getElementById("start").textContent = offset + 1;
         document.getElementById("end").textContent = offset + records.length;
       }
     };
 
+    // Previous button event listener
     const prevButton = document.getElementById("prev");
     prevButton.addEventListener("click", async () => {
       if (page > 1) {
@@ -92,12 +103,14 @@
       }
     });
 
+    // Next button event listener
     const nextButton = document.getElementById("next");
     nextButton.addEventListener("click", async () => {
       page++;
       getSecurityRecords((page - 1) * 10);
     });
 
+    // Initial fetch of security records
     getSecurityRecords();
   </script>
 </body>

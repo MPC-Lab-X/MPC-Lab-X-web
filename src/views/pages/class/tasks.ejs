@@ -9,27 +9,37 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6">
+    <!-- Classroom Tasks Header -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-semibold text-text">Classroom Tasks</h1>
-      <a href="/classrooms/<%= classId %>/tasks/new" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">New Task</a>
+      <a href="/classrooms/<%= classId %>/tasks/new" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition-colors duration-200">
+        New Task
+      </a>
     </div>
 
+    <!-- Search Bar -->
     <div class="mb-6">
       <input type="text" id="search" placeholder="Search tasks..." class="border border-gray-300 rounded p-2 w-full" oninput="filterTasks()" />
     </div>
 
+    <!-- Task Container -->
     <div id="tasks" class="grid grid-cols-1 gap-6"></div>
   </main>
+
   <script>
+    // Create a new Classroom instance
     const classroom = new Classroom(app);
 
+    // Fetch classroom details
     classroom.getClass("<%= classId %>").then((response) => {
       if (response.status === "success") {
         const students = response.data.students.filter((student) => !student.deleted);
 
         document.title = `MPC Lab | Tasks - ${response.data.name}`;
         document.getElementById("classroom-name").textContent = response.data.name;
+
         const studentsCount = document.getElementById("students-count");
         const adminsCount = document.getElementById("admins-count");
         studentsCount.textContent = students.length;
@@ -37,6 +47,7 @@
         studentsCount.classList.remove("hidden");
         adminsCount.classList.remove("hidden");
       } else {
+        // Handle errors based on error codes
         if (response.error.code === "CLASS_NOT_FOUND" || response.error.code === "INVALID_CLASS_ID") {
           app.location.showNotFound();
         } else if (response.error.code === "ACCESS_DENIED") {
@@ -47,6 +58,7 @@
 
     let allTasks = [];
 
+    // Fetch tasks for the classroom
     classroom.getTasks("<%= classId %>").then((response) => {
       if (response.status === "success") {
         allTasks = response.data;
@@ -54,9 +66,11 @@
       }
     });
 
+    // Render the list of tasks
     function renderTasks(tasks) {
       const tasksContainer = document.getElementById("tasks");
-      tasksContainer.innerHTML = "";
+      tasksContainer.innerHTML = ""; // Clear existing tasks
+
       if (tasks.length > 0) {
         tasks.forEach((task) => {
           const taskCard = document.createElement("div");
@@ -73,6 +87,7 @@
       }
     }
 
+    // Filter tasks based on the search input
     function filterTasks() {
       const searchTerm = document.getElementById("search").value.toLowerCase();
       const filteredTasks = allTasks.filter(task =>

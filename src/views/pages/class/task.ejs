@@ -8,25 +8,41 @@
 
 <body>
   <%- include("../../components/classroom-sidebar.ejs", { classId }) %>
+
   <main class="sm:ml-64 p-6 space-y-6">
+    <!-- Task Overview Section -->
     <div class="bg-background-50 shadow-md rounded-lg p-6 space-y-4">
       <h1 id="task-name" class="text-2xl md:text-3xl font-semibold mb-2">Task Name</h1>
-      <p id="task-description" class="text-gray-700">This is a short description of the task that outlines the key objectives and details.</p>
+      <p id="task-description" class="text-gray-700">
+        This is a short description of the task that outlines the key objectives and details.
+      </p>
       <div class="flex flex-wrap gap-4">
-        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/print" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">Print Task</a>
-        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/grade" class="bg-secondary-500 text-white px-4 py-2 rounded hover:bg-secondary-400 transition duration-200">Grade Task</a>
-        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/edit" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400 transition duration-200">Task Settings</a>
+        <!-- Action buttons for task -->
+        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/print" class="bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-400 transition duration-200">
+          Print Task
+        </a>
+        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/grade" class="bg-secondary-500 text-white px-4 py-2 rounded hover:bg-secondary-400 transition duration-200">
+          Grade Task
+        </a>
+        <a href="/classrooms/<%= classId %>/tasks/<%= taskId %>/edit" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400 transition duration-200">
+          Task Settings
+        </a>
       </div>
     </div>
 
+    <!-- Additional Information Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Task Details Card -->
       <div class="bg-background-50 shadow-md rounded-lg p-6 space-y-4">
         <h2 class="text-xl font-bold">Task Details</h2>
         <ul class="list-disc list-inside text-gray-700">
-          <li>Created at: <span id="task-created-at" class="font-semibold">12:00 PM, 12th May 2021</span></li>
+          <li>
+            Created at: <span id="task-created-at" class="font-semibold">12:00 PM, 12th May 2021</span>
+          </li>
         </ul>
       </div>
 
+      <!-- Grading Progress Card -->
       <div class="bg-background-50 shadow-md rounded-lg p-6 space-y-4">
         <h2 class="text-xl font-bold">Grading Progress</h2>
         <p id="grading-progress" class="text-gray-700">You have graded 7 out of 10 questions.</p>

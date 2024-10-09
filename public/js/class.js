@@ -15,7 +15,7 @@ class Classroom {
   }
 
   /**
-   * @function createClass - Creates a new classroom.
+   * @method createClass - Creates a new classroom.
    * @param {string} name - The name of the classroom.
    * @returns {Promise<Object>} - The response object.
    */
@@ -34,7 +34,7 @@ class Classroom {
   }
 
   /**
-   * @function renameClass - Renames a classroom.
+   * @method renameClass - Renames a classroom.
    * @param {string} id - The ID of the classroom.
    * @param {string} name - The new name of the classroom.
    * @returns {Promise<Object>} - The response object.
@@ -54,7 +54,7 @@ class Classroom {
   }
 
   /**
-   * @function getClasses - Gets all the classes.
+   * @method getClasses - Gets all the classes.
    * @returns {Promise<Object>} - The response object.
    */
   async getClasses() {
@@ -71,7 +71,7 @@ class Classroom {
   }
 
   /**
-   * @function getClass - Gets a class.
+   * @method getClass - Gets a class.
    * @param {string} id - The ID of the class.
    * @returns {Promise<Object>} - The response object.
    */
@@ -89,7 +89,7 @@ class Classroom {
   }
 
   /**
-   * @function addAdmin - Adds an admin to a class.
+   * @method addAdmin - Adds an admin to a class.
    * @param {string} id - The ID of the class.
    * @param {string} identifier - The id, email, or username of the user.
    * @returns {Promise<Object>} - The response object.
@@ -109,7 +109,7 @@ class Classroom {
   }
 
   /**
-   * @function removeAdmin - Removes an admin from a class.
+   * @method removeAdmin - Removes an admin from a class.
    * @param {string} id - The ID of the class.
    * @param {string} userId - The ID of the user.
    * @returns {Promise<Object>} - The response object.
@@ -129,7 +129,7 @@ class Classroom {
   }
 
   /**
-   * @function addStudent - Adds a student to a class.
+   * @method addStudent - Adds a student to a class.
    * @param {string} id - The ID of the class.
    * @param {string} name - The name of the student.
    * @returns {Promise<Object>} - The response object.
@@ -149,7 +149,7 @@ class Classroom {
   }
 
   /**
-   * @function renameStudent - Renames a student in a class.
+   * @method renameStudent - Renames a student in a class.
    * @param {string} id - The ID of the class.
    * @param {number} studentNumber - The student number of the student.
    * @param {string} name - The new name of the student.
@@ -173,7 +173,7 @@ class Classroom {
   }
 
   /**
-   * @function deleteStudent - Deletes a student from a class.
+   * @method deleteStudent - Deletes a student from a class.
    * @param {string} id - The ID of the class.
    * @param {number} studentNumber - The student number of the student.
    * @returns {Promise<Object>} - The response object.
@@ -195,7 +195,7 @@ class Classroom {
   }
 
   /**
-   * @function deleteClass - Deletes a class.
+   * @method deleteClass - Deletes a class.
    * @param {string} id - The ID of the class.
    * @returns {Promise<Object>} - The response object.
    */
@@ -213,7 +213,7 @@ class Classroom {
   }
 
   /**
-   * @function createTask - Creates a task in a class.
+   * @method createTask - Creates a task in a class.
    * @param {string} classId - The ID of the class.
    * @param {string} name - The name of the task.
    * @param {string} description - The description of the task.
@@ -235,7 +235,7 @@ class Classroom {
   }
 
   /**
-   * @function getTasks - Gets all the tasks in a class.
+   * @method getTasks - Gets all the tasks in a class.
    * @param {string} classId - The ID of the class.
    * @returns {Promise<Object>} - The response object.
    */
@@ -253,7 +253,7 @@ class Classroom {
   }
 
   /**
-   * @function getTask - Gets a task by ID.
+   * @method getTask - Gets a task by ID.
    * @param {string} taskId - The ID of the task.
    * @returns {Promise<Object>} - The response object.
    */
@@ -271,7 +271,7 @@ class Classroom {
   }
 
   /**
-   * @function getTaskProblems - Gets all the problems in a task for a student.
+   * @method getTaskProblems - Gets all the problems in a task for a student.
    * @param {string} taskId - The ID of the task.
    * @param {number} studentNumber - The student number of the student.
    * @returns {Promise<Object>} - The response object.
@@ -293,7 +293,7 @@ class Classroom {
   }
 
   /**
-   * @function renameTask - Renames a task.
+   * @method renameTask - Renames a task.
    * @param {string} taskId - The ID of the task.
    * @param {string} name - The new name of the task.
    * @returns {Promise<Object>} - The response object.
@@ -313,7 +313,7 @@ class Classroom {
   }
 
   /**
-   * @function updateTaskDescription - Updates the description of a task.
+   * @method updateTaskDescription - Updates the description of a task.
    * @param {string} taskId - The ID of the task.
    * @param {string} description - The new description of the task.
    * @returns {Promise<Object>} - The response object.
@@ -333,7 +333,7 @@ class Classroom {
   }
 
   /**
-   * @function updateGradingStatus - Updates the grading status of a task.
+   * @method updateGradingStatus - Updates the grading status of a task.
    * @param {string} taskId - The ID of the task.
    * @param {number} studentNumber - The student number of the student.
    * @param {boolean} graded - The grading status of the task.
@@ -357,7 +357,7 @@ class Classroom {
   }
 
   /**
-   * @function deleteTask - Deletes a task.
+   * @method deleteTask - Deletes a task.
    * @param {string} taskId - The ID of the task.
    * @returns {Promise<Object>} - The response object.
    */

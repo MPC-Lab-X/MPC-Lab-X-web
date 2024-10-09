@@ -15,7 +15,7 @@ class Authentication {
   }
 
   /**
-   * @function register - Registers a new user.
+   * @method register - Registers a new user.
    * @param {string} email - The email address of the user.
    * @returns {Promise<Object>} - The response object.
    */
@@ -36,7 +36,7 @@ class Authentication {
   }
 
   /**
-   * @function completeRegistration - Completes the registration of a user.
+   * @method completeRegistration - Completes the registration of a user.
    * @param {string} token - The registration token.
    * @param {string} username - The username of the user.
    * @param {string} password - The password of the user.
@@ -57,7 +57,7 @@ class Authentication {
   }
 
   /**
-   * @function login - Logs in a user.
+   * @method login - Logs in a user.
    * @param {string} identifier - The email or username of the user.
    * @param {string} password - The password of the user.
    * @returns {Promise<Object>} - The response object.
@@ -77,7 +77,7 @@ class Authentication {
   }
 
   /**
-   * @function resetPassword - Sends a password reset email.
+   * @method resetPassword - Sends a password reset email.
    * @param {string} email - The email address of the user.
    * @returns {Promise<Object>} - The response object.
    */
@@ -98,7 +98,7 @@ class Authentication {
   }
 
   /**
-   * @function completePasswordReset - Completes the password reset process.
+   * @method completePasswordReset - Completes the password reset process.
    * @param {string} token - The password reset token.
    * @param {string} password - The new password.
    * @returns {Promise<Object>} - The response object.

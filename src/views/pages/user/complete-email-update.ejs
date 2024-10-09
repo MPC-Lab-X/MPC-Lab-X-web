@@ -9,7 +9,9 @@
 
 <body>
   <%- include("../../components/main-sidebar.ejs") %>
+
   <main class="sm:ml-64 p-6">
+    <!-- Email Processing Section -->
     <section id="processing" class="text-center">
       <h1 class="text-2xl font-semibold text-primary">Updating Email...</h1>
       <p class="text-gray-600 mt-2">Please wait while we update your email address.</p>
@@ -18,21 +20,26 @@
       </div>
     </section>
 
+    <!-- Success Message Section -->
     <section id="success" class="hidden text-center">
       <h1 class="text-2xl font-semibold text-green-600">Email Updated Successfully!</h1>
       <p class="text-gray-600 mt-2">Your email address has been updated.</p>
       <a href="/user/" class="mt-4 inline-block bg-primary text-white py-2 px-4 rounded hover:bg-primary-600">Back to Profile</a>
     </section>
 
+    <!-- Error Message Section -->
     <section id="error" class="hidden text-center">
       <h1 class="text-2xl font-semibold text-red-600">Email Update Failed!</h1>
       <p class="text-gray-600 mt-2">We couldn't update your email. The link may be expired or invalid.</p>
       <a href="/user/settings/" class="mt-4 inline-block bg-primary text-white py-2 px-4 rounded hover:bg-primary-600">Back to Settings</a>
     </section>
   </main>
+
   <script>
+    // Create a new User instance
     const user = new User(app);
 
+    // Complete the email update process
     user.completeEmailUpdate("<%= token %>").then((response) => {
       if (response.status === "success") {
         document.getElementById("processing").classList.add("hidden");

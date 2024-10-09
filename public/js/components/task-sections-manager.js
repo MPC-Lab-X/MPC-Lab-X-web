@@ -19,7 +19,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function getTopic - Gets a topic by path.
+   * @method getTopic - Gets a topic by path.
    * @param {Array} path - The path to the topic.
    * @returns {Object} - The topic.
    */
@@ -42,7 +42,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function getDefaults - Returns the default options for a topic.
+   * @method getDefaults - Returns the default options for a topic.
    * @param {Object} parameters - The parameters to set.
    * @returns {Object} - The default options.
    */
@@ -59,7 +59,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function newTopic - Adds a new topic (section) to the topics map.
+   * @method newTopic - Adds a new topic (section) to the topics map.
    * @param {Array} path - The path to the section.
    * @param {Object} topic - The topic to add.
    * @param {Function} onEdit - The function to call when editing the section.
@@ -75,7 +75,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function editTopic - Edits a topic (section) in the topics map.
+   * @method editTopic - Edits a topic (section) in the topics map.
    * @param {number} topicId - The ID of the topic.
    * @param {Array} path - The path to the section.
    * @param {Object} topic - The topic to add.
@@ -91,7 +91,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function deleteTopic - Deletes a topic (section) from the topics map.
+   * @method deleteTopic - Deletes a topic (section) from the topics map.
    * @param {number} topicId - The ID of the topic.
    */
   deleteTopic(topicId) {
@@ -99,7 +99,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function renderSection - Renders a section (topic) to the element.
+   * @method renderSection - Renders a section (topic) to the element.
    * @param {number} topicId - The ID of the topic.
    */
   renderSection(topicId) {
@@ -127,7 +127,7 @@ class TaskSectionsManager {
     const editButton = document.createElement("button");
     editButton.className =
       "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400 transition duration-200";
-    editButton.innerHTML = "Edit";
+    editButton.textContent = "Edit";
     editButton.addEventListener("click", () => {
       topic._onEdit(topicId);
     });
@@ -135,7 +135,7 @@ class TaskSectionsManager {
     const deleteButton = document.createElement("button");
     deleteButton.className =
       "bg-red-500 text-white px-4 py-2 rounded hover:bg-red-400 transition duration-200";
-    deleteButton.innerHTML = "Delete";
+    deleteButton.textContent = "Delete";
     deleteButton.addEventListener("click", () => {
       this.deleteSection(topicId);
     });
@@ -258,7 +258,7 @@ class TaskSectionsManager {
 
           const booleanInputText = document.createElement("span");
           booleanInputText.className = "ml-3";
-          booleanInputText.innerHTML = "Enable";
+          booleanInputText.textContent = "Enable";
 
           booleanInputLabel.appendChild(booleanInput);
           booleanInputLabel.appendChild(booleanInputText);
@@ -269,7 +269,7 @@ class TaskSectionsManager {
 
       const parameterDescription = document.createElement("p");
       parameterDescription.className = "text-gray-500 text-sm";
-      parameterDescription.innerHTML = parameter.description;
+      parameterDescription.textContent = parameter.description;
 
       parameterElement.appendChild(parameterDescription);
       parametersElement.appendChild(parameterElement);
@@ -294,7 +294,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function newSection - Adds a new section (topic) to the task.
+   * @method newSection - Adds a new section (topic) to the task.
    * @param {Array} path - The path to the section.
    * @param {Function} onEdit - The function to call when editing the section.
    */
@@ -309,7 +309,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function editSection - Edits a section (topic) in the task.
+   * @method editSection - Edits a section (topic) in the task.
    * @param {number} topicId - The ID of the topic.
    * @param {Array} path - The path to the section.
    */
@@ -321,7 +321,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function deleteSection - Deletes a section (topic) from the task.
+   * @method deleteSection - Deletes a section (topic) from the task.
    * @param {number} topicId - The ID of the topic.
    */
   deleteSection(topicId) {
@@ -330,7 +330,7 @@ class TaskSectionsManager {
   }
 
   /**
-   * @function getTopics - Gets the topics of the task. (converts the map to an array, removing the _element property, and the keys)
+   * @method getTopics - Gets the topics of the task. (converts the map to an array, removing the _element property, and the keys)
    * @returns {Array} - The topics.
    */
   getTopics() {
