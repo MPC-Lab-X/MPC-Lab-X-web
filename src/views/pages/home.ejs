@@ -5,10 +5,136 @@
   <%- include("../components/head.ejs") %>
   <meta name="description" content="Explore MPC Lab, an open-source platform that generates 100% random questions in mathematics, physics, and chemistry. Fully customizable, ideal for classrooms, homework, and printable quizzes.">
   <title>MPC Lab | Home</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      /* 使用主题颜色 */
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+  </style>
 </head>
 
-<body>
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
   <%- include("../components/header.ejs") %>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex flex-col justify-center items-center text-center text-white">
+    <div class="absolute inset-0 bg-black opacity-30"></div>
+    <h1 class="text-6xl font-bold mb-4" data-aos="fade-down">MPC Lab</h1>
+    <p class="text-2xl mb-6" data-aos="fade-up" data-aos-delay="200">The ultimate open-source platform for dynamic problem generation.</p>
+    <div class="flex space-x-4">
+      <a href="/register" class="bg-white text-primary-500 px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300" data-aos="fade-right" data-aos-delay="400">Start Using</a>
+      <a href="#demo" class="bg-transparent border border-white text-white px-8 py-3 font-semibold rounded hover:bg-white hover:text-primary-500 transition duration-300" data-aos="fade-left" data-aos-delay="400">Try the Demo</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 bg-background-200">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8">Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <h3 class="text-2xl font-bold mb-4">Automatic Problem Generation</h3>
+          <p class="text-lg">Generate questions for math, physics, and chemistry with flexible parameters.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
+          <h3 class="text-2xl font-bold mb-4">Customizable & Scalable</h3>
+          <p class="text-lg">Easily adjust parameters for both simple and complex assessments.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="400">
+          <h3 class="text-2xl font-bold mb-4">Classroom Management</h3>
+          <p class="text-lg">Manage classrooms effectively with grading modes and personalized question sets for each student.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="600">
+          <h3 class="text-2xl font-bold mb-4">Flexible Problem Grouping</h3>
+          <p class="text-lg">Combine various types of problems to create comprehensive assessments.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="800">
+          <h3 class="text-2xl font-bold mb-4">Open Source</h3>
+          <p class="text-lg">Fully open-source with GitHub integration and community support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section with Animation -->
+  <section id="demo" class="bg-gradient-to-r from-primary-400 to-primary-600 py-16 text-white">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8">Try the Demo</h2>
+      <div class="bg-white text-gray-800 p-8 rounded-lg shadow-md inline-block">
+        <p class="text-lg mb-4">Click the button below to test MPC Lab's problem generator:</p>
+        <button id="demo-trigger" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">Generate an Example Problem</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8 text-gray-800">API Overview</h2>
+      <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+        <p class="text-lg mb-4">Explore MPC Lab's robust API for seamless integration into your educational tools and platforms. Get started by viewing the API documentation and using our sample endpoints.</p>
+        <a href="/api-docs" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">View API Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NPM Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8 text-gray-800">Open Source Tools</h2>
+      <div class="flex flex-col md:flex-row justify-center gap-8">
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md" data-aos="zoom-in">
+          <h3 class="text-2xl font-bold mb-4">GitHub Repository</h3>
+          <p class="text-lg">View the source code, contribute, or fork the project on GitHub.</p>
+          <a href="https://github.com/mpc-lab-x" class="text-primary-500 font-semibold mt-4 block hover:underline">Go to GitHub</a>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
+          <h3 class="text-2xl font-bold mb-4">NPM Module</h3>
+          <p class="text-lg">Install the problem generator via NPM and integrate it into your own projects.</p>
+          <code class="block bg-gray-200 p-4 rounded mt-4">npm install mpclab</code>
+          <a href="https://www.npmjs.com/package/mpclab" class="text-primary-500 font-semibold mt-4 block hover:underline">View on NPM</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800, // Animation duration
+      easing: 'ease-in-out', // Animation easing
+      once: true // Only animate once
+    });
+
+    // Demo button JS handler
+    document.getElementById('demo-trigger').addEventListener('click', function() {
+      // JS to trigger the demo component
+    });
+  </script>
 </body>
 
 </html>
