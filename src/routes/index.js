@@ -26,6 +26,10 @@ router.get("/team", (req, res) => {
   res.render("pages/team");
 });
 
+router.get("/contact", (req, res) => {
+  res.render("pages/contact");
+});
+
 router.get("/dashboard", (req, res) => {
   res.render("pages/dashboard");
 });

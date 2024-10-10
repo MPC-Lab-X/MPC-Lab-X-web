@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <meta name="description" content="Contact page for MPC Lab, where you can discuss issues or pull requests.">
+  <title>MPC Lab | Contact</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
+  <%- include("../components/header.ejs") %>
+
+  <!-- Contact Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h1 class="text-5xl font-bold mb-4 text-white">Get in Touch</h1>
+      <p class="text-xl mb-8 text-white">We welcome your feedback and suggestions!</p>
+      <p class="text-lg mb-4 text-white">You can discuss issues or suggest improvements on our GitHub repositories:</p>
+      <div class="mt-8 flex align-center justify-center flex-wrap gap-4">
+        <a href="https://github.com/MPC-Lab-X/MPC-Lab-X" class="bg-white text-primary-500 inline-block w-fit px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300">MPC-Lab-X (Problem Generator)</a>
+        <a href="https://github.com/MPC-Lab-X/MPC-Lab-X-server" class="bg-white text-primary-500 inline-block w-fit px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300">MPC-Lab-X-Server (Backend Server)</a>
+        <a href="https://github.com/MPC-Lab-X/MPC-Lab-X-web" class="bg-white text-primary-500 inline-block w-fit px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300">MPC-Lab-X-Web (Frontend Web)</a>
+      </div>
+      <p class="text-lg mt-8 text-white">We appreciate your contributions to improving our platform!</p>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+
+</html>
