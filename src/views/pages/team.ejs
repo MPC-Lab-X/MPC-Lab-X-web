@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <meta name="description" content="Meet the team behind MPC Lab, Tony Kan and Devin Liang are the primary developers of MPC Lab and MPC Lab X.">
+  <title>MPC Lab | Team</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+
+    .team-card {
+      transition: transform 0.3s;
+    }
+
+    .team-card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
+  <%- include("../components/header.ejs") %>
+
+  <!-- Team Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h1 class="text-5xl font-bold mb-4 text-gray-800">Meet Our Team</h1>
+      <p class="text-xl mb-8">We are a dedicated team of students committed to enhancing education through technology.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Team Member 1: Tony Kan -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <div class="flex items-center">
+            <img src="https://github.com/TKanX.png" alt="Tony Kan" class="w-16 h-16 rounded-full mr-4">
+            <div>
+              <h2 class="text-2xl font-bold">Tony Kan</h2>
+              <p class="text-lg">Founder & Lead Developer</p>
+              <p class="text-md">Tony is the primary developer of MPC Lab and MPC Lab X, focusing on creating flexible problem generators for education.</p>
+              <div>
+                <a href="https://github.com/MPC-Lab-X/MPC-Lab" class="text-blue-500 hover:underline">MPC Lab</a> |
+                <a href="https://github.com/MPC-Lab-X/MPC-Lab-X" class="text-blue-500 hover:underline">MPC Lab-X</a>
+              </div>
+              <a href="https://github.com/TKanX" class="text-blue-500 hover:underline block mt-2">GitHub Profile</a>
+            </div>
+          </div>
+        </div>
+        <!-- Team Member 2: Devin Liang -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <div class="flex items-center">
+            <img src="https://github.com/244196806qq.png" alt="Devin Liang" class="w-16 h-16 rounded-full mr-4">
+            <div>
+              <h2 class="text-2xl font-bold">Devin Liang</h2>
+              <p class="text-lg">Algorithm Developer</p>
+              <p class="text-md">Devin contributed to the algorithm development for MPC Lab, enhancing the functionality of the problem generator.</p>
+              <div>
+                <a href="https://github.com/MPC-Lab-X/MPC-Lab" class="text-blue-500 hover:underline">MPC Lab</a>
+              </div>
+              <a href="https://github.com/244196806qq" class="text-blue-500 hover:underline block mt-2">GitHub Profile</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+
+</html>

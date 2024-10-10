@@ -22,6 +22,10 @@ router.get("/api-docs", (req, res) => {
   res.render("pages/api-docs");
 });
 
+router.get("/team", (req, res) => {
+  res.render("pages/team");
+});
+
 router.get("/dashboard", (req, res) => {
   res.render("pages/dashboard");
 });
