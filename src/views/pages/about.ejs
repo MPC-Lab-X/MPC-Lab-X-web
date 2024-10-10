@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <meta name="description" content="Learn more about MPC Lab, an open-source platform that generates 100% random questions in mathematics, physics, and chemistry.">
+  <title>MPC Lab | About</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
+  <%- include("../components/header.ejs") %>
+
+  <!-- About Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h1 class="text-5xl font-bold mb-4 text-gray-800">About MPC Lab</h1>
+      <p class="text-xl mb-6">Discover the mission and vision behind MPC Lab, your ultimate open-source platform for dynamic problem generation.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
+          <p class="text-lg">At MPC Lab, we aim to empower educators and students by providing a flexible and user-friendly platform for generating random questions across various subjects, including mathematics, physics, and chemistry. Our goal is to enhance the learning experience and make problem generation accessible to all.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
+          <h2 class="text-3xl font-bold mb-4">Our Vision</h2>
+          <p class="text-lg">We envision a future where educators can easily create personalized assessments tailored to their students' needs. By harnessing the power of open-source technology, we strive to foster collaboration, innovation, and continuous improvement in educational tools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 bg-background-200">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8">Why Choose MPC Lab?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <h3 class="text-2xl font-bold mb-4">Open Source</h3>
+          <p class="text-lg">MPC Lab is an open-source platform developed by students, aiming to provide a powerful tool for generating random questions in mathematics, physics, and chemistry.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
+          <h3 class="text-2xl font-bold mb-4">Community Support</h3>
+          <p class="text-lg">Join our growing community of educators and developers dedicated to improving educational tools and resources.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="400">
+          <h3 class="text-2xl font-bold mb-4">Customizable Solutions</h3>
+          <p class="text-lg">Easily adjust parameters for problem generation, ensuring that each assessment meets the specific needs of your students.</p>
+        </div>
+      </div>
+      <p class="mt-8 text-lg">This project is created for educational purposes and is not for profit, reflecting our commitment to making quality educational resources accessible to all.</p>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+
+</html>

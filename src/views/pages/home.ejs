@@ -42,6 +42,14 @@
     <div class="flex space-x-4">
       <a href="/register" class="bg-white text-primary-500 px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300" data-aos="fade-right" data-aos-delay="400">Start Using</a>
       <a href="#demo" class="bg-transparent border border-white text-white px-8 py-3 font-semibold rounded hover:bg-white hover:text-primary-500 transition duration-300" data-aos="fade-left" data-aos-delay="400">Try the Demo</a>
+      <script>
+        document.querySelector('a[href="#demo"]').addEventListener('click', function(event) {
+          event.preventDefault();
+          document.querySelector('#demo').scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      </script>
     </div>
   </section>
 
@@ -69,6 +77,10 @@
         <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="800">
           <h3 class="text-2xl font-bold mb-4">Open Source</h3>
           <p class="text-lg">Fully open-source with GitHub integration and community support.</p>
+        </div>
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="1000">
+          <h3 class="text-2xl font-bold mb-4">And More...</h3>
+          <p class="text-lg hover:underline"><a href="/features" class="text-primary-500">Explore all features &#8594;</a></p>
         </div>
       </div>
     </div>
@@ -104,7 +116,7 @@
         <div class="bg-gray-100 p-6 rounded-lg shadow-md" data-aos="zoom-in">
           <h3 class="text-2xl font-bold mb-4">GitHub Repository</h3>
           <p class="text-lg">View the source code, contribute, or fork the project on GitHub.</p>
-          <a href="https://github.com/mpc-lab-x" class="text-primary-500 font-semibold mt-4 block hover:underline">Go to GitHub</a>
+          <a href="https://github.com/MPC-Lab-X" class="text-primary-500 font-semibold mt-4 block hover:underline">Go to GitHub</a>
         </div>
         <div class="bg-gray-100 p-6 rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
           <h3 class="text-2xl font-bold mb-4">NPM Module</h3>
