@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <meta name="description" content="Explore the features of MPC Lab, an open-source platform for random problem generation across multiple subjects.">
+  <title>MPC Lab | Features</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
+  <%- include("../components/header.ejs") %>
+
+  <!-- Features Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h1 class="text-5xl font-bold mb-8 text-gray-800">MPC Lab Features</h1>
+      <p class="text-xl mb-12">Discover the powerful tools and unique features that make MPC Lab the ultimate platform for generating random problems in mathematics, physics, and chemistry.</p>
+
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <!-- Feature 1: Dynamic Problem Generation -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in">
+          <h2 class="text-2xl font-bold mb-4">Dynamic Problem Generation</h2>
+          <p class="text-lg">Generate completely random problems tailored to specific topics in mathematics, physics, and chemistry. Each problem set is unique, allowing students to practice effectively.</p>
+        </div>
+
+        <!-- Feature 2: Flexible Parameters -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="200">
+          <h2 class="text-2xl font-bold mb-4">Flexible Parameters</h2>
+          <p class="text-lg">Adjust problem difficulty, types, and parameters with ease, ensuring a personalized and challenging experience for each student.</p>
+        </div>
+
+        <!-- Feature 3: Classroom Management -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="400">
+          <h2 class="text-2xl font-bold mb-4">Classroom Management</h2>
+          <p class="text-lg">Manage classrooms, assign tasks, and track student progress through an intuitive, teacher-friendly interface.</p>
+        </div>
+
+        <!-- Feature 4: Grading Options -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="600">
+          <h2 class="text-2xl font-bold mb-4">Customizable Grading</h2>
+          <p class="text-lg">Flexible grading modes allow for automated or manual grading, enabling teachers to save time while still providing detailed feedback.</p>
+        </div>
+
+        <!-- Feature 5: Open-Source API -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="800">
+          <h2 class="text-2xl font-bold mb-4">Open-Source API</h2>
+          <p class="text-lg">Take full advantage of our open-source API, which allows developers to integrate MPC Lab's problem generation capabilities into their own applications.</p>
+        </div>
+
+        <!-- Feature 6: Collaborative Community -->
+        <div class="p-6 bg-white rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="1000">
+          <h2 class="text-2xl font-bold mb-4">Collaborative Community</h2>
+          <p class="text-lg">Join a vibrant community of students and educators contributing to the continuous improvement and expansion of MPC Lab’s capabilities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+
+</html>

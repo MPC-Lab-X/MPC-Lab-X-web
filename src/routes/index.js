@@ -14,6 +14,10 @@ router.get("/about", (req, res) => {
   res.render("pages/about");
 });
 
+router.get("/features", (req, res) => {
+  res.render("pages/features");
+});
+
 router.get("/dashboard", (req, res) => {
   res.render("pages/dashboard");
 });
