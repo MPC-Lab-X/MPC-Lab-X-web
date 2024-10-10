@@ -73,6 +73,7 @@
   <script>
     const classroom = new Classroom(app);
 
+    // Fetch task details and render
     classroom.getTask("<%= taskId %>").then((response) => {
       if (response.status === "success") {
         document.getElementById("task-name").textContent = response.data.name;
@@ -124,15 +125,6 @@
             gradeAllButton.addEventListener("click", () => {
               gradeQueue.markAllGraded();
             });
-
-            const nextStudentGradedButton = document.getElementById("next-student-graded");
-            nextStudentGradedButton.onclick = () => {
-              gradeQueue.markGraded();
-            };
-            const nextStudentGradedBottomButton = document.getElementById("next-student-graded-bottom");
-            nextStudentGradedBottomButton.onclick = () => {
-              gradeQueue.markGraded();
-            };
 
             const nextStudentButton = document.getElementById("next-student");
             nextStudentButton.addEventListener("click", () => {
