@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <meta name="description" content="MPC Lab API Documentation and NPM Package Usage. Learn how to integrate our random problem generation API and use the MPC Lab NPM package.">
+  <title>MPC Lab | API Docs</title>
+  <!-- AOS Animation Library CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css">
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+
+    .code-container {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: background-color 0.3s;
+    }
+
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .hljs {
+      padding: 1rem;
+      background: #282c34;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body class="bg-background-50 text-text-default scroll-smooth gradient-bg">
+  <!-- Header Section -->
+  <%- include("../components/header.ejs") %>
+
+  <!-- API Documentation Section -->
+  <section class="py-16">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h1 class="text-5xl font-bold mb-8 text-gray-800">MPC Lab API Documentation</h1>
+      <p class="text-xl mb-12">Explore our API to generate random problems across various subjects, and learn how to integrate the MPC Lab NPM package into your project.</p>
+
+      <!-- API Docs -->
+      <div class="bg-white rounded-lg shadow-md p-8 text-left mb-16">
+        <h2 class="text-3xl font-bold mb-6">API Documentation</h2>
+        <p class="text-lg mb-4">Use the API to generate problems in mathematics, physics, and chemistry by specifying topics and subtopics.</p>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Endpoint:</h3>
+        <div class="code-container">
+          <pre><code class="hljs">GET /api/problems/:topics/:subtopics/:...</code></pre>
+          <button class="copy-btn" data-copy="/api/problems/:topics/:subtopics/:...">Copy</button>
+        </div>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Request Parameters:</h3>
+        <ul class="list-disc ml-6 text-lg">
+          <li><strong>topics</strong> (string): The topics to generate the problem for.</li>
+          <li><strong>subtopics</strong> (string): The subtopics to generate the problem for.</li>
+          <li><strong>...</strong> (string): Additional subtopics, if applicable.</li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Query Parameters:</h3>
+        <ul class="list-disc ml-6 text-lg">
+          <li><strong>options</strong> (object): Problem generation options, customized to your needs.</li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Response:</h3>
+        <div class="code-container">
+          <pre><code class="hljs json">{
+  "status": "success",
+  "data": {},
+  "message": "Problem generated successfully."
+}</code></pre>
+          <button class="copy-btn" data-copy='{
+  "status": "success",
+  "data": {},
+  "message": "Problem generated successfully."
+}'>Copy</button>
+        </div>
+
+        <a href="https://github.com/MPC-Lab-X/MPC-Lab-X-server/blob/main/docs/API.md" class="text-primary-600 underline mt-6 block text-lg" target="_blank">View full API documentation on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NPM Package Section -->
+  <section class="py-16 bg-background-200">
+    <div class="container mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold mb-8">NPM Package Usage</h2>
+      <p class="text-xl mb-12">The MPC Lab NPM package offers an easy-to-use interface for integrating our problem generator directly into your Node.js project.</p>
+
+      <!-- NPM Installation -->
+      <div class="bg-white rounded-lg shadow-md p-8 text-left mb-16">
+        <h3 class="text-2xl font-semibold mb-4">Installation</h3>
+        <div class="code-container">
+          <pre><code class="hljs shell">npm install mpclab</code></pre>
+          <button class="copy-btn" data-copy="npm install mpclab">Copy</button>
+        </div>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Simple Usage:</h3>
+        <div class="code-container">
+          <pre><code class="hljs javascript">const ProblemGenerator = require("mpclab");
+
+const generator = new ProblemGenerator();
+const problem = generator.generateOne([
+  "math",
+  "algebra",
+  "linear-equations",
+  "standardForm"
+]);
+
+console.log(problem);</code></pre>
+          <button class="copy-btn" data-copy='const ProblemGenerator = require("mpclab");
+
+const generator = new ProblemGenerator();
+const problem = generator.generateOne([
+  "math",
+  "algebra",
+  "linear-equations",
+  "standardForm"
+]);
+
+console.log(problem);'>Copy</button>
+        </div>
+
+        <h3 class="text-2xl font-semibold mt-6 mb-4">Advanced Usage:</h3>
+        <a href="https://www.npmjs.com/package/mpclab" class="text-primary-500 font-semibold mt-4 mb-4 block hover:underline">View on NPM</a>
+        <p class="text-lg mb-4">For advanced customization and problem generation, refer to our <a href="https://github.com/MPC-Lab-X/MPC-Lab-X" class="text-primary-600 underline">GitHub repository</a> for detailed instructions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <%- include("../components/footer.ejs") %>
+
+  <!-- AOS Library JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      once: true
+    });
+
+    // Initialize Highlight.js
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+
+    // Copy to Clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const code = button.getAttribute('data-copy');
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = 'Copied!';
+          setTimeout(() => {
+            button.textContent = 'Copy';
+          }, 1500);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

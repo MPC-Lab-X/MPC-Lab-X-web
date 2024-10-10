@@ -18,6 +18,10 @@ router.get("/features", (req, res) => {
   res.render("pages/features");
 });
 
+router.get("/api-docs", (req, res) => {
+  res.render("pages/api-docs");
+});
+
 router.get("/dashboard", (req, res) => {
   res.render("pages/dashboard");
 });
