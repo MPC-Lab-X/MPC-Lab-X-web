@@ -90,7 +90,7 @@
 
         // Update pagination display
         document.getElementById("start").textContent = offset + 1;
-        document.getElementById("end").textContent = offset + records.length;
+        document.getElementById("end").textContent = offset + response.data.length;
       }
     };
 
