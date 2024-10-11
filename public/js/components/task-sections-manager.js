@@ -8,11 +8,12 @@ class TaskSectionsManager {
    * @constructor - Initializes the TaskSectionsManager class.
    * @param {HTMLElement} element - The element to bind the component to.
    * @param {Object} problemIndex - The problem index.
+   * @param {boolean} demoMode - Whether the task is in demo mode.
    */
-  constructor(element, problemIndex) {
+  constructor(element, problemIndex, demoMode) {
     this.element = element;
-
     this.problemIndex = problemIndex;
+    this.demoMode = demoMode;
 
     this.topicId = 0;
     this.topics = new Map();
@@ -141,7 +142,7 @@ class TaskSectionsManager {
     });
 
     actionsElement.appendChild(editButton);
-    actionsElement.appendChild(deleteButton);
+    if (!this.demoMode) actionsElement.appendChild(deleteButton);
 
     headerElement.appendChild(actionsElement);
 
@@ -174,8 +175,17 @@ class TaskSectionsManager {
     questionsCountDescription.innerHTML =
       "The number of questions to generate.";
 
-    questionsCount.appendChild(questionsCountInput);
-    questionsCount.appendChild(questionsCountDescription);
+    if (!this.demoMode) {
+      questionsCount.appendChild(questionsCountInput);
+      questionsCount.appendChild(questionsCountDescription);
+    } else {
+      questionsCount.appendChild(questionsCountDescription);
+
+      const notAvailable = document.createElement("p");
+      notAvailable.className = "text-red-500 text-sm mt-1";
+      notAvailable.innerHTML = "Not available in demo mode.";
+      questionsCount.appendChild(notAvailable);
+    }
 
     const parametersElement = document.createElement("div");
     parametersElement.className = "mb-4";
@@ -327,6 +337,15 @@ class TaskSectionsManager {
   deleteSection(topicId) {
     this.topics.get(topicId)._element.remove();
     this.deleteTopic(topicId);
+  }
+
+  /**
+   * @method deleteAllSections - Deletes all sections (topics) from the task.
+   */
+  deleteAllSections() {
+    this.topics.forEach((topic, topicId) => {
+      this.deleteSection(topicId);
+    });
   }
 
   /**

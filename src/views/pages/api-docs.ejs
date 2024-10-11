@@ -173,18 +173,18 @@ console.log(problem);'>Copy</button>
     });
 
     // Initialize Highlight.js
-    document.querySelectorAll('pre code').forEach((block) => {
+    document.querySelectorAll("pre code").forEach((block) => {
       hljs.highlightElement(block);
     });
 
     // Copy to Clipboard functionality
-    document.querySelectorAll('.copy-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const code = button.getAttribute('data-copy');
+    document.querySelectorAll(".copy-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const code = button.getAttribute("data-copy");
         navigator.clipboard.writeText(code).then(() => {
-          button.textContent = 'Copied!';
+          button.textContent = "Copied!";
           setTimeout(() => {
-            button.textContent = 'Copy';
+            button.textContent = "Copy";
           }, 1500);
         });
       });

@@ -7,7 +7,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render("pages/home");
+  res.render("pages/home", { desmosApiKey: process.env.DESMOS_API_KEY });
 });
 
 router.get("/about", (req, res) => {

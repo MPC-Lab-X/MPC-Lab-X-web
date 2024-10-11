@@ -41,12 +41,12 @@
     <p class="text-2xl mb-6" data-aos="fade-up" data-aos-delay="200">The ultimate open-source platform for dynamic problem generation.</p>
     <div class="flex space-x-4">
       <a href="/register" class="bg-white text-primary-500 px-8 py-3 font-semibold rounded shadow hover:bg-gray-100 transition duration-300" data-aos="fade-right" data-aos-delay="400">Start Using</a>
-      <a href="#demo" class="bg-transparent border border-white text-white px-8 py-3 font-semibold rounded hover:bg-white hover:text-primary-500 transition duration-300" data-aos="fade-left" data-aos-delay="400">Try the Demo</a>
+      <a href="#show-demo" class="bg-transparent border border-white text-white px-8 py-3 font-semibold rounded hover:bg-white hover:text-primary-500 transition duration-300" data-aos="fade-left" data-aos-delay="400">Try the Demo</a>
       <script>
-        document.querySelector('a[href="#demo"]').addEventListener('click', function(event) {
+        document.querySelector('a[href="#show-demo"]').addEventListener("click", function(event) {
           event.preventDefault();
-          document.querySelector('#demo').scrollIntoView({
-            behavior: 'smooth'
+          document.querySelector("#show-demo").scrollIntoView({
+            behavior: "smooth"
           });
         });
       </script>
@@ -87,12 +87,35 @@
   </section>
 
   <!-- Demo Section with Animation -->
-  <section id="demo" class="bg-gradient-to-r from-primary-400 to-primary-600 py-16 text-white">
+  <section id="show-demo" class="bg-gradient-to-r from-primary-400 to-primary-600 py-16 text-white">
     <div class="container mx-auto text-center" data-aos="fade-up">
       <h2 class="text-4xl font-bold mb-8">Try the Demo</h2>
-      <div class="bg-white text-gray-800 p-8 rounded-lg shadow-md inline-block">
+      <div class="bg-background-200 text-gray-800 p-8 rounded-lg shadow-md inline-block">
         <p class="text-lg mb-4">Click the button below to test MPC Lab's problem generator:</p>
         <button id="demo-trigger" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">Generate an Example Problem</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section -->
+  <section id="demo" class="hidden bg-gradient-to-r from-primary-400 to-primary-600 py-16">
+    <div class="bg-background-200 rounded-lg shadow-md p-8 container mx-auto">
+      <%- include("../components/task-sections-manager.ejs") %>
+      <%- include("../components/problem-type-selector.ejs") %>
+      <%- include("../components/libraries.ejs", { desmosApiKey }) %>
+      <div class="container mt-8 mx-auto text-center">
+        <button id="generate-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">Generate an Example Problem</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Section -->
+  <section id="problem" class="hidden bg-gradient-to-r from-primary-400 to-primary-600 py-16">
+    <div class="bg-background-200 rounded-lg shadow-md p-8 container mx-auto text-center">
+      <%- include("../components/problems.ejs") %>
+      <div class="mt-8">
+        <button id="regenerate-same-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">Generate Same Problem</button>
+        <button id="generate-new-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300 ml-4">Generate New Problem Type</button>
       </div>
     </div>
   </section>
@@ -137,14 +160,115 @@
     // Initialize AOS animations
     AOS.init({
       duration: 800, // Animation duration
-      easing: 'ease-in-out', // Animation easing
+      easing: "ease-in-out", // Animation easing
       once: true // Only animate once
     });
 
-    // Demo button JS handler
-    document.getElementById('demo-trigger').addEventListener('click', function() {
-      // JS to trigger the demo component
-    });
+    // Fetch problem types
+    fetch(`${app.apiURL}/problems`)
+      .then(response => response.json())
+      .then(data => {
+        const problemTypes = data.data;
+
+        const problemTypeSelector = new ProblemTypeSelector(
+          document.getElementById("problem-type-selector"),
+          problemTypes
+        );
+
+        const taskSectionsManager = new TaskSectionsManager(
+          document.getElementById("task-sections-manager"),
+          problemTypes,
+          true
+        );
+
+        // Demo button JS handler
+        document.getElementById("demo-trigger").addEventListener("click", function() {
+          const showDemo = document.getElementById("show-demo");
+          const demo = document.getElementById("demo");
+          showDemo.classList.add("hidden");
+          demo.classList.remove("hidden");
+
+          problemTypeSelector.show().then((problemPath) => {
+            taskSectionsManager.newSection(problemPath, (topicId) => {
+              problemTypeSelector.show().then((problemPath) => {
+                taskSectionsManager.editSection(topicId, problemPath);
+              }).catch((error) => {
+                /* Selector closed */
+              });
+            });
+          }).catch((error) => {
+            // Reset to demo
+            demo.classList.add("hidden");
+            showDemo.classList.remove("hidden");
+
+            showDemo.scrollIntoView({
+              behavior: "smooth"
+            });
+          });
+        });
+
+        // Generate problem function (same problem)
+        const generateSameProblem = () => {
+          const demo = document.getElementById("demo");
+          const problem = document.getElementById("problem");
+
+          demo.classList.add("hidden");
+          problem.classList.remove("hidden");
+
+          fetch(`${app.apiURL}/problems/${taskSectionsManager.getTopics()[0].path.join("/")}`)
+            .then(response => response.json())
+            .then(data => {
+              const problems = new Problems(document.getElementById("problems"));
+              problems.render([data.data]);
+
+              problem.scrollIntoView({
+                behavior: "smooth"
+              });
+            });
+        };
+
+        // Generate new problem function (new problem type)
+        const generateNewProblem = () => {
+          taskSectionsManager.deleteAllSections(); // Clear previous sections
+
+          const demo = document.getElementById("demo");
+          const problem = document.getElementById("problem");
+
+          demo.classList.remove("hidden");
+          problem.classList.add("hidden");
+
+          problemTypeSelector.show().then((problemPath) => {
+            taskSectionsManager.newSection(problemPath, (topicId) => {
+              problemTypeSelector.show().then((problemPath) => {
+                taskSectionsManager.editSection(topicId, problemPath);
+              }).catch((error) => {
+                /* Selector closed */
+              });
+            });
+
+            demo.scrollIntoView({
+              behavior: "smooth"
+            });
+          }).catch((error) => {
+            // Reset to demo
+            demo.classList.add("hidden");
+            document.getElementById("show-demo").classList.remove("hidden");
+
+            document.getElementById("show-demo").scrollIntoView({
+              behavior: "smooth"
+            });
+          });
+        };
+
+        // Initial Generate Problem button
+        document.getElementById("generate-problem").addEventListener("click", generateSameProblem);
+
+        // Regenerate Same Problem button
+        document.getElementById("regenerate-same-problem").addEventListener("click", generateSameProblem);
+
+        // Generate New Problem Type button
+        document.getElementById("generate-new-problem").addEventListener("click", generateNewProblem);
+      });
   </script>
 </body>
 

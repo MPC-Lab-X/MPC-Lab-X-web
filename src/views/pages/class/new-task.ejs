@@ -87,7 +87,7 @@
     let taskSectionsManager;
 
     // Fetch problem types
-    fetch("/api/problems")
+    fetch(`${app.apiURL}/problems`)
       .then((response) => response.json())
       .then((data) => {
         const problemTypeSelector = new ProblemTypeSelector(

@@ -74,12 +74,12 @@
       }
 
       // Tooltip functionality
-      document.querySelectorAll('.tooltip').forEach(function(el) {
-        el.addEventListener('mouseenter', function() {
-          this.querySelector('.tooltip-text').classList.remove('hidden');
+      document.querySelectorAll(".tooltip").forEach(function(el) {
+        el.addEventListener("mouseenter", function() {
+          this.querySelector(".tooltip-text").classList.remove("hidden");
         });
-        el.addEventListener('mouseleave', function() {
-          this.querySelector('.tooltip-text').classList.add('hidden');
+        el.addEventListener("mouseleave", function() {
+          this.querySelector(".tooltip-text").classList.add("hidden");
         });
       });
     });
