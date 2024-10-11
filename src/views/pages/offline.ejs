@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include("../components/head.ejs") %>
+  <title>MPC Lab | Offline</title>
+  <style>
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(270deg, #1F67A6, #1B91BF, #1F67A6);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+    }
+  </style>
+</head>
+
+<body class="text-gray-900 gradient-bg">
+  <%- include("../components/header.ejs") %>
+  <section class="flex flex-col items-center justify-center min-h-screen px-4 text-center">
+    <div class="max-w-xl bg-white p-8 rounded-lg shadow-md">
+      <h1 class="text-4xl font-bold mb-4 text-primary-500">You are Offline</h1>
+      <p class="text-lg text-gray-600 mb-6">
+        It looks like you're not connected to the internet. Some features may not be available until you're back online.
+      </p>
+      <a href="/" class="px-6 py-3 bg-primary-500 text-white rounded-lg shadow hover:bg-primary-600 transition duration-300">
+        Return to Home
+      </a>
+    </div>
+  </section>
+  <%- include("../components/footer.ejs") %>
+  <script>
+    window.addEventListener("online", () => {
+      app.location.refresh();
+    });
+  </script>
+</body>
+
+</html>

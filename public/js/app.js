@@ -523,6 +523,25 @@ class App {
     await this.auth.init();
     this.location.init();
     this.ui.init();
+    this.initServiceWorker();
+  }
+
+  /**
+   * @method initServiceWorker - Initializes the service worker.
+   */
+  initServiceWorker() {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then((registration) => {
+            /** Registration was successful */
+          })
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      });
+    }
   }
 }
 

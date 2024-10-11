@@ -48,6 +48,10 @@ router.get("/403", (req, res) => {
   res.render("pages/403", { path: req.query.path || "/" });
 });
 
+router.get("/offline", (req, res) => {
+  res.render("pages/offline");
+});
+
 router.get("*", (req, res) => {
   res.redirect(`/404?path=${req.path}`);
 });
