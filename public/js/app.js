@@ -280,6 +280,12 @@ class Location {
    * @param {string} url - The URL to redirect to.
    */
   redirect(url) {
+    if (
+      (url.startsWith("http") || url.startsWith("https")) &&
+      !url.startsWith(window.location.origin)
+    )
+      throw new Error("Cannot redirect to an external URL.");
+
     if (window.location.href !== url) {
       window.location.href = url;
     }
