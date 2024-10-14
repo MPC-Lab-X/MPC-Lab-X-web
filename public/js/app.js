@@ -280,14 +280,16 @@ class Location {
    * @param {string} url - The URL to redirect to.
    */
   redirect(url) {
+    const sanitizedUrl = new URL(url, window.location.origin).href;
+
     if (
-      (url.startsWith("http") || url.startsWith("https")) &&
-      !url.startsWith(window.location.origin)
+      (sanitizedUrl.startsWith("http") || sanitizedUrl.startsWith("https")) &&
+      !sanitizedUrl.startsWith(window.location.origin)
     )
       throw new Error("Cannot redirect to an external URL.");
 
-    if (window.location.href !== url) {
-      window.location.href = url;
+    if (window.location.href !== sanitizedUrl) {
+      window.location.href = sanitizedUrl;
     }
   }
 
