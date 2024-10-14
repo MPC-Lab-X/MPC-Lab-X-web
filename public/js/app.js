@@ -459,31 +459,85 @@ class UI {
     if (type === "alert") {
       alert.className = `flex items-center p-4 mt-2 mb-4 text-sm ${colorClasses} border rounded-lg`;
       alert.role = "alert";
-      alert.innerHTML = `
-          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-          </svg>
-          <span class="sr-only">Info</span>
-          <div>
-            <span class="font-medium">${message}</span>
-          </div>`;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "flex-shrink-0 inline w-4 h-4 me-3");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      svg.setAttribute("fill", "currentColor");
+      svg.setAttribute("viewBox", "0 0 20 20");
+
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+      path.setAttribute(
+        "d",
+        "M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"
+      );
+      svg.appendChild(path);
+
+      const srOnly = document.createElement("span");
+      srOnly.setAttribute("class", "sr-only");
+      srOnly.textContent = "Info";
+
+      const div = document.createElement("div");
+      const fontMedium = document.createElement("span");
+      fontMedium.setAttribute("class", "font-medium");
+      fontMedium.textContent = message;
+
+      div.appendChild(fontMedium);
+
+      alert.appendChild(svg);
+      alert.appendChild(srOnly);
+      alert.appendChild(div);
     } else if (type === "list") {
       const messageAfterOne = message.slice(1);
       const list = messageAfterOne.map((item) => `<li>${item}</li>`).join("");
 
       alert.className = `flex p-4 mt-2 mb-4 text-sm ${colorClasses} rounded-lg`;
       alert.role = "alert";
-      alert.innerHTML = `
-          <svg class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-          </svg>
-          <span class="sr-only">${message[0]}</span>
-          <div>
-            <span class="font-medium">Ensure that these requirements are met:</span>
-            <ul class="mt-1.5 list-disc list-inside">
-              ${list}
-            </ul>
-          </div>`;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      svg.setAttribute("fill", "currentColor");
+      svg.setAttribute("viewBox", "0 0 20 20");
+
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+      path.setAttribute(
+        "d",
+        "M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 1 1 1 1v4h1a1 1 0 0 1 0 2Z"
+      );
+      svg.appendChild(path);
+
+      const srOnly = document.createElement("span");
+      srOnly.setAttribute("class", "sr-only");
+      srOnly.textContent = message[0];
+
+      const div = document.createElement("div");
+
+      const fontMedium = document.createElement("span");
+      fontMedium.setAttribute("class", "font-medium");
+      fontMedium.textContent = "Ensure that these requirements are met:";
+
+      const ul = document.createElement("ul");
+      ul.setAttribute("class", "mt-1.5 list-disc list-inside");
+
+      messageAfterOne.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+
+      div.appendChild(fontMedium);
+      div.appendChild(ul);
+
+      alert.appendChild(svg);
+      alert.appendChild(srOnly);
+      alert.appendChild(div);
     }
 
     parentElement.appendChild(alert);
