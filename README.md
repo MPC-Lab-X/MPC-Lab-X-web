@@ -16,7 +16,7 @@ MPC-Lab-X-web is the frontend component of the MPC-Lab-X project, built using Ex
 - A Desmos API key (required for graphing)
 - Backend services ([MPC-Lab-X-server](https://github.com/MPC-Lab-X/MPC-Lab-X-server))
 
-> **Note:** This project is part of the MPC-Lab-X project. To use this application, you must have the backend services up and running. And configure the backend services URL in the `/public/js/api.js` file (default: `/api`). For more information, refer to the [MPC-Lab-X-server](https://github.com/MPC-Lab-X/MPC-Lab-X-server) repository.
+> **Note:** This project is part of the MPC-Lab-X project. To use this application, you must have the backend services up and running. And configure the backend services URL in the `/public/js/app.js` file (default: `/api`). For more information, refer to the [MPC-Lab-X-server](https://github.com/MPC-Lab-X/MPC-Lab-X-server) repository.
 
 ## Installation
 
@@ -48,10 +48,12 @@ npm start
 
 ## Acknowledgements
 
-- [Express.js](https://expressjs.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [KaTeX](https://katex.org/)
-- [Desmos API](https://www.desmos.com/api)
+We would like to express our gratitude to the following libraries and tools that have greatly contributed to the success of this project:
+
+- [Express.js](https://expressjs.com/): A fast and minimalist web framework for building Node.js applications.
+- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for creating custom designs without leaving your HTML.
+- [KaTeX](https://katex.org/): A fast, easy-to-use JavaScript library for rendering LaTeX math equations in web applications.
+- [Desmos API](https://www.desmos.com/api): A powerful API for integrating advanced graphing capabilities into your web applications.
 
 ## License
 
