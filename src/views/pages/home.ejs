@@ -215,7 +215,7 @@
           demo.classList.add("hidden");
           problem.classList.remove("hidden");
 
-          fetch(`${app.apiURL}/problems/${taskSectionsManager.getTopics()[0].path.join("/")}`)
+          fetch(`${app.apiURL}/problems/${taskSectionsManager.getTopics()[0].path.join("/")}?options=${JSON.stringify(taskSectionsManager.getTopics()[0].options)}`)
             .then(response => response.json())
             .then(data => {
               const problems = new Problems(document.getElementById("problems"));

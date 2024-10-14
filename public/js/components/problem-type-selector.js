@@ -47,14 +47,9 @@ class ProblemTypeSelector {
     for (const key in node) {
       const item = node[key];
 
-      // Strip numbers from description for search purposes
-      const sanitizedDescription = item.description
-        ? item.description.replace(/\d+/g, "")
-        : "";
-
       const match =
         item.name.toLowerCase().includes(query.toLowerCase()) ||
-        sanitizedDescription.toLowerCase().includes(query.toLowerCase()) ||
+        item.description.toLowerCase().includes(query.toLowerCase()) ||
         currentPath.some((p) => p.toLowerCase().includes(query.toLowerCase()));
 
       if (item.topics) {
@@ -111,7 +106,7 @@ class ProblemTypeSelector {
         this.searchInput.value
       );
       const highlightedDescription = this.highlightMatch(
-        topic.description ? topic.description.replace(/\d+/g, "") : "",
+        topic.description || "",
         this.searchInput.value
       );
 

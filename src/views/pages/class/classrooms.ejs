@@ -59,7 +59,7 @@
             </p>
             <p class="text-sm text-gray-600 mb-4">
               <a href="/classrooms/${classroom._id}/students">
-                <strong>Students:</strong> ${classroom.students.length}
+                <strong>Students:</strong> ${classroom.students.filter(student => !student.deleted).length}
               </a>
             </p>
             <div class="tooltip">
