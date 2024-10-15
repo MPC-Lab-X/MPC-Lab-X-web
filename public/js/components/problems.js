@@ -169,9 +169,9 @@ class Problems {
           const problemSolutionElementFraction = document.createElement("div");
           problemSolutionElementFraction.className = "mb-2";
           katex.render(
-            `${solution.fraction.s ? "-" : ""}\\frac{${solution.fraction.n}}{${
-              solution.fraction.d
-            }}`,
+            `${solution.fraction.s === 1 ? "-" : ""}\\frac{${
+              solution.fraction.n
+            }}{${solution.fraction.d}}`,
             problemSolutionElementFraction
           );
 
