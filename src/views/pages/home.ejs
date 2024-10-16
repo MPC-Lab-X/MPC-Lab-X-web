@@ -113,9 +113,13 @@
   <section id="problem" class="hidden bg-gradient-to-r from-primary-400 to-primary-600 py-16">
     <div class="bg-background-200 rounded-lg shadow-md p-8 container mx-auto text-center">
       <%- include("../components/problems.ejs") %>
-      <div class="mt-8">
-        <button id="regenerate-same-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">Generate Same Problem</button>
-        <button id="generate-new-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300 ml-4">Generate New Problem Type</button>
+      <div class="mt-8 flex flex-col items-center sm:flex-row sm:justify-center sm:space-x-4">
+        <button id="regenerate-same-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300 mb-4 sm:mb-0">
+          Generate Same Problem
+        </button>
+        <button id="generate-new-problem" class="bg-primary-500 text-white px-6 py-3 rounded hover:bg-primary-600 transition duration-300">
+          Generate New Problem Type
+        </button>
       </div>
     </div>
   </section>
