@@ -253,6 +253,139 @@ class TaskSectionsManager {
           parameterElement.appendChild(numberInputNumber);
           break;
         }
+        case "range": {
+          const rangeContainer = document.createElement("div");
+          rangeContainer.className = "relative w-full mt-4 h-8";
+
+          const rangeFill = document.createElement("div");
+          rangeFill.className =
+            "absolute h-1 bg-blue-500 top-1/2 transform -translate-y-1/2 rounded";
+
+          const rangeMinInput = document.createElement("input");
+          rangeMinInput.type = "range";
+          rangeMinInput.min = parameter.min;
+          rangeMinInput.max = parameter.max;
+          rangeMinInput.value = options[key]?.min ?? parameter.min;
+          rangeMinInput.className =
+            "absolute w-full appearance-none bg-transparent pointer-events-auto z-10";
+
+          const rangeMaxInput = document.createElement("input");
+          rangeMaxInput.type = "range";
+          rangeMaxInput.min = parameter.min;
+          rangeMaxInput.max = parameter.max;
+          rangeMaxInput.value = options[key]?.max ?? parameter.max;
+          rangeMaxInput.className =
+            "absolute w-full appearance-none bg-transparent pointer-events-auto z-10";
+          rangeMaxInput.style.top = "14px";
+
+          const rangeMinValueInput = document.createElement("input");
+          rangeMinValueInput.type = "number";
+          rangeMinValueInput.min = parameter.min;
+          rangeMinValueInput.max = parameter.max;
+          rangeMinValueInput.value = options[key]?.min ?? parameter.min;
+          rangeMinValueInput.className =
+            "p-2 border border-gray-300 rounded mt-2 w-1/2";
+
+          const rangeMaxValueInput = document.createElement("input");
+          rangeMaxValueInput.type = "number";
+          rangeMaxValueInput.min = parameter.min;
+          rangeMaxValueInput.max = parameter.max;
+          rangeMaxValueInput.value = options[key]?.max ?? parameter.max;
+          rangeMaxValueInput.className =
+            "p-2 border border-gray-300 rounded mt-2 w-1/2";
+
+          const updateValues = () => {
+            let minValue = Number(rangeMinInput.value);
+            let maxValue = Number(rangeMaxInput.value);
+
+            if (minValue > maxValue) {
+              if (event.target === rangeMinInput) {
+                minValue = maxValue - 1;
+              } else {
+                maxValue = minValue + 1;
+              }
+            }
+
+            rangeMinInput.value = minValue;
+            rangeMaxInput.value = maxValue;
+
+            rangeMinValueInput.value = minValue;
+            rangeMaxValueInput.value = maxValue;
+
+            const minPercent =
+              ((minValue - parameter.min) / (parameter.max - parameter.min)) *
+              100;
+            const maxPercent =
+              ((maxValue - parameter.min) / (parameter.max - parameter.min)) *
+              100;
+
+            rangeFill.style.left = `${minPercent}%`;
+            rangeFill.style.width = `${maxPercent - minPercent}%`;
+
+            this.topics.get(topicId).options[key] = {
+              min: minValue,
+              max: maxValue,
+            };
+          };
+
+          const onRangeClick = (event) => {
+            const rect = rangeContainer.getBoundingClientRect();
+            const clickPosition =
+              ((event.clientX - rect.left) / rect.width) *
+                (parameter.max - parameter.min) +
+              parameter.min;
+
+            const minDistance = Math.abs(
+              clickPosition - Number(rangeMinInput.value)
+            );
+            const maxDistance = Math.abs(
+              clickPosition - Number(rangeMaxInput.value)
+            );
+
+            if (minDistance < maxDistance) {
+              rangeMinInput.value = Math.min(
+                clickPosition,
+                Number(rangeMaxInput.value) - 1
+              );
+            } else {
+              rangeMaxInput.value = Math.max(
+                clickPosition,
+                Number(rangeMinInput.value) + 1
+              );
+            }
+            updateValues();
+          };
+
+          rangeContainer.addEventListener("click", onRangeClick);
+
+          rangeMinInput.addEventListener("input", updateValues);
+          rangeMaxInput.addEventListener("input", updateValues);
+
+          rangeMinValueInput.addEventListener("input", (event) => {
+            let value = Math.max(Number(event.target.value), parameter.min);
+            value = Math.min(value, Number(rangeMaxInput.value) - 1);
+            rangeMinInput.value = value;
+            updateValues();
+          });
+
+          rangeMaxValueInput.addEventListener("input", (event) => {
+            let value = Math.min(Number(event.target.value), parameter.max);
+            value = Math.max(value, Number(rangeMinInput.value) + 1);
+            rangeMaxInput.value = value;
+            updateValues();
+          });
+
+          updateValues();
+
+          rangeContainer.appendChild(rangeFill);
+          rangeContainer.appendChild(rangeMinInput);
+          rangeContainer.appendChild(rangeMaxInput);
+
+          parameterElement.appendChild(rangeContainer);
+          parameterElement.appendChild(rangeMinValueInput);
+          parameterElement.appendChild(rangeMaxValueInput);
+          break;
+        }
         case "boolean": {
           const booleanInputLabel = document.createElement("label");
           booleanInputLabel.className = "inline-flex items-center mt-1";
@@ -274,6 +407,7 @@ class TaskSectionsManager {
           booleanInputLabel.appendChild(booleanInputText);
 
           parameterElement.appendChild(booleanInputLabel);
+          break;
         }
       }
 
