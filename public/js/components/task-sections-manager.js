@@ -294,7 +294,7 @@ class TaskSectionsManager {
           rangeMaxValueInput.className =
             "p-2 border border-gray-300 rounded mt-2 w-1/2";
 
-          const updateValues = () => {
+          const updateValues = (event) => {
             let minValue = Number(rangeMinInput.value);
             let maxValue = Number(rangeMaxInput.value);
 
