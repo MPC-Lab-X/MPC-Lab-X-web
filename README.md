@@ -48,4 +48,4 @@ MPC-Lab-X-web is the frontend component of the MPC-Lab-X project, built using Ex
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
