@@ -22,38 +22,29 @@ MPC-Lab-X-web is the frontend component of the MPC-Lab-X project, built using Ex
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/MPC-Lab-X/MPC-Lab-X-web.git
-```
+   ```bash
+   git clone https://github.com/MPC-Lab-X/MPC-Lab-X-web.git
+   ```
 
 2. Install the dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 3. Create a `.env` file in the root directory and add the following environment variables:
 
-```env
-PORT=3000 # Port number for the server (default: 3000)
-HOST=localhost # Host address for the server (default: localhost)
-DESMOS_API_KEY=dcb31709b452b1cf9dc26972add0fda6 # API key for Desmos API (required for graphing)
-```
+   ```env
+   PORT=3000 # Port number for the server (default: 3000)
+   HOST=localhost # Host address for the server (default: localhost)
+   DESMOS_API_KEY=dcb31709b452b1cf9dc26972add0fda6 # API key for Desmos API (required for graphing)
+   ```
 
 4. Start the server:
 
-```bash
-npm start
-```
-
-## Acknowledgements
-
-We would like to express our gratitude to the following libraries and tools that have greatly contributed to the success of this project:
-
-- [Express.js](https://expressjs.com/): A fast and minimalist web framework for building Node.js applications.
-- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for creating custom designs without leaving your HTML.
-- [KaTeX](https://katex.org/): A fast, easy-to-use JavaScript library for rendering LaTeX math equations in web applications.
-- [Desmos API](https://www.desmos.com/api): A powerful API for integrating advanced graphing capabilities into your web applications.
+   ```bash
+   npm start
+   ```
 
 ## License
 
